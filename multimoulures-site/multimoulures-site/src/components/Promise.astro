@@ -1,0 +1,31 @@
+---
+import Inner from './Inner.astro';
+import { routes, company, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+---
+<Inner lang={lang} alt={routes.promise[fr ? 'en' : 'fr']}
+  title={fr ? 'Délai de 72 heures sur les moulures sur mesure | Multi-Moulures' : '72 hour turnaround on custom flashings | Multi-Moulures'}
+  description={fr ? 'Comment Multi-Moulures fabrique vos moulures sur mesure en 72 heures : inventaire de 35 000 feuilles, 2 usines, 6 plieuses.' : 'How Multi-Moulures makes your custom flashings in 72 hours: 35,000 sheets in stock, 2 plants, 6 brakes.'}
+  kicker={fr ? 'Nos délais' : 'Turnaround'}
+  h1={fr ? 'Pourquoi nos délais sont si courts' : 'Why our turnaround is so short'}
+  lead={fr ? 'Délai standard de 72 heures, cueillette à Saint-Bruno ou livraison sur votre chantier. Chantier bloqué ? Appelez-nous.' : '72 hour standard turnaround, pickup in Saint-Bruno or jobsite delivery. Jobsite stuck? Call us.'}>
+  <div class="grid g2">
+    <div>
+      <h2>{fr ? 'Comment on y arrive' : 'How we do it'}</h2>
+      <p>{fr ? 'La plupart des plieurs commandent l’acier après avoir reçu votre commande. Nous gardons plus de 35 000 feuilles en stock, soit plus de 1,2 million de pieds carrés, dans une large gamme de couleurs et de calibres. La production démarre dès que votre commande est confirmée.' : 'Most benders order steel after they receive your order. We keep over 35,000 sheets in stock, more than 1.2 million square feet, across a wide range of colours and gauges. Production starts as soon as your order is confirmed.'}</p>
+      <p>{fr ? `Deux usines de ${company.plantSqft} pi², ${company.brakes} plieuses dont une XXL de ${company.xxlFeet} pieds, ${company.cnc} poinçonneuses CNC et une équipe de ${company.employees} personnes absorbent vos volumes, même en pleine saison.` : `Two ${company.plantSqft.replace(/\s/, ',')} sq ft plants, ${company.brakes} brakes including a ${company.xxlFeet} ft XXL, ${company.cnc} CNC punching machines and a team of ${company.employees} absorb your volumes, even in peak season.`}</p>
+    </div>
+    <div>
+      <h2>{fr ? 'Ce que couvre le délai' : 'What the turnaround covers'}</h2>
+      <table class="spec">
+        <tr><th colspan="2">{fr ? 'Délai de 72 heures' : '72 hour turnaround'}</th></tr>
+        <tr><td>{fr ? 'Départ du délai' : 'Clock starts'}</td><td>{fr ? 'Confirmation de la commande' : 'Order confirmation'}</td></tr>
+        <tr><td>{fr ? 'Produits' : 'Products'}</td><td>{fr ? 'Moulures sur mesure de toiture et de revêtement' : 'Custom roofing and cladding flashings'}</td></tr>
+        <tr><td>{fr ? 'Récupération' : 'Fulfilment'}</td><td>{fr ? 'Cueillette ou livraison (5 camions)' : 'Pickup or delivery (5 trucks)'}</td></tr>
+        <tr><td>{fr ? 'Ventilation sur mesure' : 'Custom ventilation'}</td><td>{fr ? '5 jours' : '5 days'}</td></tr>
+      </table>
+      <p style="margin-top:24px"><a class="btn" href={routes.order[lang]}>{fr ? 'Demander un prix' : 'Get a quote'}</a></p>
+    </div>
+  </div>
+</Inner>

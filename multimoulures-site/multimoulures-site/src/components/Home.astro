@@ -1,0 +1,186 @@
+---
+import Base from '../layouts/Base.astro';
+import Profile from './Profile.astro';
+import { company, products, routes, t, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const tx = t[lang];
+const fr = lang === 'fr';
+const other: Lang = fr ? 'en' : 'fr';
+const title = fr
+  ? 'Moulures et ventilation de toiture sur mesure pour entrepreneurs | Multi-Moulures'
+  : 'Custom roofing flashings and roof vents for contractors | Multi-Moulures';
+const description = fr
+  ? 'Fabricant québécois de moulures et de ventilation de toiture sur mesure. 35 000 feuilles en stock, moulures en 72 h, ventilation en 5 jours, pensé pour le volume.'
+  : 'Quebec manufacturer of custom roofing flashings and roof vents. 35,000 sheets in stock, flashings in 72 h, vents in 5 days, built for volume.';
+---
+<Base lang={lang} title={title} description={description} alt={routes.home[other]}>
+  <section class="hero">
+    <div class="wrap hgrid">
+      <div class="copy">
+        <p class="caps">{tx.heroKicker}</p>
+        <h1>{tx.heroTitle}</h1>
+        <p class="lead">{tx.heroLead}</p>
+        <div class="btns">
+          <a class="btn" href={routes.order[lang]}>{tx.cta}</a>
+          <a class="btn ghost" href={'tel:' + company.phone}>{tx.call} {company.phoneDisplay}</a>
+        </div>
+      </div>
+      <a class="band" href={routes.promise[lang]}>
+        <span class="bnote">{tx.heroNote}</span>
+        <span class="metric"><span class="num">{tx.heroNum}</span><span class="unit">{tx.heroUnit}</span></span>
+        <span class="bsub">{tx.heroSub} →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>{tx.pillarsTitle}</h2>
+      <div class="grid g4 pillars">
+        {tx.pillars.map(([h, p]) => <div class="pillar"><h3>{h}</h3><p>{p}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap mgrid2">
+      <div>
+        <p class="caps">{fr ? 'Faire ou faire faire' : 'Make or buy'}</p>
+        <h2>{tx.makeTitle}</h2>
+        <p class="lead">{tx.makeLead}</p>
+        <p>{tx.makeNote}</p>
+        <a class="btn" href={routes.calculator[lang]}>{tx.makeCta} →</a>
+      </div>
+      <table class="spec make">
+        <tr><th></th><th>{tx.makeColA}</th><th>{tx.makeColB}</th></tr>
+        {tx.makeRows.map(([a, b, c]) => <tr><td><strong>{a}</strong></td><td>{b}</td><td class="win">{c}</td></tr>)}
+      </table>
+    </div>
+  </section>
+
+  <section class="vent">
+    <div class="wrap vgrid">
+      <div>
+        <p class="caps light">{fr ? 'Ventilation de toiture' : 'Roof ventilation'}</p>
+        <h2>{tx.ventTitle}</h2>
+        <p class="lead">{tx.ventLead}</p>
+        <a class="btn light" href={routes.vents[lang]}>{tx.ventCta} →</a>
+      </div>
+      <div class="vbox">
+        <span class="vnum">5</span><span class="vunit">{fr ? 'jours' : 'days'}</span>
+        <ul>{tx.ventPoints.map((p) => <li>{p}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section metrics">
+    <div class="wrap">
+      <h2>{tx.metricsTitle}</h2>
+      <div class="mgrid">
+        {tx.metrics.map(([n, l]) => <div class="m"><span class="mn">{n}</span><span class="ml">{l}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap">
+      <h2>{tx.productsTitle}</h2>
+      <p class="lead">{tx.productsLead}</p>
+      <div class="grid g4 pgrid">
+        {products.map((p) => (
+          <a class="card prod" href={routes.products[lang] + p.slug[lang] + '/'}>
+            <Profile d={p.path} />
+            <h3>{p.name[lang]}</h3>
+            <p>{p.short[lang]}</p>
+          </a>
+        ))}
+        <a class="card prod more" href={routes.products[lang]}>
+          <h3>{tx.allProducts} →</h3>
+          <p>{fr ? 'Pliage, poinçonnage CNC, revêtement et barres de fixation.' : 'Bending, CNC punching, cladding and fastening bars.'}</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sketch">
+    <div class="wrap sgrid">
+      <div>
+        <h2>{tx.sketchTitle}</h2>
+        <p class="lead">{tx.sketchLead}</p>
+        <a class="btn light" href={routes.order[lang]}>{tx.cta}</a>
+      </div>
+      <ol class="steps">
+        {tx.sketchSteps.map((s, i) => <li><span>{i + 1}</span>{s}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap agrid">
+      <div>
+        <h2>{tx.accountTitle}</h2>
+        <p class="lead">{tx.accountLead}</p>
+      </div>
+      <div class="btns col">
+        <a class="btn" href={routes.order[lang]}>{tx.cta}</a>
+        <a class="btn ghost" href={routes.contact[lang] + '#visite'}>{tx.visit}</a>
+        <a class="btn ghost" href={'tel:' + company.phone}>{tx.call} {company.phoneDisplay}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero{background:var(--gradient-wash);border-bottom:1px solid var(--mm-rule);overflow:hidden}
+  .hgrid{display:grid;gap:32px;padding-top:clamp(40px,7vw,96px);padding-bottom:clamp(40px,7vw,96px);align-items:center}
+  @media (min-width:900px){.hgrid{grid-template-columns:1.25fr 1fr}}
+  .copy .lead{margin:16px 0 28px}
+  .band{display:grid;gap:4px;background:var(--mm-navy);color:#fff;text-decoration:none;padding:36px 40px 36px 64px;clip-path:polygon(40px 0,100% 0,100% 100%,0 100%)}
+  @media (min-width:900px){.band{margin-right:calc(-1 * var(--gutter) - 200px);padding-right:240px}}
+  .bnote{font-size:15px;color:var(--mm-sky)}
+  .metric{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;font-family:var(--font-display);font-weight:800;line-height:1}
+  .num{font-size:clamp(56px,8vw,104px);letter-spacing:-.03em}
+  .unit{font-size:clamp(24px,2.6vw,34px);font-weight:700}
+  .bsub{font-size:16px;color:#fff;margin-top:8px}
+  .band:hover{background:var(--mm-navy-deep)}
+  .pillars{margin-top:28px}
+  .pillar{border-top:3px solid var(--mm-steel);padding-top:18px}
+  .pillar p{color:var(--mm-graphite)}
+  .mgrid2{display:grid;gap:36px;align-items:center}
+  @media (min-width:960px){.mgrid2{grid-template-columns:1fr 1.15fr}}
+  .make td.win{color:var(--mm-navy);font-weight:700}
+  .make th:first-child{width:22%}
+  .vent{background:var(--mm-navy);color:#fff;padding:clamp(48px,7vw,88px) 0;clip-path:polygon(0 24px,100% 0,100% 100%,0 100%)}
+  .vent h2{color:#fff;font-size:clamp(28px,4vw,44px);font-style:italic}
+  .vent .lead{color:#fff;opacity:.92}
+  .caps.light{color:var(--mm-sky)}
+  .vgrid{display:grid;gap:36px;align-items:center}
+  @media (min-width:900px){.vgrid{grid-template-columns:1.3fr 1fr}}
+  .vbox{background:var(--mm-steel);padding:32px 36px;clip-path:polygon(24px 0,100% 0,100% 100%,0 100%)}
+  .vnum{font-family:var(--font-display);font-weight:800;font-size:clamp(72px,9vw,120px);line-height:1}
+  .vunit{font-family:var(--font-display);font-weight:700;font-size:32px;margin-left:10px}
+  .vbox ul{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+  .vbox li{padding-left:22px;position:relative}
+  .vbox li::before{content:'';position:absolute;left:0;top:.55em;width:10px;height:10px;background:#fff}
+  .mgrid{display:grid;grid-template-columns:repeat(2,1fr);border-top:2px solid var(--mm-navy);margin-top:24px}
+  @media (min-width:800px){.mgrid{grid-template-columns:repeat(3,1fr)}}
+  .m{padding:22px 16px 22px 0;border-bottom:1px solid var(--mm-rule);display:grid}
+  .mn{font-family:var(--font-display);font-weight:800;font-size:clamp(28px,3.4vw,40px);color:var(--mm-navy);line-height:1.1}
+  .ml{color:var(--mm-graphite)}
+  .pgrid{margin-top:28px}
+  .prod h3{margin-top:12px}
+  .more{background:var(--mm-ice);border-color:var(--mm-ice);display:flex;flex-direction:column;justify-content:center}
+  .sketch{background:var(--mm-steel);color:#fff;padding:clamp(48px,7vw,80px) 0;clip-path:polygon(0 0,100% 24px,100% 100%,0 calc(100% - 24px))}
+  .sketch h2{color:#fff;font-size:clamp(30px,4vw,44px);font-style:italic}
+  .sketch .lead{color:#fff;opacity:.92}
+  .sgrid{display:grid;gap:32px;align-items:center}
+  @media (min-width:900px){.sgrid{grid-template-columns:1.2fr 1fr}}
+  .steps{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+  .steps li{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.1);border-left:3px solid #fff;padding:16px 18px;font-size:18px}
+  .steps span{font-family:var(--font-display);font-weight:800;font-size:28px;min-width:24px}
+  .agrid{display:grid;gap:28px;align-items:center}
+  @media (min-width:900px){.agrid{grid-template-columns:1.4fr 1fr}}
+  .btns.col{flex-direction:column}
+  .btns.col .btn{text-align:center}
+  @media (max-width:640px){table.make{font-size:14px}table.make td,table.make th{padding:8px}}
+</style>

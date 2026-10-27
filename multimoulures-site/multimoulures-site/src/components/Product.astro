@@ -1,0 +1,31 @@
+---
+import Inner from './Inner.astro';
+import Profile from './Profile.astro';
+import { routes, products, company, type Lang } from '../data/site';
+const { lang, slug } = Astro.props as { lang: Lang; slug: string };
+const fr = lang === 'fr';
+const other: Lang = fr ? 'en' : 'fr';
+const p = products.find((x) => x.slug[lang] === slug)!;
+const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.name[lang], description: p.short[lang], brand: { '@type': 'Brand', name: 'Multi-Moulures' }, manufacturer: { '@id': 'https://multimoulures.com/#org' }, material: fr ? 'Acier' : 'Steel' }];
+---
+<Inner lang={lang} alt={routes.products[other] + p.slug[other] + '/'} schema={schema}
+  crumbs={[[fr ? 'Moulures sur mesure' : 'Custom flashings', routes.products[lang]]]}
+  title={`${p.name[lang]} ${fr ? 'sur mesure en 72 h' : 'made to measure in 72 h'} | Multi-Moulures`}
+  description={`${p.name[lang]} ${fr ? 'pliés sur mesure à Saint-Bruno, prêts en 72 heures.' : 'custom bent in Saint-Bruno, Quebec, ready in 72 hours.'} ${p.short[lang]}`}
+  kicker={fr ? 'Moulure sur mesure' : 'Custom flashing'} h1={p.name[lang]} lead={p.short[lang]}>
+  <div class="grid g2">
+    <div><Profile d={p.path} size="lg" /></div>
+    <div>
+      <table class="spec">
+        <tr><th colspan="2">{fr ? 'Caractéristiques' : 'Specifications'}</th></tr>
+        <tr><td>{fr ? 'Délai' : 'Turnaround'}</td><td>{fr ? '72 heures' : '72 hours'}</td></tr>
+        <tr><td>{fr ? 'Longueur maximale' : 'Maximum length'}</td><td>{company.xxlFeet} {fr ? 'pieds' : 'feet'}</td></tr>
+        <tr><td>{fr ? 'Calibres' : 'Gauges'}</td><td class="todo">{fr ? 'À compléter' : 'To complete'}</td></tr>
+        <tr><td>{fr ? 'Couleurs' : 'Colours'}</td><td class="todo">{fr ? 'À compléter' : 'To complete'}</td></tr>
+        <tr><td>{fr ? 'Récupération' : 'Fulfilment'}</td><td>{fr ? 'Cueillette ou livraison' : 'Pickup or delivery'}</td></tr>
+      </table>
+      <p style="margin-top:24px" class="btns"><a class="btn" href={routes.order[lang]}>{fr ? 'Demander un prix' : 'Get a quote'}</a><a class="btn ghost" href={'tel:' + company.phone}>{company.phoneDisplay}</a></p>
+    </div>
+  </div>
+  <p class="todo" style="margin-top:32px">{fr ? 'À ajouter : photos réelles, profils standards du catalogue, usages typiques, questions fréquentes propres à ce produit.' : 'To add: real photos, standard catalogue profiles, typical uses, product specific FAQ.'}</p>
+</Inner>

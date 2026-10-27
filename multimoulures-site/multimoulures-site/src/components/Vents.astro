@@ -1,0 +1,53 @@
+---
+import Inner from './Inner.astro';
+import { routes, company, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const items = fr ? [
+  ['AirM100', 'Aérateur de toit à base ajustable, environ 280 PCM en 12 x 12 po, pentes de 1/12 à 16/12.'],
+  ['AirM300', 'Aérateur haute performance jusqu’à 24 x 24 po, pentes de 2/12 à 15/12, testé selon les normes CSA.'],
+  ['AirM300 base pignon', 'Version pour faîte en pignon.'],
+  ['Dôme 480', 'Grande surface libre de ventilation de 242 po².'],
+  ['Col de cygne', 'Sortie d’évacuation sur mesure.'],
+  ['Boîte à clapets multiples', 'Plusieurs sorties regroupées dans un seul boîtier.'],
+  ['Soffites d’acier', 'Soffites ventilés et soffite mural anti-rafale.'],
+  ['VR rectangulaire et triangulaire', 'Ventilation de pignon sur mesure.'],
+] : [
+  ['AirM100', 'Adjustable base roof vent, about 280 CFM at 12 x 12 in, pitches from 1/12 to 16/12.'],
+  ['AirM300', 'High performance roof vent up to 24 x 24 in, pitches from 2/12 to 15/12, tested to CSA standards.'],
+  ['AirM300 gable base', 'Version for gable ridges.'],
+  ['Dome 480', 'Large 242 sq in net free ventilation area.'],
+  ['Gooseneck', 'Custom exhaust outlet.'],
+  ['Multi damper box', 'Several outlets grouped in one housing.'],
+  ['Steel soffits', 'Vented soffits and wind resistant wall soffit.'],
+  ['Rectangular and triangular gable vents', 'Custom gable ventilation.'],
+];
+const schema = [{ '@context': 'https://schema.org', '@type': 'ItemList', name: fr ? 'Ventilation de toiture sur mesure' : 'Custom roof vents', itemListElement: items.map(([n, d], i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'Product', name: n, description: d, brand: { '@type': 'Brand', name: 'Multi-Moulures' } } })) }];
+---
+<Inner lang={lang} alt={routes.vents[fr ? 'en' : 'fr']} schema={schema}
+  title={fr ? 'Ventilation de toiture sur mesure en 5 jours, couleur assortie | Multi-Moulures' : 'Custom roof vents in 5 days, colour matched | Multi-Moulures'}
+  description={fr ? 'Aérateurs de toit et ventilation sur mesure fabriqués en 5 jours, toutes grandeurs, couleur assortie à votre toiture en acier prépeint.' : 'Custom roof vents made in 5 days, any size, colour matched to your roof in prepainted steel.'}
+  kicker={fr ? 'Ventilation de toiture' : 'Roof ventilation'}
+  h1={fr ? 'Ventilation sur mesure en 5 jours' : 'Custom roof vents in 5 days'}
+  lead={fr ? 'Quand l’industrie compte en semaines, nous livrons en 5 jours. Toutes les grandeurs, toutes les couleurs, dans le même acier prépeint que votre toiture.' : 'While the industry counts in weeks, we deliver in 5 days. Any size, any colour, in the same prepainted steel as your roof.'}>
+  <div class="grid g2">
+    <div>
+      <h2>{fr ? 'Pourquoi c’est différent' : 'Why it’s different'}</h2>
+      <p>{fr ? 'La plupart des aérateurs sont offerts en quelques grandeurs et couleurs standards, avec des délais de plusieurs semaines pour le sur mesure. Nous fabriquons chaque aérateur à partir de notre propre inventaire d’acier prépeint galvanisé canadien, dans la couleur exacte de votre revêtement de toiture.' : 'Most roof vents come in a few standard sizes and colours, with lead times of several weeks for anything custom. We make every vent from our own stock of Canadian prepainted galvanized steel, in the exact colour of your roofing.'}</p>
+      <p>{fr ? 'Résultat : une ventilation qui disparaît dans la toiture et qui arrive au chantier en même temps que vos moulures.' : 'The result: vents that blend into the roof and reach the jobsite together with your flashings.'}</p>
+      <p class="btns"><a class="btn" href={routes.order[lang]}>{fr ? 'Demander un prix' : 'Get a quote'}</a><a class="btn ghost" href={company.ventilationSite}>{fr ? 'Fiches techniques complètes' : 'Full spec sheets'} →</a></p>
+    </div>
+    <table class="spec">
+      <tr><th colspan="2">{fr ? 'En bref' : 'At a glance'}</th></tr>
+      <tr><td>{fr ? 'Délai' : 'Turnaround'}</td><td><strong>{fr ? '5 jours' : '5 days'}</strong></td></tr>
+      <tr><td>{fr ? 'Grandeurs' : 'Sizes'}</td><td>{fr ? 'Sur mesure' : 'Custom'}</td></tr>
+      <tr><td>{fr ? 'Couleurs' : 'Colours'}</td><td>{fr ? 'Assorties à votre toiture' : 'Matched to your roof'}</td></tr>
+      <tr><td>{fr ? 'Matériau' : 'Material'}</td><td>{fr ? 'Acier prépeint galvanisé canadien' : 'Canadian prepainted galvanized steel'}</td></tr>
+      <tr><td>{fr ? 'Essais' : 'Testing'}</td><td>{fr ? 'AirM300 testé selon les normes CSA' : 'AirM300 tested to CSA standards'}</td></tr>
+    </table>
+  </div>
+  <h2 style="margin-top:56px">{fr ? 'La gamme' : 'The range'}</h2>
+  <div class="grid g4">
+    {items.map(([n, d]) => <div class="card"><h3>{n}</h3><p>{d}</p></div>)}
+  </div>
+</Inner>

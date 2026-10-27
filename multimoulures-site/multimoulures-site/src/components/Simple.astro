@@ -1,0 +1,28 @@
+---
+import Inner from './Inner.astro';
+import { routes, company, type Lang } from '../data/site';
+const { lang, kind } = Astro.props as { lang: Lang; kind: 'regions' | 'contact' | 'careers' };
+const fr = lang === 'fr';
+const other: Lang = fr ? 'en' : 'fr';
+const meta = {
+  regions: { h1: fr ? 'Régions desservies' : 'Service areas', title: fr ? 'Régions desservies : cueillette et livraison | Multi-Moulures' : 'Service areas: pickup and delivery | Multi-Moulures', d: fr ? 'Cueillette à Saint-Bruno-de-Montarville ou livraison sur chantier au Québec.' : 'Pickup in Saint-Bruno-de-Montarville or jobsite delivery in Quebec.' },
+  contact: { h1: 'Contact', title: fr ? 'Contact | Multi-Moulures, Saint-Bruno-de-Montarville' : 'Contact | Multi-Moulures, Saint-Bruno-de-Montarville', d: fr ? 'Téléphone, courriel et adresse de Multi-Moulures.' : 'Multi-Moulures phone, email and address.' },
+  careers: { h1: fr ? 'Emplois' : 'Careers', title: fr ? 'Emplois en pliage de métal à Saint-Bruno | Multi-Moulures' : 'Sheet metal jobs in Saint-Bruno | Multi-Moulures', d: fr ? 'Joignez une équipe de 60 personnes en pliage et fabrication de métal en feuille.' : 'Join a 60 person sheet metal bending and fabrication team.' },
+}[kind];
+---
+<Inner lang={lang} alt={routes[kind][other]} title={meta.title} description={meta.d} h1={meta.h1}>
+  {kind === 'contact' && (
+    <div><div class="grid g3">
+      <div class="card"><h3>{fr ? 'Téléphone' : 'Phone'}</h3><p><a href={'tel:' + company.phone}>{company.phoneDisplay}</a></p></div>
+      <div class="card"><h3>{fr ? 'Courriel' : 'Email'}</h3><p><a href={'mailto:' + company.email}>{company.email}</a></p></div>
+      <div class="card"><h3>{fr ? 'Usine' : 'Plant'}</h3><p>{company.street}<br />{company.city} (Québec) {company.postal}</p><p class="todo">{fr ? 'Heures de cueillette à ajouter' : 'Pickup hours to add'}</p></div>
+    </div>
+    <div id="visite" class="card" style="margin-top:32px;background:var(--mm-ice);border-color:var(--mm-ice)">
+      <h2>{fr ? 'Planifier une visite de l’usine' : 'Book a plant visit'}</h2>
+      <p>{fr ? 'Venez voir notre inventaire de 35 000 feuilles, nos plieuses et notre équipe. Appelez-nous ou écrivez-nous pour fixer un moment.' : 'Come see our 35,000 sheet inventory, our brakes and our team. Call or email us to set a time.'}</p>
+      <p class="btns" style="margin-top:16px"><a class="btn" href={'tel:' + company.phone}>{company.phoneDisplay}</a><a class="btn ghost" href={'mailto:' + company.email + '?subject=' + encodeURIComponent(fr ? 'Visite de l’usine' : 'Plant visit')}>{company.email}</a></p>
+    </div></div>
+  )}
+  {kind === 'regions' && <p class="todo">{fr ? 'À compléter : une section par région réellement desservie (Montérégie, Montréal, Laval, Rive-Nord, Estrie, etc.).' : 'To complete: one section per region actually served.'}</p>}
+  {kind === 'careers' && <p class="todo">{fr ? 'À compléter : postes ouverts. Cette page permet aux offres d’emploi de ne plus dépasser l’accueil dans les résultats de recherche.' : 'To complete: open positions.'}</p>}
+</Inner>

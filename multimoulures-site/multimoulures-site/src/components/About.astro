@@ -1,0 +1,24 @@
+---
+import Inner from './Inner.astro';
+import { routes, company, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const rows = fr
+  ? [['Fondée', 'Il y a plus de 35 ans'], ['Usines', '2 usines de 20 000 pi²'], ['Plieuses', '6, dont une XXL de 20 pieds'], ['Poinçonneuses CNC', '2'], ['Coupeuses', '3'], ['Profileuses', 'Oui'], ['Inventaire', '35 000+ feuilles, 1,2 M pi²'], ['Livraison', '5 camions'], ['Équipe', '60 personnes']]
+  : [['Founded', 'Over 35 years ago'], ['Plants', '2 plants of 20,000 sq ft'], ['Brakes', '6, including a 20 ft XXL'], ['CNC punching', '2'], ['Shears', '3'], ['Roll formers', 'Yes'], ['Inventory', '35,000+ sheets, 1.2M sq ft'], ['Delivery', '5 trucks'], ['Team', '60 people']];
+---
+<Inner lang={lang} alt={routes.about[fr ? 'en' : 'fr']}
+  title={fr ? 'À propos : 35 ans de pliage de métal au Québec | Multi-Moulures' : 'About: 35 years of sheet metal bending in Quebec | Multi-Moulures'}
+  description={fr ? 'Multi-Moulures, fabricant québécois de moulures de métal sur mesure depuis plus de 35 ans : 2 usines, 6 plieuses, 60 employés.' : 'Multi-Moulures, Quebec manufacturer of custom metal flashings for over 35 years: 2 plants, 6 brakes, 60 employees.'}
+  kicker={fr ? 'À propos' : 'About'} h1={fr ? 'Plus de 35 ans à plier du métal pour les couvreurs' : 'Over 35 years bending metal for roofers'}>
+  <div class="grid g2">
+    <div>
+      <p>{fr ? 'Fondée par Yves et Patrick Mathieu, Multi-Moulures fabrique des moulures et composantes de métal sur mesure pour la toiture, le revêtement et l’enveloppe du bâtiment.' : 'Founded by Yves and Patrick Mathieu, Multi-Moulures manufactures custom metal flashings and components for roofing, cladding and the building envelope.'}</p>
+      <p>{fr ? 'L’entreprise a été acquise par Marc Edwards et Charles Lambert. Yves demeure en place avec toute l’équipe.' : 'The company was acquired by Marc Edwards and Charles Lambert. Yves remains in place with the entire team.'}</p>
+    </div>
+    <table class="spec">
+      <tr><th colspan="2">{fr ? 'En chiffres' : 'By the numbers'}</th></tr>
+      {rows.map(([a, b]) => <tr><td>{a}</td><td>{b}</td></tr>)}
+    </table>
+  </div>
+</Inner>

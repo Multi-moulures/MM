@@ -1,0 +1,116 @@
+---
+import '../styles/global.css';
+import { company, nav, routes, t, type Lang } from '../data/site';
+
+interface Props { lang: Lang; title: string; description: string; alt: string; schema?: object[] }
+const { lang, title, description, alt, schema = [] } = Astro.props;
+const tx = t[lang];
+const site = 'https://multimoulures.com';
+const path = Astro.url.pathname;
+const frPath = lang === 'fr' ? path : alt;
+const enPath = lang === 'en' ? path : alt;
+
+const org = {
+  '@context': 'https://schema.org',
+  '@type': ['Organization', 'LocalBusiness'],
+  '@id': site + '/#org',
+  name: company.name,
+  alternateName: 'Multi-Moulures',
+  url: site,
+  logo: site + '/img/mm.png',
+  telephone: company.phone,
+  email: company.email,
+  foundingDate: String(new Date().getFullYear() - company.foundedYears),
+  numberOfEmployees: company.employees,
+  description: tx.footerAbout,
+  address: { '@type': 'PostalAddress', streetAddress: company.street, addressLocality: company.city, addressRegion: company.region, postalCode: company.postal, addressCountry: 'CA' },
+  knowsLanguage: ['fr', 'en'],
+  areaServed: { '@type': 'AdministrativeArea', name: 'Québec' },
+};
+---
+<!doctype html>
+<html lang={lang === 'fr' ? 'fr-CA' : 'en-CA'}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={site + path} />
+  <link rel="alternate" hreflang="fr-CA" href={site + frPath} />
+  <link rel="alternate" hreflang="en-CA" href={site + enPath} />
+  <link rel="alternate" hreflang="x-default" href={site + frPath} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:locale" content={lang === 'fr' ? 'fr_CA' : 'en_CA'} />
+  <link rel="icon" href="/img/mm.png" />
+  <script type="application/ld+json" set:html={JSON.stringify([org, ...schema])} />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap bar">
+      <a class="brand" href={routes.home[lang]} aria-label="Multi-Moulures">
+        <img src="/img/mm.png" alt="" width="48" height="47" />
+        <img class="word" src="/img/wordmark.png" alt="Multi-Moulures" width="186" height="38" />
+      </a>
+      <nav aria-label="Navigation">
+        {nav.map((n) => <a href={routes[n.key][lang]} aria-current={path === routes[n.key][lang] ? 'page' : undefined}>{n[lang]}</a>)}
+      </nav>
+      <div class="actions">
+        <a class="lang" href={alt} hreflang={lang === 'fr' ? 'en' : 'fr'}>{tx.switchLang}</a>
+        <a class="btn small" href={routes.order[lang]}>{tx.cta}</a>
+      </div>
+    </div>
+  </header>
+  <main><slot /></main>
+  <footer class="foot">
+    <div class="wrap fgrid">
+      <div>
+        <p class="slogan"><span>{tx.slogan[0]}</span> <em>{tx.slogan[1]}</em></p>
+        <p class="fabout">{tx.footerAbout}</p>
+      </div>
+      <div>
+        <p class="caps light">Contact</p>
+        <p><a href={'tel:' + company.phone}>{company.phoneDisplay}</a><br /><a href={'mailto:' + company.email}>{company.email}</a></p>
+        <p>{company.street}<br />{company.city} (Québec) {company.postal}</p>
+      </div>
+      <div>
+        <p class="caps light">{lang === 'fr' ? 'Liens' : 'Links'}</p>
+        <p class="flinks">
+          <a href={routes.order[lang]}>{tx.cta}</a>
+          <a href={routes.regions[lang]}>{lang === 'fr' ? 'Régions desservies' : 'Service areas'}</a>
+          <a href={routes.careers[lang]}>{lang === 'fr' ? 'Emplois' : 'Careers'}</a>
+          <a href={company.ventilationSite}>Multi-Ventilation</a>
+        </p>
+      </div>
+    </div>
+    <div class="wrap legal">© {new Date().getFullYear()} {company.name} {tx.rights}</div>
+  </footer>
+</body>
+</html>
+
+<style>
+  .top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--mm-rule)}
+  .bar{display:flex;align-items:center;gap:24px;min-height:72px}
+  .brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .brand img:first-child{width:42px;height:auto}
+  .brand .word{width:170px;height:auto}
+  nav{display:flex;gap:22px;margin-left:auto}
+  nav a{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--mm-slate);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
+  nav a:hover,nav a[aria-current]{color:var(--mm-navy);border-color:var(--mm-steel)}
+  .actions{display:flex;align-items:center;gap:16px}
+  .lang{font-size:14px;color:var(--mm-graphite)}
+  .btn.small{padding:10px 16px;font-size:14px}
+  @media (max-width:1020px){nav{display:none}.actions{margin-left:auto}}
+  @media (max-width:520px){.brand .word{display:none}.lang{font-size:13px}.btn.small{padding:9px 12px;font-size:13px}}
+  .foot{background:var(--gradient-footer);color:#fff;padding:56px 0 24px;margin-top:0}
+  .foot a{color:#fff}
+  .fgrid{display:grid;gap:32px}
+  @media (min-width:800px){.fgrid{grid-template-columns:1.4fr 1fr 1fr}}
+  .slogan{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1.15;margin-bottom:12px}
+  .slogan span{color:var(--mm-sky)}
+  .slogan em{font-style:italic}
+  .fabout{color:var(--mm-sky)}
+  .caps.light{color:var(--mm-sky)}
+  .flinks{display:grid;gap:6px}
+  .legal{border-top:1px solid var(--mm-footer-line,#0a4d8a);margin-top:32px;padding-top:16px;font-size:13px;color:var(--mm-sky)}
+</style>

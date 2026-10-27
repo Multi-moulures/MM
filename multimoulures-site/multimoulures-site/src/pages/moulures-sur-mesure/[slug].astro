@@ -1,0 +1,6 @@
+---
+import C from '../../components/Product.astro';
+import { products } from '../../data/site';
+export function getStaticPaths() { return products.map((p) => ({ params: { slug: p.slug.fr } })); }
+---
+<C lang="fr" slug={Astro.params.slug} />

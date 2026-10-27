@@ -1,0 +1,29 @@
+---
+import Inner from './Inner.astro';
+import Profile from './Profile.astro';
+import { routes, products, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+---
+<Inner lang={lang} alt={routes.products[fr ? 'en' : 'fr']}
+  title={fr ? 'Moulures de toiture et de revêtement sur mesure | Multi-Moulures' : 'Custom roofing and cladding flashings | Multi-Moulures'}
+  description={fr ? 'Solins, faîtières, noues, larmiers, déflecteurs de neige, départs et fermetures pliés sur mesure au Québec, prêts en 72 heures.' : 'Flashings, ridge caps, valleys, drip edges, snow deflectors, starter strips and closures, custom bent in Quebec, ready in 72 hours.'}
+  kicker={fr ? 'Produits' : 'Products'} h1={fr ? 'Moulures sur mesure' : 'Custom flashings'}
+  lead={fr ? 'Chaque pièce est pliée à vos mesures, dans la couleur et le calibre de votre revêtement.' : 'Every part is bent to your measurements, in the colour and gauge of your cladding.'}>
+  <div class="grid g3">
+    {products.map((p) => (
+      <a class="card" href={routes.products[lang] + p.slug[lang] + '/'}>
+        <Profile d={p.path} />
+        <h3 style="margin-top:12px">{p.name[lang]}</h3>
+        <p>{p.short[lang]}</p>
+      </a>
+    ))}
+  </div>
+  <h2 style="margin-top:56px">{fr ? 'Services de fabrication' : 'Fabrication services'}</h2>
+  <div class="grid g4">
+    <div class="card"><h3>{fr ? 'Pliage' : 'Bending'}</h3><p>{fr ? '6 plieuses, pièces jusqu’à 20 pieds.' : '6 brakes, parts up to 20 feet.'}</p></div>
+    <div class="card"><h3>{fr ? 'Poinçonnage CNC' : 'CNC punching'}</h3><p>{fr ? '2 poinçonneuses CNC.' : '2 CNC punching machines.'}</p></div>
+    <div class="card"><h3>{fr ? 'Revêtement métallique' : 'Metal cladding'}</h3><p class="todo">{fr ? 'À compléter.' : 'To complete.'}</p></div>
+    <div class="card"><h3>{fr ? 'Barres de fixation' : 'Fastening bars'}</h3><p class="todo">{fr ? 'À compléter.' : 'To complete.'}</p></div>
+  </div>
+</Inner>
