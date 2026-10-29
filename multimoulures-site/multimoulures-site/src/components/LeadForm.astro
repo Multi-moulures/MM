@@ -1,0 +1,27 @@
+---
+import { type Lang } from '../data/site';
+const { lang, kind = 'roofer' } = Astro.props as { lang: Lang; kind?: 'roofer' | 'reseller' };
+const fr = lang === 'fr';
+const types = fr
+  ? [['roofer', 'Couvreur'], ['inhouse', 'Couvreur qui plie à l’interne'], ['reseller', 'Distributeur ou quincaillerie'], ['gc', 'Entrepreneur général ou constructeur'], ['other', 'Autre']]
+  : [['roofer', 'Roofing contractor'], ['inhouse', 'Roofer who bends in house'], ['reseller', 'Distributor or building supply store'], ['gc', 'General contractor or builder'], ['other', 'Other']];
+const volumes = fr
+  ? ['Moins de 25 000 $', '25 000 $ à 100 000 $', '100 000 $ à 500 000 $', 'Plus de 500 000 $', 'Je ne sais pas']
+  : ['Under $25,000', '$25,000 to $100,000', '$100,000 to $500,000', 'Over $500,000', 'Not sure'];
+---
+<form class="order" method="post" action="#">
+  <label>{fr ? 'Entreprise' : 'Company'}<input name="company" required autocomplete="organization" /></label>
+  <label>{fr ? 'Votre nom' : 'Your name'}<input name="name" required autocomplete="name" /></label>
+  <label>{fr ? 'Téléphone' : 'Phone'}<input name="phone" type="tel" required autocomplete="tel" /></label>
+  <label>{fr ? 'Courriel' : 'Email'}<input name="email" type="email" autocomplete="email" /></label>
+  <label>{fr ? 'Vous êtes' : 'You are'}
+    <select name="type">{types.map(([v, l]) => <option value={v} selected={v === kind}>{l}</option>)}</select>
+  </label>
+  <label>{fr ? 'Ville et province' : 'City and province'}<input name="location" required autocomplete="address-level2" /></label>
+  <label>{fr ? 'Achats annuels de moulures et ventilation (approx.)' : 'Annual flashing and vent purchases (approx.)'}
+    <select name="volume">{volumes.map((v) => <option>{v}</option>)}</select>
+  </label>
+  <label>{fr ? 'Message (facultatif)' : 'Message (optional)'}<textarea name="message" rows="4"></textarea></label>
+  <button class="btn" type="submit">{fr ? 'Envoyer' : 'Send'}</button>
+  <p class="todo">{fr ? 'Formulaire à brancher.' : 'Form to connect.'}</p>
+</form>

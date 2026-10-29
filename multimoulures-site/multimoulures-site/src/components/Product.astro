@@ -1,31 +1,54 @@
 ---
 import Inner from './Inner.astro';
-import Profile from './Profile.astro';
-import { routes, products, company, type Lang } from '../data/site';
+import { routes, company, type Lang } from '../data/site';
+import { families, sheets } from '../data/catalogue';
 const { lang, slug } = Astro.props as { lang: Lang; slug: string };
 const fr = lang === 'fr';
 const other: Lang = fr ? 'en' : 'fr';
-const p = products.find((x) => x.slug[lang] === slug)!;
-const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.name[lang], description: p.short[lang], brand: { '@type': 'Brand', name: 'Multi-Moulures' }, manufacturer: { '@id': 'https://multimoulures.com/#org' }, material: fr ? 'Acier' : 'Steel' }];
+const f = families.find((x) => x.slug[lang] === slug)!;
+const related = (f.fiche || []).map((s) => sheets.find((x) => x.slug === s)).filter(Boolean);
+const label = (code: string) => code.replace(/-(\d+)$/, ' $1').replace(/-/g, ' ').toUpperCase();
+const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: f.name[lang], description: f.desc[lang], brand: { '@type': 'Brand', name: 'Multi-Moulures' }, manufacturer: { '@id': 'https://multimoulures.com/#org' }, material: fr ? 'Acier galvanisé, acier prépeint, aluminium' : 'Galvanized steel, prepainted steel, aluminium', image: `https://multimoulures.com/img/profils/${f.imgs[0]}.png` }];
 ---
-<Inner lang={lang} alt={routes.products[other] + p.slug[other] + '/'} schema={schema}
+<Inner lang={lang} alt={routes.products[other] + f.slug[other] + '/'} schema={schema}
   crumbs={[[fr ? 'Moulures sur mesure' : 'Custom flashings', routes.products[lang]]]}
-  title={`${p.name[lang]} ${fr ? 'sur mesure en 72 h' : 'made to measure in 72 h'} | Multi-Moulures`}
-  description={`${p.name[lang]} ${fr ? 'pliés sur mesure à Saint-Bruno, prêts en 72 heures.' : 'custom bent in Saint-Bruno, Quebec, ready in 72 hours.'} ${p.short[lang]}`}
-  kicker={fr ? 'Moulure sur mesure' : 'Custom flashing'} h1={p.name[lang]} lead={p.short[lang]}>
-  <div class="grid g2">
-    <div><Profile d={p.path} size="lg" /></div>
+  title={`${f.name[lang]} ${fr ? 'sur mesure' : 'made to measure'} : ${f.imgs.length} ${fr ? 'profils' : 'profiles'} | Multi-Moulures`}
+  description={`${f.name[lang]} ${fr ? 'pliés sur mesure à Saint-Bruno-de-Montarville.' : 'custom bent in Saint-Bruno-de-Montarville, Quebec.'} ${f.desc[lang]}`}
+  kicker={`${f.imgs.length} ${fr ? (f.imgs.length > 1 ? 'profils' : 'profil') : (f.imgs.length > 1 ? 'profiles' : 'profile')}`} h1={f.name[lang]} lead={f.desc[lang]}>
+  <h2>{fr ? 'Profils du catalogue' : 'Catalogue profiles'}</h2>
+  <p>{fr ? 'Indiquez le code du profil dans votre demande, ou envoyez votre propre dessin.' : 'Quote the profile code in your request, or send your own drawing.'}</p>
+  <div class="profiles">
+    {f.imgs.map((code) => (
+      <figure>
+        <img src={`/img/profils/${code}.png`} alt={`${f.name[lang]}, profil ${label(code)}`} loading="lazy" />
+        <figcaption>{label(code)}</figcaption>
+      </figure>
+    ))}
+  </div>
+  <div class="grid g2" style="margin-top:48px">
+    <table class="spec">
+      <tr><th colspan="2">{fr ? 'Fabrication' : 'Fabrication'}</th></tr>
+      <tr><td>{fr ? 'Délai' : 'Turnaround'}</td><td>{fr ? '72 heures (délai standard)' : '72 hours (standard turnaround)'}</td></tr>
+      <tr><td>{fr ? 'Longueur maximale' : 'Maximum length'}</td><td>{company.xxlFeet} {fr ? 'pieds' : 'feet'}</td></tr>
+      <tr><td>{fr ? 'Acier galvanisé' : 'Galvanized steel'}</td><td>{fr ? 'Calibres 12 à 30, Z275 / G90' : '12 to 30 gauge, Z275 / G90'}</td></tr>
+      <tr><td>{fr ? 'Acier prépeint' : 'Prepainted steel'}</td><td>{fr ? 'Calibres 22 à 30' : '22 to 30 gauge'}</td></tr>
+      <tr><td>{fr ? 'Aluminium prépeint' : 'Prepainted aluminium'}</td><td>{fr ? '0,013 à 0,027 po' : '0.013 to 0.027 in'}</td></tr>
+      <tr><td>{fr ? 'Couleurs' : 'Colours'}</td><td><a href={routes.inventory[lang]}>{fr ? 'Plus de 200 couleurs d’acier, 90 d’aluminium' : 'Over 200 steel colours, 90 aluminium'}</a></td></tr>
+      <tr><td>{fr ? 'Récupération' : 'Fulfilment'}</td><td>{fr ? 'Cueillette ou livraison (5 camions)' : 'Pickup or delivery (5 trucks)'}</td></tr>
+    </table>
     <div>
-      <table class="spec">
-        <tr><th colspan="2">{fr ? 'Caractéristiques' : 'Specifications'}</th></tr>
-        <tr><td>{fr ? 'Délai' : 'Turnaround'}</td><td>{fr ? '72 heures' : '72 hours'}</td></tr>
-        <tr><td>{fr ? 'Longueur maximale' : 'Maximum length'}</td><td>{company.xxlFeet} {fr ? 'pieds' : 'feet'}</td></tr>
-        <tr><td>{fr ? 'Calibres' : 'Gauges'}</td><td class="todo">{fr ? 'À compléter' : 'To complete'}</td></tr>
-        <tr><td>{fr ? 'Couleurs' : 'Colours'}</td><td class="todo">{fr ? 'À compléter' : 'To complete'}</td></tr>
-        <tr><td>{fr ? 'Récupération' : 'Fulfilment'}</td><td>{fr ? 'Cueillette ou livraison' : 'Pickup or delivery'}</td></tr>
-      </table>
-      <p style="margin-top:24px" class="btns"><a class="btn" href={routes.order[lang]}>{fr ? 'Demander un prix' : 'Get a quote'}</a><a class="btn ghost" href={'tel:' + company.phone}>{company.phoneDisplay}</a></p>
+      {related.length > 0 && <>
+        <h3>{fr ? 'Fiches techniques liées' : 'Related spec sheets'}</h3>
+        <ul class="rel">{related.map((r) => <li><a href={routes.sheets[lang] + r!.slug + '/'}>{r!.name[lang]}</a></li>)}</ul>
+      </>}
+      <p class="btns" style="margin-top:24px"><a class="btn" href={'tel:' + company.phone}>{fr ? 'Appeler un conseiller' : 'Call an advisor'}</a><a class="btn ghost" href={routes.order[lang]}>{fr ? 'Demander un prix' : 'Get a quote'}</a></p>
     </div>
   </div>
-  <p class="todo" style="margin-top:32px">{fr ? 'À ajouter : photos réelles, profils standards du catalogue, usages typiques, questions fréquentes propres à ce produit.' : 'To add: real photos, standard catalogue profiles, typical uses, product specific FAQ.'}</p>
 </Inner>
+<style>
+  .profiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;margin-top:20px}
+  figure{margin:0;border:1px solid var(--mm-rule);background:#fff;padding:12px;display:grid;gap:8px;justify-items:center}
+  figure img{height:110px;width:auto;max-width:100%;object-fit:contain}
+  figcaption{font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--mm-navy)}
+  .rel{padding-left:20px;display:grid;gap:6px}
+</style>

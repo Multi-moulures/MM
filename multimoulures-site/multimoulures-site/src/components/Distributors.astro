@@ -1,0 +1,28 @@
+---
+import Inner from './Inner.astro';
+import LeadForm from './LeadForm.astro';
+import { routes, company, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+---
+<Inner lang={lang} alt={routes.distributors[fr ? 'en' : 'fr']}
+  title={fr ? 'Distributeurs et quincailleries : revendez nos moulures et notre ventilation | Multi-Moulures' : 'Distributors: resell our custom flashings and roof vents | Multi-Moulures'}
+  description={fr ? 'Devenez distributeur Multi-Moulures : moulures et ventilation de toiture sur mesure, couleurs assorties, ventilation en 5 jours.' : 'Become a Multi-Moulures distributor: custom roofing flashings and vents, colour matched, vents in 5 days.'}
+  kicker={fr ? 'Revente' : 'Resale'} h1={fr ? 'Distributeurs et quincailleries' : 'Distributors and building supply stores'}
+  lead={fr ? 'Offrez à vos clients couvreurs ce que vos concurrents ne peuvent pas offrir : du sur mesure, dans leurs couleurs, rapidement.' : 'Give your roofing customers what your competitors can’t: custom parts, in their colours, fast.'}>
+  <div class="grid g2">
+    <div>
+      <h2>{fr ? 'Pourquoi revendre Multi-Moulures' : 'Why resell Multi-Moulures'}</h2>
+      <ul class="ticks">
+        <li>{fr ? 'Ventilation de toiture sur mesure en 5 jours, toutes grandeurs, couleur assortie' : 'Custom roof vents in 5 days, any size, colour matched'}</li>
+        <li>{fr ? 'Moulures sur mesure, délai standard de 72 heures' : 'Custom flashings, 72 hour standard turnaround'}</li>
+        <li>{fr ? '35 000 feuilles d’acier prépeint en stock' : '35,000 sheets of prepainted steel in stock'}</li>
+        <li>{fr ? 'Fabriqué au Québec, en acier galvanisé prépeint canadien' : 'Made in Quebec from Canadian prepainted galvanized steel'}</li>
+      </ul>
+      <p class="todo">{fr ? 'À compléter : conditions de distribution, territoires, matériel de présentation.' : 'To complete: distribution terms, territories, sales material.'}</p>
+      <p>{fr ? 'Ou appelez-nous au' : 'Or call us at'} <a href={'tel:' + company.phone}><strong>{company.phoneDisplay}</strong></a>.</p>
+    </div>
+    <LeadForm lang={lang} kind="reseller" />
+  </div>
+</Inner>
+<style>.ticks{padding-left:20px;display:grid;gap:8px;margin:0 0 24px}</style>

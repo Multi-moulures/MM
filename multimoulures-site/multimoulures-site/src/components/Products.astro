@@ -1,29 +1,34 @@
 ---
 import Inner from './Inner.astro';
-import Profile from './Profile.astro';
-import { routes, products, type Lang } from '../data/site';
+import { routes, type Lang } from '../data/site';
+import { families, totalProfiles } from '../data/catalogue';
 const { lang } = Astro.props as { lang: Lang };
 const fr = lang === 'fr';
+const schema = [{ '@context': 'https://schema.org', '@type': 'ItemList', name: fr ? 'Moulures sur mesure' : 'Custom flashings', numberOfItems: families.length,
+  itemListElement: families.map((f, i) => ({ '@type': 'ListItem', position: i + 1, name: f.name[lang], url: 'https://multimoulures.com' + routes.products[lang] + f.slug[lang] + '/' })) }];
 ---
-<Inner lang={lang} alt={routes.products[fr ? 'en' : 'fr']}
-  title={fr ? 'Moulures de toiture et de revêtement sur mesure | Multi-Moulures' : 'Custom roofing and cladding flashings | Multi-Moulures'}
-  description={fr ? 'Solins, faîtières, noues, larmiers, déflecteurs de neige, départs et fermetures pliés sur mesure au Québec, prêts en 72 heures.' : 'Flashings, ridge caps, valleys, drip edges, snow deflectors, starter strips and closures, custom bent in Quebec, ready in 72 hours.'}
-  kicker={fr ? 'Produits' : 'Products'} h1={fr ? 'Moulures sur mesure' : 'Custom flashings'}
-  lead={fr ? 'Chaque pièce est pliée à vos mesures, dans la couleur et le calibre de votre revêtement.' : 'Every part is bent to your measurements, in the colour and gauge of your cladding.'}>
-  <div class="grid g3">
-    {products.map((p) => (
-      <a class="card" href={routes.products[lang] + p.slug[lang] + '/'}>
-        <Profile d={p.path} />
-        <h3 style="margin-top:12px">{p.name[lang]}</h3>
-        <p>{p.short[lang]}</p>
+<Inner lang={lang} alt={routes.products[fr ? 'en' : 'fr']} schema={schema}
+  title={fr ? `Moulures de toiture et de revêtement sur mesure : ${totalProfiles} profils | Multi-Moulures` : `Custom roofing and cladding flashings: ${totalProfiles} profiles | Multi-Moulures`}
+  description={fr ? `Plus de ${totalProfiles} profils de moulures en 26 familles : départs, larmiers, solins, fascias, faîtières, noues, caps, finitions. Pliés sur mesure au Québec dans la couleur de votre revêtement.` : `Over ${totalProfiles} flashing profiles in 26 families: starters, drip edges, flashings, fascia, ridge caps, valleys, parapet caps, trims. Custom bent in Quebec in your cladding colour.`}
+  kicker={fr ? `${totalProfiles} profils · 26 familles` : `${totalProfiles} profiles · 26 families`} h1={fr ? 'Moulures sur mesure' : 'Custom flashings'}
+  lead={fr ? 'Choisissez un profil de notre catalogue ou envoyez votre dessin. Chaque pièce est pliée à vos mesures, dans le calibre et la couleur de votre revêtement.' : 'Pick a profile from our catalogue or send your drawing. Every part is bent to your measurements, in the gauge and colour of your cladding.'}>
+  <div class="grid g4 fam">
+    {families.map((f) => (
+      <a class="card famcard" href={routes.products[lang] + f.slug[lang] + '/'}>
+        <img src={`/img/profils/${f.imgs[0]}.png`} alt={`${f.name[lang]} : profil type`} loading="lazy" width="160" height="110" />
+        <h3>{f.name[lang]}</h3>
+        <p>{f.imgs.length} {fr ? (f.imgs.length > 1 ? 'profils' : 'profil') : (f.imgs.length > 1 ? 'profiles' : 'profile')}</p>
       </a>
     ))}
   </div>
-  <h2 style="margin-top:56px">{fr ? 'Services de fabrication' : 'Fabrication services'}</h2>
-  <div class="grid g4">
-    <div class="card"><h3>{fr ? 'Pliage' : 'Bending'}</h3><p>{fr ? '6 plieuses, pièces jusqu’à 20 pieds.' : '6 brakes, parts up to 20 feet.'}</p></div>
-    <div class="card"><h3>{fr ? 'Poinçonnage CNC' : 'CNC punching'}</h3><p>{fr ? '2 poinçonneuses CNC.' : '2 CNC punching machines.'}</p></div>
-    <div class="card"><h3>{fr ? 'Revêtement métallique' : 'Metal cladding'}</h3><p class="todo">{fr ? 'À compléter.' : 'To complete.'}</p></div>
-    <div class="card"><h3>{fr ? 'Barres de fixation' : 'Fastening bars'}</h3><p class="todo">{fr ? 'À compléter.' : 'To complete.'}</p></div>
+  <div class="more-links">
+    <a class="btn" href={routes.order[lang]}>{fr ? 'Demander un prix' : 'Get a quote'}</a>
+    <a class="btn ghost" href={routes.sheets[lang]}>{fr ? 'Voir les fiches techniques' : 'See spec sheets'} →</a>
+    <a class="btn ghost" href={routes.inventory[lang]}>{fr ? 'Couleurs et métaux' : 'Colours and metals'} →</a>
   </div>
 </Inner>
+<style>
+  .famcard img{height:110px;width:auto;max-width:100%;object-fit:contain;margin-bottom:12px}
+  .famcard h3{margin-bottom:4px}
+  .more-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
+</style>

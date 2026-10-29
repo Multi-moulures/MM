@@ -1,0 +1,6 @@
+---
+import C from '../../components/Sheet.astro';
+import { sheets } from '../../data/catalogue';
+export function getStaticPaths() { return sheets.map((s) => ({ params: { slug: s.slug } })); }
+---
+<C lang="fr" slug={Astro.params.slug} />

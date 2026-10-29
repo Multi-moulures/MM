@@ -1,0 +1,122 @@
+---
+import Inner from './Inner.astro';
+import { routes, company, type Lang } from '../data/site';
+import { gaugeTable, otherMetals, aluminium } from '../data/catalogue';
+import colours from '../data/couleurs.json';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const galv = ['12', '14', '16', '18', '20', '22', '24', '26', '28', '30'];
+const pre = ['22', '24', '26', '28', '30'];
+const steel = colours.filter((c) => c.kind === 'steel');
+const alu = colours.filter((c) => c.kind === 'alu');
+const steelCount = steel.reduce((a, b) => a + b.count, 0);
+---
+<Inner lang={lang} alt={routes.inventory[fr ? 'en' : 'fr']}
+  title={fr ? 'Couleurs d’acier prépeint et métaux en stock : Ideal, Vicwest, MAC, Agway, Gentek | Multi-Moulures' : 'Prepainted steel colours and metals in stock: Ideal, Vicwest, MAC, Agway, Gentek | Multi-Moulures'}
+  description={fr ? `Moulures dans la couleur exacte de votre toiture : ${steelCount} couleurs d’acier prépeint de 5 fabricants et 90 couleurs d’aluminium Gentek. Acier galvanisé calibres 12 à 30, prépeint 22 à 30.` : `Flashings in the exact colour of your roof: ${steelCount} prepainted steel colours from 5 manufacturers and 90 Gentek aluminium colours. Galvanized steel 12 to 30 gauge, prepainted 22 to 30.`}
+  kicker={fr ? 'Inventaire' : 'Inventory'} h1={fr ? 'Couleurs et métaux en stock' : 'Colours and metals in stock'}
+  lead={fr ? 'Du calibre 12 pour les pièces industrielles au calibre 30 pour la ferblanterie fine, le métal est déjà sur place. Nous plions vos moulures sans attendre l’usine, dans la couleur exacte de votre toiture.' : 'From 12 gauge for industrial parts to 30 gauge for fine sheet metal work, the metal is already here. We bend your flashings without waiting on the mill, in the exact colour of your roof.'}>
+  <div class="stats">
+    <div><span>{fr ? '35 000+' : '35,000+'}</span>{fr ? 'feuilles d’acier en inventaire' : 'steel sheets in inventory'}</div>
+    <div><span>12 à 30</span>{fr ? 'calibres d’acier galvanisé' : 'galvanized steel gauges'}</div>
+    <div><span>{steelCount}</span>{fr ? 'couleurs d’acier prépeint, 5 fabricants' : 'prepainted steel colours, 5 manufacturers'}</div>
+    <div><span>90</span>{fr ? 'couleurs d’aluminium Gentek' : 'Gentek aluminium colours'}</div>
+  </div>
+
+  <h2 id="calibres">{fr ? 'Acier : calibres disponibles' : 'Steel: available gauges'}</h2>
+  <div class="grid g2">
+    <div class="scroll"><table class="spec">
+      <tr><th>{fr ? 'Galvanisé, calibre' : 'Galvanized, gauge'}</th><th>po</th><th>mm</th><th>lb/pi²</th></tr>
+      {galv.map((g) => <tr><td>{g}</td><td>{gaugeTable[g][0]}</td><td>{gaugeTable[g][1]}</td><td>{gaugeTable[g][2]}</td></tr>)}
+    </table></div>
+    <div>
+      <div class="scroll"><table class="spec">
+        <tr><th>{fr ? 'Prépeint, calibre' : 'Prepainted, gauge'}</th><th>po</th><th>mm</th><th>lb/pi²</th></tr>
+        {pre.map((g) => <tr><td>{g}</td><td>{gaugeTable[g][0]}</td><td>{gaugeTable[g][1]}</td><td>{gaugeTable[g][2]}</td></tr>)}
+      </table></div>
+      <p class="note">{fr ? 'Longueurs de 10 pi (3 048 mm), revêtement de zinc Z275 / G90, épaisseurs nominales. Rouleau 30 ga : 36 po x 50 pi et 24 po x 50 pi.' : '10 ft (3,048 mm) lengths, Z275 / G90 zinc coating, nominal thicknesses. 30 ga coil: 36 in x 50 ft and 24 in x 50 ft.'}</p>
+      <h3>{fr ? 'Pourquoi l’acier galvanisé prépeint' : 'Why prepainted galvanized steel'}</h3>
+      <ul class="ticks">
+        <li>{fr ? 'Même acier que celui des fabricants de toitures métalliques' : 'The same steel metal roofing manufacturers use'}</li>
+        <li>{fr ? 'Zinc sous la peinture : double protection contre la corrosion' : 'Zinc under the paint: double corrosion protection'}</li>
+        <li>{fr ? 'Rigidité pour les grandes portées et les calibres épais' : 'Stiffness for long spans and heavy gauges'}</li>
+        <li>{fr ? 'Garantie de 10 ans sur la peinture' : '10 year paint warranty'}</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>{fr ? 'Autres métaux' : 'Other metals'}</h2>
+  <div class="scroll"><table class="spec">
+    <tr><th>{fr ? 'Métal' : 'Metal'}</th><th>{fr ? 'Calibres' : 'Gauges'}</th><th>Formats</th><th>{fr ? 'Usages typiques' : 'Typical uses'}</th></tr>
+    {otherMetals[lang].map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}
+  </table></div>
+
+  <h2>{fr ? 'Aluminium' : 'Aluminium'}</h2>
+  <p>{fr ? 'Pour les bords de toit, les fascias et la finition des revêtements de vinyle ou de fibrociment, l’aluminium prépeint ne rouille jamais, se travaille facilement sur le chantier et s’agence aux revêtements résidentiels. Trois fois plus léger que l’acier à épaisseur égale.' : 'For roof edges, fascia and vinyl or fibre cement trim, prepainted aluminium never rusts, is easy to work on site and matches residential cladding. Three times lighter than steel at the same thickness.'}</p>
+  <div class="scroll"><table class="spec">
+    <tr><th>{fr ? 'Produit' : 'Product'}</th><th>{fr ? 'Épaisseurs' : 'Thickness'}</th><th>Formats</th></tr>
+    {aluminium[lang].map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}
+  </table></div>
+
+  <h2 id="couleurs">{fr ? 'Couleurs d’acier prépeint' : 'Prepainted steel colours'}</h2>
+  <p>{fr ? 'Vos moulures dans la couleur exacte de votre toiture ou de votre revêtement d’acier. Voici les palettes des fabricants que nous assortissons. Couleurs non tenues en stock disponibles sur commande.' : 'Your flashings in the exact colour of your roofing or steel cladding. These are the manufacturer palettes we match. Colours not stocked are available to order.'}</p>
+  <div class="brands">
+    {steel.map((b) => (
+      <details>
+        <summary><span>{b.brand}</span><span class="cnt">{b.count} {fr ? 'couleurs' : 'colours'}</span></summary>
+        {b.series.map((s) => <div class="ser"><p class="caps">{s.series}</p><ul class="chips">{s.colors.map((c) => <li>{c}</li>)}</ul></div>)}
+        {b.note && <p class="note">{b.note}</p>}
+      </details>
+    ))}
+  </div>
+  <h2>{fr ? 'Couleurs d’aluminium prépeint' : 'Prepainted aluminium colours'}</h2>
+  <div class="brands">
+    {alu.map((b) => (
+      <details>
+        <summary><span>{b.brand}</span><span class="cnt">90 {fr ? 'couleurs' : 'colours'}</span></summary>
+        {b.series.map((s) => <div class="ser"><p class="caps">{s.series}</p><ul class="chips">{s.colors.map((c) => <li>{c}</li>)}</ul></div>)}
+      </details>
+    ))}
+  </div>
+
+  <div class="grid g2 how">
+    <div class="card">
+      <h3>{fr ? 'Votre couleur n’est pas dans la liste?' : 'Colour not listed?'}</h3>
+      <ul class="ticks">
+        <li>{fr ? 'Apportez-nous un échantillon de votre revêtement : nous trouvons la correspondance' : 'Bring us a sample of your cladding and we will match it'}</li>
+        <li>{fr ? 'Couleurs spéciales et finis texturés disponibles sur commande' : 'Special colours and textured finishes available to order'}</li>
+        <li>{fr ? 'Un seul interlocuteur pour vos moulures, solins et accessoires, toutes marques confondues' : 'One contact for all your flashings and accessories, whatever the brand'}</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>{fr ? 'Comment commander' : 'How to order'}</h3>
+      <ul class="ticks">
+        <li>{fr ? 'Indiquez la marque et le nom de la couleur de votre revêtement' : 'Tell us the brand and colour name of your cladding'}</li>
+        <li>{fr ? 'Envoyez votre dessin ou choisissez un profil dans notre catalogue' : 'Send your drawing or pick a profile from our catalogue'}</li>
+        <li>{fr ? 'Échantillon de couleur disponible sur demande' : 'Colour samples available on request'}</li>
+      </ul>
+      <p class="btns"><a class="btn" href={'tel:' + company.phone}>{fr ? 'Appeler un conseiller' : 'Call an advisor'}</a><a class="btn ghost" href={routes.products[lang]}>{fr ? 'Voir les profils' : 'See profiles'}</a></p>
+    </div>
+  </div>
+  <p class="note">{fr ? 'Les noms et palettes appartiennent à leurs fabricants respectifs et sont cités uniquement pour la correspondance des couleurs. Demandez un échantillon avant de commander.' : 'Names and palettes belong to their respective manufacturers and are cited only for colour matching. Ask for a sample before ordering.'}</p>
+</Inner>
+<style>
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);border-top:2px solid var(--mm-navy);margin-bottom:48px}
+  @media (min-width:800px){.stats{grid-template-columns:repeat(4,1fr)}}
+  .stats div{padding:20px 16px 20px 0;border-bottom:1px solid var(--mm-rule);display:grid;color:var(--mm-graphite)}
+  .stats span{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,3vw,36px);color:var(--mm-navy);line-height:1.1}
+  h2{margin-top:48px}
+  .scroll{overflow-x:auto;min-width:0}
+  table.spec{font-variant-numeric:tabular-nums}
+  .note{font-size:14px;color:var(--mm-graphite);margin-top:12px}
+  .ticks{padding-left:20px;display:grid;gap:6px}
+  .brands{display:grid;gap:8px}
+  details{border:1px solid var(--mm-rule);background:#fff;padding:0 18px}
+  details[open]{padding-bottom:18px}
+  summary{display:flex;justify-content:space-between;gap:12px;padding:16px 0;font-size:18px}
+  .cnt{font-family:var(--font-body);font-weight:500;color:var(--mm-graphite);font-size:15px}
+  .ser{margin-top:12px}
+  .chips{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+  .chips li{background:var(--mm-mist);padding:4px 10px;font-size:14px}
+  .how{margin-top:48px}
+</style>

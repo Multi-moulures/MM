@@ -1,0 +1,33 @@
+---
+import Inner from './Inner.astro';
+import { routes, type Lang } from '../data/site';
+import { sheets } from '../data/catalogue';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const groups = [['premium', fr ? 'Pliage premium' : 'Premium products'], ['essentiels', fr ? 'Pliage essentiels' : 'Essential profiles']] as const;
+---
+<Inner lang={lang} alt={routes.sheets[fr ? 'en' : 'fr']}
+  title={fr ? 'Fiches techniques : larmier GCR, persiennes, barres en Z, noues | Multi-Moulures' : 'Spec sheets: drip flashing, louvres, Z bars, valleys | Multi-Moulures'}
+  description={fr ? 'Fiches techniques Multi-Moulures : larmier métallique recommandé par la GCR, persiennes architecturales, volets décoratifs, barres en L, U et Z, départ d’aluminium, noue, profilé oméga, solin de coin.' : 'Multi-Moulures spec sheets: GCR recommended drip flashing, architectural louvres, decorative shutters, L, U and Z bars, aluminium starter, valley, omega profile, corner flashing.'}
+  kicker={fr ? 'Catalogue 2026' : '2026 catalogue'} h1={fr ? 'Fiches techniques' : 'Spec sheets'}
+  lead={fr ? 'Dimensions, calibres et formats en stock de nos produits pliés.' : 'Dimensions, gauges and stock formats of our bent products.'}>
+  {groups.map(([g, title]) => (
+    <section class="grp">
+      <h2>{title}</h2>
+      <div class="grid g4">
+        {sheets.filter((s) => s.group === g).map((s) => (
+          <a class="card sc" href={routes.sheets[lang] + s.slug + '/'}>
+            <img src={`/img/produits/${s.slug}.webp`} alt={s.name[lang]} loading="lazy" />
+            <h3>{s.name[lang]}</h3>
+            <p>{s.tag[lang]}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+  <p class="todo" style="margin-top:32px">{fr ? 'Fiches PDF téléchargeables à ajouter une fois la version finale du catalogue prête.' : 'Downloadable PDF sheets to add once the final catalogue is ready.'}</p>
+</Inner>
+<style>
+  .grp{margin-bottom:48px}
+  .sc img{height:150px;width:100%;object-fit:contain;background:var(--mm-mist);margin-bottom:12px}
+</style>

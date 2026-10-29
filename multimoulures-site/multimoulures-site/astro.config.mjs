@@ -5,5 +5,6 @@ export default defineConfig({
   site: 'https://multimoulures.com',
   trailingSlash: 'always',
   i18n: { defaultLocale: 'fr', locales: ['fr', 'en'], routing: { prefixDefaultLocale: false } },
-  integrations: [sitemap({ i18n: { defaultLocale: 'fr', locales: { fr: 'fr-CA', en: 'en-CA' } } })],
+  // While English is not live, keep /en/ out of the sitemap (see company.englishLive in src/data/site.ts)
+  integrations: [sitemap({ filter: (page) => !page.includes('/en/') })],
 });

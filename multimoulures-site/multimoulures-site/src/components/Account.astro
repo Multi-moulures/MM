@@ -1,0 +1,27 @@
+---
+import Inner from './Inner.astro';
+import LeadForm from './LeadForm.astro';
+import { routes, company, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+---
+<Inner lang={lang} alt={routes.account[fr ? 'en' : 'fr']}
+  title={fr ? 'Ouvrir un compte entrepreneur | Multi-Moulures' : 'Open a contractor account | Multi-Moulures'}
+  description={fr ? 'Compte entrepreneur Multi-Moulures pour couvreurs et entrepreneurs : commandes récurrentes simplifiées, conditions de volume, conseiller dédié.' : 'Multi-Moulures contractor account for roofers and contractors: simpler recurring orders, volume terms, a dedicated advisor.'}
+  kicker={fr ? 'Compte entrepreneur' : 'Contractor account'} h1={fr ? 'Ouvrir un compte entrepreneur' : 'Open a contractor account'}
+  lead={fr ? 'Pour vos commandes récurrentes de moulures et de ventilation sur mesure.' : 'For your recurring custom flashing and vent orders.'}>
+  <div class="grid g2">
+    <div>
+      <h2>{fr ? 'Ce que le compte vous donne' : 'What the account gives you'}</h2>
+      <ul class="ticks">
+        <li>{fr ? 'Un conseiller qui connaît vos chantiers et vos profils' : 'An advisor who knows your jobs and your profiles'}</li>
+        <li>{fr ? 'Des conditions adaptées à vos volumes' : 'Terms matched to your volumes'}</li>
+        <li>{fr ? 'Des recommandes simples de vos pièces habituelles' : 'Easy reorders of your usual parts'}</li>
+        <li>{fr ? 'Cueillette à Saint-Bruno ou livraison par nos 5 camions' : 'Pickup in Saint-Bruno or delivery by our 5 trucks'}</li>
+      </ul>
+      <p>{fr ? 'Plus rapide encore : appelez un conseiller au' : 'Faster still: call an advisor at'} <a href={'tel:' + company.phone}><strong>{company.phoneDisplay}</strong></a>.</p>
+    </div>
+    <LeadForm lang={lang} />
+  </div>
+</Inner>
+<style>.ticks{padding-left:20px;display:grid;gap:8px;margin:0 0 24px}</style>

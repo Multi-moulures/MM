@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import Profile from './Profile.astro';
-import { company, products, routes, t, type Lang } from '../data/site';
+import { company, routes, t, type Lang } from '../data/site';
+import { families, totalProfiles } from '../data/catalogue';
 const { lang } = Astro.props as { lang: Lang };
 const tx = t[lang];
 const fr = lang === 'fr';
@@ -21,8 +21,8 @@ const description = fr
         <h1>{tx.heroTitle}</h1>
         <p class="lead">{tx.heroLead}</p>
         <div class="btns">
-          <a class="btn" href={routes.order[lang]}>{tx.cta}</a>
-          <a class="btn ghost" href={'tel:' + company.phone}>{tx.call} {company.phoneDisplay}</a>
+          <a class="btn" href={'tel:' + company.phone}>{tx.callAdvisor} · {company.phoneDisplay}</a>
+          <a class="btn ghost" href={routes.account[lang]}>{tx.account}</a>
         </div>
       </div>
       <a class="band" href={routes.promise[lang]}>
@@ -39,22 +39,6 @@ const description = fr
       <div class="grid g4 pillars">
         {tx.pillars.map(([h, p]) => <div class="pillar"><h3>{h}</h3><p>{p}</p></div>)}
       </div>
-    </div>
-  </section>
-
-  <section class="section wash">
-    <div class="wrap mgrid2">
-      <div>
-        <p class="caps">{fr ? 'Faire ou faire faire' : 'Make or buy'}</p>
-        <h2>{tx.makeTitle}</h2>
-        <p class="lead">{tx.makeLead}</p>
-        <p>{tx.makeNote}</p>
-        <a class="btn" href={routes.calculator[lang]}>{tx.makeCta} →</a>
-      </div>
-      <table class="spec make">
-        <tr><th></th><th>{tx.makeColA}</th><th>{tx.makeColB}</th></tr>
-        {tx.makeRows.map(([a, b, c]) => <tr><td><strong>{a}</strong></td><td>{b}</td><td class="win">{c}</td></tr>)}
-      </table>
     </div>
   </section>
 
@@ -84,21 +68,58 @@ const description = fr
 
   <section class="section wash">
     <div class="wrap">
+      <h2>{tx.proofTitle}</h2>
+      <p class="lead">{tx.proofLead}</p>
+      <div class="grid g4 proof">
+        {[1,2,3,4].map(() => <div class="ph"><span class="todo">{fr ? 'Photo à fournir' : 'Photo to supply'}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
       <h2>{tx.productsTitle}</h2>
       <p class="lead">{tx.productsLead}</p>
       <div class="grid g4 pgrid">
-        {products.map((p) => (
+        {families.filter((f) => f.home).slice(0, 7).map((p) => (
           <a class="card prod" href={routes.products[lang] + p.slug[lang] + '/'}>
-            <Profile d={p.path} />
+            <img class="pimg" src={`/img/profils/${p.imgs[0]}.png`} alt="" loading="lazy" />
             <h3>{p.name[lang]}</h3>
-            <p>{p.short[lang]}</p>
+            <p>{p.imgs.length} {fr ? 'profils' : 'profiles'}</p>
           </a>
         ))}
         <a class="card prod more" href={routes.products[lang]}>
           <h3>{tx.allProducts} →</h3>
-          <p>{fr ? 'Pliage, poinçonnage CNC, revêtement et barres de fixation.' : 'Bending, CNC punching, cladding and fastening bars.'}</p>
+          <p>{fr ? `${totalProfiles} profils en 26 familles, plus vos propres dessins.` : `${totalProfiles} profiles in 26 families, plus your own drawings.`}</p>
         </a>
       </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap mgrid2">
+      <div>
+        <p class="caps">{fr ? 'Faire ou faire faire' : 'Make or buy'}</p>
+        <h2>{tx.makeTitle}</h2>
+        <p class="lead">{tx.makeLead}</p>
+        <p>{tx.makeNote}</p>
+        <a class="btn" href={routes.calculator[lang]}>{tx.makeCta} →</a>
+      </div>
+      <table class="spec make">
+        <tr><th></th><th>{tx.makeColA}</th><th>{tx.makeColB}</th></tr>
+        {tx.makeRows.map(([a, b, c]) => <tr><td><strong>{a}</strong></td><td>{b}</td><td class="win">{c}</td></tr>)}
+      </table>
+    </div>
+  </section>
+
+  <section class="section dist">
+    <div class="wrap vgrid2">
+      <div>
+        <p class="caps">{fr ? 'Revente' : 'Resale'}</p>
+        <h2>{tx.distTitle}</h2>
+        <p class="lead">{tx.distLead}</p>
+      </div>
+      <a class="btn ghost" href={routes.distributors[lang]}>{tx.distCta} →</a>
     </div>
   </section>
 
@@ -122,9 +143,10 @@ const description = fr
         <p class="lead">{tx.accountLead}</p>
       </div>
       <div class="btns col">
-        <a class="btn" href={routes.order[lang]}>{tx.cta}</a>
+        <a class="btn" href={'tel:' + company.phone}>{tx.callAdvisor} · {company.phoneDisplay}</a>
+        <a class="btn ghost" href={routes.account[lang]}>{tx.account}</a>
+        <a class="btn ghost" href={routes.order[lang]}>{tx.cta}</a>
         <a class="btn ghost" href={routes.contact[lang] + '#visite'}>{tx.visit}</a>
-        <a class="btn ghost" href={'tel:' + company.phone}>{tx.call} {company.phoneDisplay}</a>
       </div>
     </div>
   </section>
@@ -169,6 +191,7 @@ const description = fr
   .ml{color:var(--mm-graphite)}
   .pgrid{margin-top:28px}
   .prod h3{margin-top:12px}
+  .pimg{height:80px;width:auto;max-width:100%;object-fit:contain}
   .more{background:var(--mm-ice);border-color:var(--mm-ice);display:flex;flex-direction:column;justify-content:center}
   .sketch{background:var(--mm-steel);color:#fff;padding:clamp(48px,7vw,80px) 0;clip-path:polygon(0 0,100% 24px,100% 100%,0 calc(100% - 24px))}
   .sketch h2{color:#fff;font-size:clamp(30px,4vw,44px);font-style:italic}
@@ -178,6 +201,11 @@ const description = fr
   .steps{list-style:none;margin:0;padding:0;display:grid;gap:12px}
   .steps li{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.1);border-left:3px solid #fff;padding:16px 18px;font-size:18px}
   .steps span{font-family:var(--font-display);font-weight:800;font-size:28px;min-width:24px}
+  .proof{margin-top:28px}
+  .ph{aspect-ratio:4/3;max-width:100%;background:var(--mm-mist);border:1px dashed var(--mm-rule);display:grid;place-items:center}
+  .dist{background:var(--mm-ice)}
+  .vgrid2{display:grid;gap:20px;align-items:center}
+  @media (min-width:800px){.vgrid2{grid-template-columns:1fr auto}}
   .agrid{display:grid;gap:28px;align-items:center}
   @media (min-width:900px){.agrid{grid-template-columns:1.4fr 1fr}}
   .btns.col{flex-direction:column}

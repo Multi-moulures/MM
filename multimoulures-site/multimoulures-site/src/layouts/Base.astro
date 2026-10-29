@@ -9,6 +9,7 @@ const site = 'https://multimoulures.com';
 const path = Astro.url.pathname;
 const frPath = lang === 'fr' ? path : alt;
 const enPath = lang === 'en' ? path : alt;
+const en = company.englishLive;
 
 const org = {
   '@context': 'https://schema.org',
@@ -36,9 +37,10 @@ const org = {
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={site + path} />
-  <link rel="alternate" hreflang="fr-CA" href={site + frPath} />
-  <link rel="alternate" hreflang="en-CA" href={site + enPath} />
-  <link rel="alternate" hreflang="x-default" href={site + frPath} />
+  {en && <link rel="alternate" hreflang="fr-CA" href={site + frPath} />}
+  {en && <link rel="alternate" hreflang="en-CA" href={site + enPath} />}
+  {en && <link rel="alternate" hreflang="x-default" href={site + frPath} />}
+  {!en && lang === 'en' && <meta name="robots" content="noindex,nofollow" />}
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:locale" content={lang === 'fr' ? 'fr_CA' : 'en_CA'} />
@@ -56,8 +58,17 @@ const org = {
         {nav.map((n) => <a href={routes[n.key][lang]} aria-current={path === routes[n.key][lang] ? 'page' : undefined}>{n[lang]}</a>)}
       </nav>
       <div class="actions">
-        <a class="lang" href={alt} hreflang={lang === 'fr' ? 'en' : 'fr'}>{tx.switchLang}</a>
-        <a class="btn small" href={routes.order[lang]}>{tx.cta}</a>
+        {(en || lang === 'en') && <a class="lang" href={alt} hreflang={lang === 'fr' ? 'en' : 'fr'}>{tx.switchLang}</a>}
+        <a class="btn small" href={'tel:' + company.phone}>{tx.callAdvisor}</a>
+        <details class="menu">
+          <summary aria-label="Menu"><span></span><span></span><span></span></summary>
+          <div class="drop">
+            {nav.map((n) => <a href={routes[n.key][lang]}>{n[lang]}</a>)}
+            <a href={routes.faq[lang]}>FAQ</a>
+            <a href={routes.account[lang]}>{tx.account}</a>
+            {(en || lang === 'en') && <a href={alt} hreflang={lang === 'fr' ? 'en' : 'fr'}>{tx.switchLang}</a>}
+          </div>
+        </details>
       </div>
     </div>
   </header>
@@ -70,13 +81,18 @@ const org = {
       </div>
       <div>
         <p class="caps light">Contact</p>
-        <p><a href={'tel:' + company.phone}>{company.phoneDisplay}</a><br /><a href={'mailto:' + company.email}>{company.email}</a></p>
+        <p><a href={'tel:' + company.phone}>{company.phoneDisplay}</a><br /><a href={'tel:' + company.phone2}>{company.phone2Display}</a><br /><a href={'mailto:' + company.email}>{company.email}</a></p>
         <p>{company.street}<br />{company.city} (Québec) {company.postal}</p>
       </div>
       <div>
         <p class="caps light">{lang === 'fr' ? 'Liens' : 'Links'}</p>
         <p class="flinks">
+          <a href={routes.account[lang]}>{tx.account}</a>
           <a href={routes.order[lang]}>{tx.cta}</a>
+          <a href={routes.calculator[lang]}>{lang === 'fr' ? 'Calculateur du pliage à l’interne' : 'In house bending calculator'}</a>
+          <a href={routes.promise[lang]}>{lang === 'fr' ? 'Nos délais' : 'Turnaround'}</a>
+          <a href={routes.about[lang]}>{lang === 'fr' ? 'À propos' : 'About'}</a>
+          <a href={routes.faq[lang]}>FAQ</a>
           <a href={routes.regions[lang]}>{lang === 'fr' ? 'Régions desservies' : 'Service areas'}</a>
           <a href={routes.careers[lang]}>{lang === 'fr' ? 'Emplois' : 'Careers'}</a>
           <a href={company.ventilationSite}>Multi-Ventilation</a>
@@ -94,14 +110,22 @@ const org = {
   .brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
   .brand img:first-child{width:42px;height:auto}
   .brand .word{width:170px;height:auto}
-  nav{display:flex;gap:22px;margin-left:auto}
-  nav a{font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--mm-slate);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
+  nav{display:flex;gap:18px;margin-left:auto}
+  nav a{white-space:nowrap;font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--mm-slate);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
   nav a:hover,nav a[aria-current]{color:var(--mm-navy);border-color:var(--mm-steel)}
   .actions{display:flex;align-items:center;gap:16px}
   .lang{font-size:14px;color:var(--mm-graphite)}
-  .btn.small{padding:10px 16px;font-size:14px}
-  @media (max-width:1020px){nav{display:none}.actions{margin-left:auto}}
-  @media (max-width:520px){.brand .word{display:none}.lang{font-size:13px}.btn.small{padding:9px 12px;font-size:13px}}
+  .btn.small{padding:10px 16px;font-size:14px;white-space:nowrap}
+  @media (max-width:1240px){nav{display:none}.actions{margin-left:auto}.lang{display:none}}
+  .menu{position:relative;display:none}
+  @media (max-width:1240px){.menu{display:block}}
+  .menu summary{list-style:none;cursor:pointer;width:44px;height:44px;display:grid;place-content:center;gap:5px;border:1px solid var(--mm-rule)}
+  .menu summary::-webkit-details-marker{display:none}
+  .menu summary span{display:block;width:20px;height:2px;background:var(--mm-navy)}
+  .drop{position:absolute;right:0;top:52px;background:#fff;border:1px solid var(--mm-rule);min-width:240px;display:grid;box-shadow:0 8px 24px rgba(16,41,74,.12)}
+  .drop a{padding:14px 18px;text-decoration:none;font-family:var(--font-display);font-weight:600;font-size:15px;color:var(--mm-navy);border-bottom:1px solid var(--mm-mist)}
+  .drop a:hover{background:var(--mm-ice)}
+  @media (max-width:520px){.brand .word{display:none}.btn.small{padding:9px 12px;font-size:13px}}
   .foot{background:var(--gradient-footer);color:#fff;padding:56px 0 24px;margin-top:0}
   .foot a{color:#fff}
   .fgrid{display:grid;gap:32px}
