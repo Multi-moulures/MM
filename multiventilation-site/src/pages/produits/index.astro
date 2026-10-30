@@ -1,0 +1,15 @@
+---
+import Inner from '../../components/Inner.astro';
+import Card from '../../components/Card.astro';
+import { categories, products } from '../../data/produits';
+const schema = [{ '@context': 'https://schema.org', '@type': 'ItemList', name: 'Produits Multi-Ventilation', numberOfItems: products.length, itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: `https://multiventilation.ca/produits/${p.slug}/` })) }];
+---
+<Inner schema={schema} title={`Produits de ventilation de toiture sur mesure : ${products.length} modèles | Multi-Ventilation`} description="AirM300, AirM100, Dôme 480, col de cygne, louvres, clapets d’évacuation et soffites ventilés, fabriqués sur mesure en 5 jours au Québec." kicker={`${products.length} produits`} h1="Produits de ventilation" lead="Chaque produit se fabrique dans la grandeur et la couleur de votre choix, en 5 jours.">
+  {categories.map((c) => (
+    <section id={c.id} class="cat">
+      <h2>{c.name}</h2><p>{c.lead}</p>
+      <div class="grid g4">{products.filter((p) => p.cat === c.id).map((p) => <Card p={p} />)}</div>
+    </section>
+  ))}
+</Inner>
+<style>.cat{margin-bottom:56px;scroll-margin-top:96px}.cat>p{color:var(--mm-graphite)}</style>

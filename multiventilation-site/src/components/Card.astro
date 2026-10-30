@@ -1,0 +1,14 @@
+---
+import type { Product } from '../data/produits';
+const { p } = Astro.props as { p: Product };
+---
+<a class="card pc" href={`/produits/${p.slug}/`}>
+  <img src={`/img/${p.slug}.webp`} alt={p.name} loading="lazy" />
+  <h3>{p.name}</h3>
+  <p><strong>{p.metric.v} {p.metric.u}</strong> · {p.metric.label.split(',')[0].toLowerCase()}</p>
+</a>
+<style>
+  .pc img{height:160px;width:100%;object-fit:contain;background:var(--mm-mist);margin-bottom:12px}
+  .pc h3{margin-bottom:4px}
+  .pc strong{color:var(--mm-navy)}
+</style>

@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import Card from '../components/Card.astro';
+import { categories, products } from '../data/produits';
+import { site } from '../data/site';
+const pick = ['airm300-base-ajustable', 'dome-480', 'col-de-cygne', 'soffite-ventile-oblong-50'];
+---
+<Base title="Ventilation de toiture sur mesure en 5 jours | Multi-Ventilation" description="Aérateurs de toit, dômes, clapets et soffites ventilés sur mesure, fabriqués en 5 jours au Québec dans la couleur exacte de votre toiture. AirM300 testé CAN3-A93-M82. Pour couvreurs et revendeurs.">
+  <section class="hero"><div class="wrap hgrid">
+    <div>
+      <p class="caps">Ventilation de toiture sur mesure · Fabriquée au Québec</p>
+      <h1>Toutes les grandeurs. Toutes les couleurs. <em>En 5 jours.</em></h1>
+      <p class="lead">Aérateurs de toit, dômes, clapets et soffites ventilés fabriqués à partir du même acier galvanisé prépeint que votre toiture. Quand l’industrie compte en semaines, nous livrons en 5 jours.</p>
+    </div>
+    <div class="paths">
+      <a class="path" href="/demander-un-prix/"><span class="caps">Je suis</span><b>Couvreur ou entrepreneur</b><span>Demander un prix pour mon chantier →</span></a>
+      <a class="path alt" href="/revendeurs/"><span class="caps">Je suis</span><b>Revendeur ou distributeur</b><span>Offrir Multi-Ventilation à mes clients →</span></a>
+    </div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="grid g4 pillars">
+      <div><span class="big">5 jours</span><p>Fabrication sur mesure, grandeur et couleur au choix.</p></div>
+      <div><span class="big">Couleur exacte</span><p>Le même acier prépeint que les fabricants de toitures métalliques.</p></div>
+      <div><span class="big">CAN3-A93-M82</span><p>AirM300 et Dôme 480 testés par UL Canada, laboratoire ISO/IEC 17025.</p></div>
+      <div><span class="big">Garantie à vie</span><p>Sur les défauts de fabrication, 10 ans sur la peinture.</p></div>
+    </div>
+  </div></section>
+
+  <section class="section wash"><div class="wrap">
+    <h2>Les plus demandés</h2>
+    <div class="grid g4">{pick.map((s) => <Card p={products.find((p) => p.slug === s)!} />)}</div>
+    <h2 style="margin-top:56px">La gamme complète : {products.length} produits</h2>
+    <div class="grid g4">
+      {categories.map((c) => (
+        <a class="card cat" href={`/produits/#${c.id}`}>
+          <h3>{c.name}</h3><p>{c.lead}</p>
+          <p class="n">{products.filter((p) => p.cat === c.id).length} produits →</p>
+        </a>
+      ))}
+    </div>
+  </div></section>
+
+  <section class="calc"><div class="wrap cgrid">
+    <div>
+      <h2>Combien de ventilation pour ce toit?</h2>
+      <p class="lead">Entrez la surface de l’entretoit et obtenez la surface libre requise, le nombre d’aérateurs et la longueur de soffite ventilé.</p>
+    </div>
+    <a class="btn light" href="/calculateur-de-ventilation/">Ouvrir le calculateur →</a>
+  </div></section>
+
+  <section class="section"><div class="wrap agrid">
+    <div>
+      <h2>Parlez à un conseiller</h2>
+      <p class="lead">Envoyez la grandeur, la pente, la couleur de la toiture et les quantités. Vous recevez un prix et une date de fabrication.</p>
+    </div>
+    <div class="btns col">
+      <a class="btn" href={'tel:' + site.phone}>Appeler · {site.phoneDisplay}</a>
+      <a class="btn ghost" href="/demander-un-prix/">Demander un prix en ligne</a>
+    </div>
+  </div></section>
+</Base>
+<style>
+  .hero{background:var(--gradient-wash);border-bottom:1px solid var(--mm-rule)}
+  .hgrid{display:grid;gap:36px;padding-block:clamp(40px,7vw,96px);align-items:center}
+  @media (min-width:960px){.hgrid{grid-template-columns:1.3fr 1fr}}
+  h1 em{color:var(--mm-steel)}
+  .hero .lead{margin-top:16px}
+  .paths{display:grid;gap:14px}
+  .path{display:grid;gap:4px;background:var(--mm-navy);color:#fff;text-decoration:none;padding:24px 28px 24px 44px;clip-path:polygon(18px 0,100% 0,100% 100%,0 100%)}
+  .path.alt{background:var(--mm-steel)}
+  .path .caps{color:var(--mm-sky)}
+  .path.alt .caps{color:#e0ebf4}
+  .path b{font-family:var(--font-display);font-size:22px;font-weight:800}
+  .path:hover{filter:brightness(.92)}
+  .pillars>div{border-top:3px solid var(--mm-steel);padding-top:16px}
+  .big{font-family:var(--font-display);font-weight:800;font-size:24px;color:var(--mm-navy);display:block;margin-bottom:6px}
+  .pillars p{color:var(--mm-graphite)}
+  .cat .n{margin-top:12px;color:var(--mm-navy);font-weight:700}
+  .calc{background:var(--mm-navy);color:#fff;padding:clamp(48px,7vw,80px) 0;clip-path:polygon(0 24px,100% 0,100% 100%,0 100%)}
+  .calc h2{color:#fff;font-style:italic;font-size:clamp(28px,4vw,40px)}
+  .calc .lead{color:#fff;opacity:.9}
+  .cgrid,.agrid{display:grid;gap:24px;align-items:center}
+  @media (min-width:860px){.cgrid{grid-template-columns:1fr auto}.agrid{grid-template-columns:1.4fr 1fr}}
+  .btns.col{flex-direction:column}.btns.col .btn{text-align:center}
+</style>

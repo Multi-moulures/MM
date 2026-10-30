@@ -1,0 +1,21 @@
+---
+import Inner from '../components/Inner.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { site } from '../data/site';
+---
+<Inner title="Demander un prix : ventilation de toiture sur mesure | Multi-Ventilation" description="Demandez un prix pour vos aérateurs de toit, dômes, clapets ou soffites ventilés sur mesure. Couvreurs, entrepreneurs et revendeurs partout au Canada." kicker="Demande de prix" h1="Demander un prix" lead="Dites-nous qui vous êtes et où vous êtes : votre demande va directement à la bonne personne.">
+  <div class="grid g2">
+    <LeadForm />
+    <div>
+      <h2>Ce qui nous aide à vous répondre vite</h2>
+      <ul class="ticks">
+        <li>Le produit et la grandeur (par exemple, AirM300 16 x 16 po)</li>
+        <li>La pente du toit</li>
+        <li>La marque et le nom de la couleur de la toiture</li>
+        <li>Les quantités et la date requise</li>
+      </ul>
+      <p>Plus rapide encore : appelez-nous au <a href={'tel:' + site.phone}><strong>{site.phoneDisplay}</strong></a>.</p>
+    </div>
+  </div>
+</Inner>
+<style>.ticks{padding-left:20px;display:grid;gap:6px}</style>

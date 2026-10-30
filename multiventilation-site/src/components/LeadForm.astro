@@ -1,0 +1,44 @@
+---
+const { kind = 'couvreur' } = Astro.props as { kind?: string };
+const provinces = ['Québec', 'Ontario', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Île-du-Prince-Édouard', 'Terre-Neuve-et-Labrador', 'Manitoba', 'Saskatchewan', 'Alberta', 'Colombie-Britannique', 'Territoires', 'États-Unis', 'Autre pays'];
+---
+<form class="order lead" method="post" action="#" data-lead>
+  <fieldset class="who">
+    <legend>Vous êtes</legend>
+    <label class="opt"><input type="radio" name="type" value="couvreur" checked={kind === 'couvreur'} /> Couvreur ou entrepreneur</label>
+    <label class="opt"><input type="radio" name="type" value="revendeur" checked={kind === 'revendeur'} /> Revendeur, distributeur ou quincaillerie</label>
+    <label class="opt"><input type="radio" name="type" value="autre" checked={kind === 'autre'} /> Autre (architecte, propriétaire, gestionnaire)</label>
+  </fieldset>
+  <label>Province ou région<select name="province" required>{provinces.map((p) => <option>{p}</option>)}</select></label>
+  <label>Ville<input name="ville" required autocomplete="address-level2" /></label>
+  <label>Entreprise<input name="entreprise" autocomplete="organization" /></label>
+  <label>Votre nom<input name="nom" required autocomplete="name" /></label>
+  <label>Téléphone<input name="telephone" type="tel" required autocomplete="tel" /></label>
+  <label>Courriel<input name="courriel" type="email" autocomplete="email" /></label>
+  <label>Produits, grandeurs, couleur et quantités<textarea name="message" rows="4"></textarea></label>
+  <button class="btn" type="submit">Envoyer</button>
+  <p class="route" role="status" hidden></p>
+  <p class="todo">Formulaire à brancher : chaque demande doit arriver avec son type et sa région pour être dirigée vers la bonne personne.</p>
+</form>
+<script>
+  document.querySelectorAll('form[data-lead]').forEach((f) => {
+    const out = f.querySelector('.route') as HTMLElement;
+    const msg = () => {
+      const t = (f.querySelector('input[name=type]:checked') as HTMLInputElement)?.value;
+      const p = (f.querySelector('select[name=province]') as HTMLSelectElement).value;
+      const qc = p === 'Québec';
+      if (t === 'revendeur') return 'Notre équipe des ventes aux revendeurs vous contactera pour vous présenter les conditions de distribution' + (qc ? '.' : ' dans votre région.');
+      if (t === 'couvreur' && !qc) return 'Nous vous servirons directement ou vous dirigerons vers un revendeur Multi-Ventilation près de chez vous.';
+      return 'Un conseiller vous rappellera avec un prix et un délai de fabrication.';
+    };
+    f.addEventListener('change', () => { out.hidden = false; out.textContent = msg(); });
+    f.addEventListener('submit', (e) => { e.preventDefault(); out.hidden = false; out.textContent = 'Merci. ' + msg(); });
+  });
+</script>
+<style>
+  .who{border:0;padding:0;margin:0;display:grid;gap:8px}
+  .who legend{font-weight:500;margin-bottom:6px}
+  .opt{display:flex!important;gap:10px;align-items:center;font-weight:400!important;border:1px solid var(--mm-rule);padding:12px;background:#fff;cursor:pointer}
+  .opt input{width:auto}
+  .route{background:var(--mm-ice);padding:12px 14px;margin:0;color:var(--mm-navy);font-weight:500}
+</style>

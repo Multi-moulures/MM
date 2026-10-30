@@ -1,0 +1,51 @@
+---
+import Inner from '../../components/Inner.astro';
+import Card from '../../components/Card.astro';
+import { products, categories } from '../../data/produits';
+import { site } from '../../data/site';
+export function getStaticPaths() { return products.map((p) => ({ params: { slug: p.slug } })); }
+const p = products.find((x) => x.slug === Astro.params.slug)!;
+const cat = categories.find((c) => c.id === p.cat)!;
+const others = products.filter((x) => x.cat === p.cat && x.slug !== p.slug).slice(0, 4);
+const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.name, description: p.desc, image: `${site.url}/img/${p.slug}.webp`, brand: { '@type': 'Brand', name: 'Multi-Ventilation' }, manufacturer: { '@type': 'Organization', name: 'Multi-Moulures inc.', url: site.parent }, material: 'Acier galvanisé G90 prépeint', additionalProperty: p.specs.map(([k, v]) => ({ '@type': 'PropertyValue', name: k, value: v })) }];
+---
+<Inner schema={schema} crumbs={[['Produits', '/produits/'], [cat.name, `/produits/#${cat.id}`]]} title={`${p.name} : ${p.sub.toLowerCase()}, sur mesure en 5 jours | Multi-Ventilation`} description={p.desc.slice(0, 155)} kicker={cat.name} h1={p.name} lead={p.sub}>
+  {p.check && <p class="todo" style="margin-bottom:24px">{p.check}</p>}
+  <div class="grid g2 top">
+    <img class="hero-img" src={`/img/${p.slug}.webp`} alt={p.name} />
+    <div>
+      <div class="metric"><span class="v">{p.metric.v}</span><span class="u">{p.metric.u}</span></div>
+      <p class="ml">{p.metric.label}</p>
+      {p.metric.note && <p class="mn">{p.metric.note}</p>}
+      <p style="margin-top:20px">{p.desc}</p>
+      <ul class="tags">
+        <li>Fabriqué en 5 jours</li><li>Couleur assortie</li><li>Acier canadien</li><li>Formats sur mesure</li>
+        {p.pitch && <li>Pentes {p.pitch}</li>}{p.tested && <li>Testé CAN3-A93-M82</li>}
+      </ul>
+      <p class="btns"><a class="btn" href="/demander-un-prix/">Demander un prix</a><a class="btn ghost" href={'tel:' + site.phone}>{site.phoneDisplay}</a></p>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:48px">
+    <table class="spec"><tr><th colspan="2">Spécifications techniques</th></tr>{p.specs.map(([k, v]) => <tr><td>{k}</td><td>{v}</td></tr>)}</table>
+    <div>
+      <div class="scroll"><table class="spec"><tr>{p.table.head.map((h) => <th>{h}</th>)}</tr>{p.table.rows.map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}</table></div>
+      {p.table.note && <p class="mn">{p.table.note}</p>}
+      <p class="mn">Débits estimés à partir de la surface libre de ventilation (SFVA). Garantie à vie sur les défauts de fabrication, 10 ans sur la peinture.</p>
+      {p.tested && <p class="mn"><a href="/normes-et-essais/">Essais selon CAN3-A93-M82 (R2003) par UL Canada →</a></p>}
+    </div>
+  </div>
+  {others.length > 0 && <section style="margin-top:64px"><h2>Dans la même catégorie</h2><div class="grid g4">{others.map((o) => <Card p={o} />)}</div></section>}
+</Inner>
+<style>
+  .hero-img{width:100%;max-height:420px;object-fit:contain;background:var(--mm-mist)}
+  .top{align-items:start}
+  .metric{display:flex;align-items:baseline;gap:10px;font-family:var(--font-display);font-weight:800;color:var(--mm-navy);line-height:1}
+  .v{font-size:clamp(48px,6vw,72px)}.u{font-size:24px}
+  .ml{margin:6px 0 0;font-weight:500}
+  .mn{font-size:14px;color:var(--mm-graphite);margin-top:8px}
+  .tags{list-style:none;padding:0;margin:16px 0 24px;display:flex;flex-wrap:wrap;gap:6px}
+  .tags li{background:var(--mm-ice);color:var(--mm-navy);padding:5px 10px;font-size:14px;font-weight:500}
+  .scroll{overflow-x:auto;min-width:0}
+  .scroll td,.scroll th{white-space:nowrap}
+  table.spec{font-variant-numeric:tabular-nums}
+</style>

@@ -1,0 +1,55 @@
+---
+import Inner from '../components/Inner.astro';
+---
+<Inner title="Calculateur de ventilation d’entretoit : surface libre, aérateurs, soffites | Multi-Ventilation" description="Calculez la surface libre de ventilation requise pour un entretoit selon la règle du 1/300 ou du 1/150, et le nombre d’aérateurs et de pieds de soffite ventilé nécessaires." kicker="Calculateur" h1="Combien de ventilation pour ce toit?" lead="Une estimation rapide de la surface libre de ventilation, du nombre d’aérateurs et de la longueur de soffite ventilé.">
+  <div class="grid g2 calc">
+    <form class="order" id="vc" onsubmit="return false">
+      <label>Surface du plafond isolé (pi²)<input id="area" type="number" min="0" step="any" value="1500" inputmode="decimal" /></label>
+      <label>Règle applicable
+        <select id="ratio">
+          <option value="300">1/300 : cas général</option>
+          <option value="150">1/150 : faible pente (moins de 1:6) ou toit cathédrale</option>
+        </select>
+      </label>
+      <label>Part de l’entrée d’air (soffites)
+        <select id="split"><option value="0.5">50 % entrée, 50 % évacuation</option><option value="0.6">60 % entrée, 40 % évacuation</option></select>
+      </label>
+      <p class="note">Le Code national du bâtiment du Canada (art. 9.19.1.2) demande une surface libre de ventilation d’au moins 1/300 de la surface isolée du plafond, ou 1/150 pour les toits à faible pente et les toits cathédrales. Ce calculateur donne une estimation : validez toujours avec le code applicable, les exigences municipales et celles du fabricant de votre toiture.</p>
+    </form>
+    <div class="result">
+      <p class="caps">Surface libre totale requise</p>
+      <p class="big" id="total">0 po²</p>
+      <div class="split"><div><span id="in">0</span> po² en entrée</div><div><span id="out">0</span> po² en évacuation</div></div>
+      <h3>Évacuation : nombre d’aérateurs</h3>
+      <table class="spec" id="exh"></table>
+      <h3>Entrée : longueur de soffite ventilé</h3>
+      <table class="spec" id="intk"></table>
+      <a class="btn" href="/demander-un-prix/">Demander un prix pour ce toit</a>
+    </div>
+  </div>
+  <script>
+    const ex = [['AirM300 12 x 12 po', 144, 'airm300-base-ajustable'], ['AirM300 16 x 16 po', 256, 'airm300-base-ajustable'], ['AirM300 24 x 24 po', 576, 'airm300-base-ajustable'], ['AirM100 12 x 12 po', 70, 'airm100-base-ajustable'], ['Dôme 480, 4 pi', 250, 'dome-480']] as const;
+    const ink = [['Soffite Oblong 50 %', 77, 'soffite-ventile-oblong-50'], ['Soffite Oblong', 41, 'soffite-ventile-oblong'], ['Soffite embossé', 13.5, 'soffite-ventile-embosse'], ['Soffite mural anti-rafale', 12, 'soffite-mural-anti-rafale']] as const;
+    const nf = new Intl.NumberFormat('fr-CA', { maximumFractionDigits: 0 });
+    const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+    function run() {
+      const a = parseFloat($('area').value) || 0, r = parseFloat($('ratio').value), s = parseFloat($('split').value);
+      const tot = (a * 144) / r, inn = tot * s, out = tot - inn;
+      $('total').textContent = nf.format(tot) + ' po²';
+      $('in').textContent = nf.format(inn); $('out').textContent = nf.format(out);
+      (document.getElementById('exh') as HTMLElement).innerHTML = '<tr><th>Aérateur</th><th>SFVA</th><th>Quantité</th></tr>' + ex.map(([n, v, u]) => `<tr><td><a href="/produits/${u}/">${n}</a></td><td>${v} po²</td><td><strong>${Math.ceil(out / v)}</strong></td></tr>`).join('');
+      (document.getElementById('intk') as HTMLElement).innerHTML = '<tr><th>Soffite</th><th>po²/pi lin.</th><th>Longueur</th></tr>' + ink.map(([n, v, u]) => `<tr><td><a href="/produits/${u}/">${n}</a></td><td>${String(v).replace('.', ',')}</td><td><strong>${nf.format(Math.ceil(inn / v))} pi</strong></td></tr>`).join('');
+    }
+    document.getElementById('vc')!.addEventListener('input', run); run();
+  </script>
+</Inner>
+<style>
+  .result{background:var(--mm-ice);padding:28px;display:grid;gap:12px;align-content:start}
+  .big{font-family:var(--font-display);font-weight:800;font-size:clamp(36px,5vw,56px);color:var(--mm-navy);margin:0;line-height:1;font-variant-numeric:tabular-nums}
+  .split{display:flex;flex-wrap:wrap;gap:8px 24px;font-weight:500}
+  .split span{font-family:var(--font-display);font-weight:800;color:var(--mm-navy)}
+  .result h3{margin:12px 0 0}
+  .note{font-size:14px;color:var(--mm-graphite)}
+  table.spec{font-variant-numeric:tabular-nums;background:#fff}
+  .result .btn{justify-self:start;margin-top:8px}
+</style>

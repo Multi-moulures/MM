@@ -1,0 +1,21 @@
+---
+import Inner from '../components/Inner.astro';
+import { products } from '../data/produits';
+const tested = products.filter((p) => p.tested);
+---
+<Inner title="Normes et essais : CAN3-A93-M82, UL Canada | Multi-Ventilation" description="L’AirM300 et le Dôme 480 de Multi-Ventilation ont été testés selon la norme CAN3-A93-M82 (R2003) par UL Canada, laboratoire accrédité ISO/IEC 17025." kicker="Qualité" h1="Normes et essais" lead="Nos aérateurs sont testés par un laboratoire indépendant, selon la norme canadienne des aérateurs de toit.">
+  <div class="grid g2">
+    <div>
+      <h2>CAN3-A93-M82 (R2003)</h2>
+      <p>Norme canadienne qui encadre les aérateurs de toit naturels pour les bâtiments résidentiels. Les essais vérifient la résistance au vent, la résistance à la pluie, la résistance à la corrosion et l’intégrité structurale.</p>
+      <p>Les essais ont été réalisés par UL Canada, laboratoire accrédité ISO/IEC 17025.</p>
+      <p class="todo">À décider : publier le rapport d’essai complet (PDF) ou un sommaire.</p>
+    </div>
+    <table class="spec">
+      <tr><th colspan="2">Produits testés</th></tr>
+      {tested.map((p) => <tr><td><a href={`/produits/${p.slug}/`}>{p.name}</a></td><td>CAN3-A93-M82 (R2003)</td></tr>)}
+    </table>
+  </div>
+  <h2 style="margin-top:48px">Matériaux</h2>
+  <p>Acier galvanisé G90 (revêtement de zinc Z275) de calibre 24 à 28 selon le produit, prépeint en usine par les mêmes fabricants que l’acier de toiture. Le zinc sous la peinture offre une double protection contre la corrosion. Garantie à vie sur les défauts de fabrication, 10 ans sur la peinture.</p>
+</Inner>
