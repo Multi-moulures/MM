@@ -48,6 +48,10 @@ const groups: [string, string, [string, string, string][]][] = [
       <tr><td>{fr ? 'Garantie' : 'Warranty'}</td><td>{fr ? 'À vie sur défaut de fabrication, 10 ans sur la peinture' : 'Lifetime on manufacturing defects, 10 years on paint'}</td></tr>
     </table>
   </div>
+  <a class="mvband" href={mv}>
+    <img src="/img/logo-mv-inverse.png" alt="Multi-Ventilation" width="1200" height="313" loading="lazy" />
+    <span><strong>{fr ? 'Notre gamme de ventilation a son propre site.' : 'Our ventilation line has its own website.'}</strong>{fr ? 'Fiches techniques complètes, calculateur de ventilation, normes et essais, programme revendeurs.' : 'Full spec sheets, ventilation calculator, standards and testing, reseller program.'}<em>multiventilation.ca →</em></span>
+  </a>
   {groups.map(([gf, ge, items]) => (
     <section class="vg">
       <h2>{fr ? gf : ge}</h2>
@@ -64,5 +68,11 @@ const groups: [string, string, [string, string, string][]][] = [
 </Inner>
 <style>
   .vg{margin-top:48px}
+  .mvband{display:grid;gap:20px 40px;align-items:center;margin-top:56px;padding:clamp(24px,4vw,40px);background:var(--gradient-footer);color:#fff;text-decoration:none}
+  @media (min-width:800px){.mvband{grid-template-columns:minmax(260px,380px) 1fr}}
+  .mvband img{width:100%;max-width:380px}
+  .mvband span{display:grid;gap:6px;font-size:17px;color:#dbe4ee}
+  .mvband strong{font-family:var(--font-display);font-size:clamp(20px,2.2vw,26px);color:#fff;line-height:1.2}
+  .mvband em{font-style:normal;font-family:var(--font-display);font-weight:700;color:#fff;text-decoration:underline;text-decoration-color:var(--mm-copper);text-underline-offset:4px;margin-top:6px}
   .vc img{height:150px;width:100%;object-fit:contain;background:var(--mm-mist);margin-bottom:12px}
 </style>

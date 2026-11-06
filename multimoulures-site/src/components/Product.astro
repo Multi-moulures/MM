@@ -34,7 +34,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: f.
       <tr><td>{fr ? 'Acier prépeint' : 'Prepainted steel'}</td><td>{fr ? 'Calibres 22 à 30' : '22 to 30 gauge'}</td></tr>
       <tr><td>{fr ? 'Aluminium prépeint' : 'Prepainted aluminium'}</td><td>{fr ? '0,013 à 0,027 po' : '0.013 to 0.027 in'}</td></tr>
       <tr><td>{fr ? 'Couleurs' : 'Colours'}</td><td><a href={routes.inventory[lang]}>{fr ? 'Plus de 200 couleurs d’acier, 90 d’aluminium' : 'Over 200 steel colours, 90 aluminium'}</a></td></tr>
-      <tr><td>{fr ? 'Récupération' : 'Fulfilment'}</td><td>{fr ? 'Cueillette ou livraison (5 camions)' : 'Pickup or delivery (5 trucks)'}</td></tr>
+      <tr><td>{fr ? 'Récupération' : 'Fulfilment'}</td><td>{fr ? 'Cueillette ou livraison' : 'Pickup or delivery'}</td></tr>
     </table>
     <div>
       {related.length > 0 && <>

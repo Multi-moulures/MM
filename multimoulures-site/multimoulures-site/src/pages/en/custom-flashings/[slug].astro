@@ -1,6 +1,0 @@
----
-import C from '../../../components/Product.astro';
-import { families } from '../../../data/catalogue';
-export function getStaticPaths() { return families.map((p) => ({ params: { slug: p.slug.en } })); }
----
-<C lang="en" slug={Astro.params.slug} />

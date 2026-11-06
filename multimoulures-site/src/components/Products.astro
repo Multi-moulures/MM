@@ -1,4 +1,5 @@
 ---
+import CatalogueDownload from './CatalogueDownload.astro';
 import Inner from './Inner.astro';
 import { routes, type Lang } from '../data/site';
 import { families, totalProfiles } from '../data/catalogue';
@@ -12,6 +13,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'ItemList', name: f
   description={fr ? `Plus de ${totalProfiles} profils de moulures en 26 familles : départs, larmiers, solins, fascias, faîtières, noues, caps, finitions. Pliés sur mesure au Québec dans la couleur de votre revêtement.` : `Over ${totalProfiles} flashing profiles in 26 families: starters, drip edges, flashings, fascia, ridge caps, valleys, parapet caps, trims. Custom bent in Quebec in your cladding colour.`}
   kicker={fr ? `${totalProfiles} profils · 26 familles` : `${totalProfiles} profiles · 26 families`} h1={fr ? 'Moulures sur mesure' : 'Custom flashings'}
   lead={fr ? 'Choisissez un profil de notre catalogue ou envoyez votre dessin. Chaque pièce est pliée à vos mesures, dans le calibre et la couleur de votre revêtement.' : 'Pick a profile from our catalogue or send your drawing. Every part is bent to your measurements, in the gauge and colour of your cladding.'}>
+  <CatalogueDownload lang={lang} />
   <div class="grid g4 fam">
     {families.map((f) => (
       <a class="card famcard" href={routes.products[lang] + f.slug[lang] + '/'}>

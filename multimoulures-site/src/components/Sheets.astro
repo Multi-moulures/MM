@@ -2,6 +2,7 @@
 import Inner from './Inner.astro';
 import { routes, type Lang } from '../data/site';
 import { sheets } from '../data/catalogue';
+import CatalogueDownload from './CatalogueDownload.astro';
 const { lang } = Astro.props as { lang: Lang };
 const fr = lang === 'fr';
 const groups = [['premium', fr ? 'Pliage premium' : 'Premium products'], ['essentiels', fr ? 'Pliage essentiels' : 'Essential profiles']] as const;
@@ -11,6 +12,7 @@ const groups = [['premium', fr ? 'Pliage premium' : 'Premium products'], ['essen
   description={fr ? 'Fiches techniques Multi-Moulures : larmier métallique recommandé par la GCR, persiennes architecturales, volets décoratifs, barres en L, U et Z, départ d’aluminium, noue, profilé oméga, solin de coin.' : 'Multi-Moulures spec sheets: GCR recommended drip flashing, architectural louvres, decorative shutters, L, U and Z bars, aluminium starter, valley, omega profile, corner flashing.'}
   kicker={fr ? 'Catalogue 2026' : '2026 catalogue'} h1={fr ? 'Fiches techniques' : 'Spec sheets'}
   lead={fr ? 'Dimensions, calibres et formats en stock de nos produits pliés.' : 'Dimensions, gauges and stock formats of our bent products.'}>
+  <CatalogueDownload lang={lang} />
   {groups.map(([g, title]) => (
     <section class="grp">
       <h2>{title}</h2>
@@ -25,7 +27,6 @@ const groups = [['premium', fr ? 'Pliage premium' : 'Premium products'], ['essen
       </div>
     </section>
   ))}
-  <p class="todo" style="margin-top:32px">{fr ? 'Fiches PDF téléchargeables à ajouter une fois la version finale du catalogue prête.' : 'Downloadable PDF sheets to add once the final catalogue is ready.'}</p>
 </Inner>
 <style>
   .grp{margin-bottom:48px}

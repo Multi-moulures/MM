@@ -20,13 +20,20 @@ const fr = lang === 'fr';
         <select name="fulfil"><option>{fr ? 'Cueillette à Saint-Bruno' : 'Pickup in Saint-Bruno'}</option><option>{fr ? 'Livraison sur chantier' : 'Jobsite delivery'}</option></select>
       </label>
       <button class="btn" type="submit">{fr ? 'Envoyer ma demande' : 'Send my request'}</button>
-      <p class="todo">{fr ? 'Formulaire à brancher (service de formulaires ou workflow d’automatisation des commandes).' : 'Form to connect (form service or order automation workflow).'}</p>
+      <p class="todo">{fr ? 'Formulaire à brancher : envoi vers info@multimoulures.com.' : 'Form to connect: sends to info@multimoulures.com.'}</p>
     </form>
     <div>
       <h2>{fr ? 'Ou plus simple encore' : 'Or even simpler'}</h2>
       <p>{fr ? 'Appelez un conseiller technique :' : 'Call a technical advisor:'} <a href={'tel:' + company.phone}><strong>{company.phoneDisplay}</strong></a></p>
       <p>{fr ? 'Écrivez-nous :' : 'Email us:'} <a href={'mailto:' + company.email}>{company.email}</a></p>
-      <p class="todo">{fr ? 'À confirmer : numéro pour envoyer une photo par texto, délai de réponse pour une soumission.' : 'To confirm: number to text a photo, quote response time.'}</p>
+      <div class="promise"><strong>{fr ? 'Réponse le jour même' : 'Same day answer'}</strong>{fr ? `Demande reçue avant ${company.quoteCutoff} un jour ouvrable : vous avez votre prix le jour même.` : 'Request received before 11 a.m. on a business day: you get your price the same day.'}</div>
+      <p class="small">{fr ? 'Lundi au vendredi, 7 h 30 à 16 h 30. Téléphone fermé de 12 h à 12 h 30.' : 'Monday to Friday, 7:30 a.m. to 4:30 p.m. Phones closed 12:00 to 12:30.'}</p>
+      <p class="small">{fr ? 'Vous êtes propriétaire ? Nos produits sont vendus aux professionnels : demandez à votre couvreur de commander chez nous.' : 'Homeowner? Our products are sold to professionals: ask your roofer to order from us.'}</p>
     </div>
   </div>
 </Inner>
+<style>
+  .promise{display:grid;gap:4px;border-left:4px solid var(--mm-copper);background:var(--mm-copper-tint);padding:16px 20px;margin:8px 0 20px}
+  .promise strong{font-family:var(--font-display);color:var(--mm-navy);font-size:19px}
+  .small{font-size:15px;color:var(--mm-graphite)}
+</style>

@@ -5,6 +5,7 @@
   --mm-steel:#2e78b7; --mm-steel-line:#1d568f; --mm-sky:#93b5da;
   --mm-ice:#e0ebf4; --mm-mist:#ebeff1; --mm-zebra:#ebedee; --mm-rule:#d5d8dc;
   --mm-ink:#2c2e35; --mm-graphite:#56585d; --mm-slate:#3a3d44; --mm-ash:#8a8d93; --mm-white:#fff;
+  --mm-copper:#b5612a; --mm-copper-deep:#8f4a1e; --mm-copper-tint:#f6e9df;
   --gradient-footer:linear-gradient(90deg,var(--mm-navy-deep) 0%,#00407b 50%,var(--mm-navy) 100%);
   --gradient-wash:linear-gradient(90deg,var(--mm-mist) 0%,#f3f5f6 60%,#fff 100%);
   --font-display:'Montserrat',system-ui,sans-serif;
@@ -27,9 +28,11 @@ p{margin:0 0 1em;max-width:68ch}
 .wash{background:var(--gradient-wash)}
 .lead{font-size:20px;color:var(--mm-slate)}
 .btn{display:inline-block;font-family:var(--font-display);font-weight:700;font-size:15px;text-decoration:none;padding:15px 26px;border:2px solid var(--mm-navy);background:var(--mm-navy);color:#fff;transition:background .15s}
-.btn:hover{background:var(--mm-navy-deep)}
+.btn:focus-visible{outline:3px solid var(--mm-copper);outline-offset:2px}
+.btn.copper{background:var(--mm-copper);border-color:var(--mm-copper);color:#fff}
+.textlink{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--mm-navy);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--mm-copper);text-decoration-thickness:2px}
 .btn.ghost{background:transparent;color:var(--mm-navy)}
-.btn.ghost:hover{background:var(--mm-ice)}
+
 .btn.light{background:#fff;color:var(--mm-navy);border-color:#fff}
 .btns{display:flex;flex-wrap:wrap;gap:12px}
 .todo{background:#fff4d6;outline:1px dashed #c9a227;padding:0 4px}
@@ -40,7 +43,7 @@ table.spec tr:nth-child(even) td{background:var(--mm-zebra)}
 .grid{display:grid;gap:20px}
 @media (min-width:720px){.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}}
 .card{border:1px solid var(--mm-rule);padding:24px;background:#fff;text-decoration:none;color:inherit;display:block}
-a.card:hover{border-color:var(--mm-steel)}
+a.card:hover{border-color:var(--mm-copper)}
 .card p{margin:0;color:var(--mm-graphite)}
 .page-head{background:var(--gradient-wash);padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px);border-bottom:1px solid var(--mm-rule)}
 .crumbs{font-size:14px;color:var(--mm-ash);margin-bottom:12px}
@@ -51,3 +54,5 @@ details p{margin:12px 0 0}
 form.order{display:grid;gap:16px;max-width:640px}
 form.order label{display:grid;gap:6px;font-weight:500}
 form.order input,form.order textarea,form.order select{font:inherit;padding:12px;border:1px solid var(--mm-rule);background:#fff;width:100%}
+
+.ph-slot{background:linear-gradient(135deg,#dfe5ea,#c9d3db);display:grid;place-items:center;color:var(--mm-graphite);font-size:14px;text-align:center;padding:12px}
