@@ -1,5 +1,5 @@
 ---
-import { langOf } from '../i18n';
+import { langOf, routes } from '../i18n';
 const { kind = 'couvreur' } = Astro.props as { kind?: string };
 const fr = langOf(Astro.url.pathname) === 'fr';
 const provinces = fr
@@ -23,6 +23,8 @@ const L = fr
   <label>{L.phone}<input name="telephone" type="tel" required autocomplete="tel" /></label>
   <label>{L.email}<input name="courriel" type="email" autocomplete="email" /></label>
   <label>{L.msg}<textarea name="message" rows="4"></textarea></label>
+  <label class="opt share"><input type="checkbox" name="partage_revendeur" value="oui" /> {fr ? 'J’accepte que ma demande soit transmise au revendeur Multi-Ventilation de ma région, s’il y en a un (facultatif).' : 'I agree that my request may be sent to the Multi-Ventilation reseller in my region, if there is one (optional).'}</label>
+  <p class="consent">{fr ? <>En envoyant ce formulaire, vous acceptez que Multi-Moulures utilise vos renseignements pour répondre à votre demande, selon notre <a href={routes.privacy.fr}>politique de confidentialité</a>.</> : <>By sending this form, you agree that Multi-Moulures may use your information to answer your request, as described in our <a href={routes.privacy.en}>privacy policy</a>.</>}</p>
   <button class="btn" type="submit">{L.send}</button>
   <p class="route" role="status" hidden></p>
   <p class="todo">{L.todo}</p>
@@ -48,5 +50,7 @@ const L = fr
   .who legend{font-weight:500;margin-bottom:6px}
   .opt{display:flex!important;gap:10px;align-items:center;font-weight:400!important;border:1px solid var(--mm-rule);padding:12px;background:#fff;cursor:pointer}
   .opt input{width:auto}
+  .share{font-size:15px}
+  .consent{font-size:14px;color:var(--mm-graphite);margin:0}
   .route{background:var(--mm-ice);padding:12px 14px;margin:0;color:var(--mm-navy);font-weight:500}
 </style>

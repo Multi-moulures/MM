@@ -1,0 +1,22 @@
+---
+import Inner from './Inner.astro';
+import { routes, type Lang } from '../data/site';
+import { privacy, privacyUpdated } from '../data/privacy';
+const { lang, brand = 'mm' } = Astro.props as { lang: Lang; brand?: 'mm' | 'mv' };
+const fr = lang === 'fr';
+const sections = privacy(lang, brand);
+---
+<Inner lang={lang} alt={routes.privacy[fr ? 'en' : 'fr']} title={fr ? 'Politique de confidentialité | Multi-Moulures' : 'Privacy policy | Multi-Moulures'} description={fr ? 'Comment Multi-Moulures recueille, utilise et protège vos renseignements personnels, et comment exercer vos droits (Loi 25).' : 'How Multi-Moulures collects, uses and protects your personal information, and how to exercise your rights.'} h1={fr ? 'Politique de confidentialité' : 'Privacy policy'} lead={(fr ? 'Dernière mise à jour : ' : 'Last updated: ') + privacyUpdated[lang]}>
+  <div class="pol">
+    <p class="todo">{fr ? 'Ébauche à faire valider par Laurie avant la mise en ligne.' : 'Draft, to be reviewed before launch.'}</p>
+    <nav class="toc">{sections.map((s, i) => <a href={`#s${i + 1}`}>{i + 1}. {s.h}</a>)}</nav>
+    {sections.map((s, i) => <section id={`s${i + 1}`}><h2>{i + 1}. {s.h}</h2>{s.p.map((x) => <p>{x}</p>)}{s.todo && fr && <p class="todo">{s.todo}</p>}</section>)}
+  </div>
+</Inner>
+<style>
+  .pol{max-width:780px}
+  .toc{display:grid;gap:4px;margin:8px 0 40px;padding:20px 24px;background:var(--mm-mist)}
+  .toc a{color:var(--mm-navy);font-size:16px}
+  .pol section{margin-bottom:36px;scroll-margin-top:110px}
+  .pol h2{font-size:24px}
+</style>

@@ -19,6 +19,7 @@ const fr = lang === 'fr';
       <label>{fr ? 'Récupération' : 'Fulfilment'}
         <select name="fulfil"><option>{fr ? 'Cueillette à Saint-Bruno' : 'Pickup in Saint-Bruno'}</option><option>{fr ? 'Livraison sur chantier' : 'Jobsite delivery'}</option></select>
       </label>
+      <p class="consent">{fr ? <>En envoyant ce formulaire, vous acceptez que Multi-Moulures utilise vos renseignements pour répondre à votre demande, selon notre <a href={routes.privacy.fr}>politique de confidentialité</a>.</> : <>By sending this form, you agree that Multi-Moulures may use your information to answer your request, as described in our <a href={routes.privacy.en}>privacy policy</a>.</>}</p>
       <button class="btn" type="submit">{fr ? 'Envoyer ma demande' : 'Send my request'}</button>
       <p class="todo">{fr ? 'Formulaire à brancher : envoi vers info@multimoulures.com.' : 'Form to connect: sends to info@multimoulures.com.'}</p>
     </form>

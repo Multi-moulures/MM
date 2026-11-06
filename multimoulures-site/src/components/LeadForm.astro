@@ -1,5 +1,5 @@
 ---
-import { type Lang } from '../data/site';
+import { routes, type Lang } from '../data/site';
 const { lang, kind = 'roofer' } = Astro.props as { lang: Lang; kind?: 'roofer' | 'reseller' };
 const fr = lang === 'fr';
 const types = fr
@@ -22,6 +22,7 @@ const volumes = fr
     <select name="volume">{volumes.map((v) => <option>{v}</option>)}</select>
   </label>
   <label>{fr ? 'Message (facultatif)' : 'Message (optional)'}<textarea name="message" rows="4"></textarea></label>
+  <p class="consent">{fr ? <>En envoyant ce formulaire, vous acceptez que Multi-Moulures utilise vos renseignements pour répondre à votre demande, selon notre <a href={routes.privacy.fr}>politique de confidentialité</a>.</> : <>By sending this form, you agree that Multi-Moulures may use your information to answer your request, as described in our <a href={routes.privacy.en}>privacy policy</a>.</>}</p>
   <button class="btn" type="submit">{fr ? 'Envoyer' : 'Send'}</button>
   <p style="font-size:15px;color:var(--mm-graphite);margin:0">{fr ? 'Réservé aux professionnels. Vous êtes propriétaire ? Demandez à votre couvreur de commander chez Multi-Moulures.' : 'For professionals only. Homeowner? Ask your roofer to order from Multi-Moulures.'}</p>
   <p class="todo">{fr ? 'Formulaire à brancher : envoi vers info@multimoulures.com.' : 'Form to connect: sends to info@multimoulures.com.'}</p>

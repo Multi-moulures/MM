@@ -50,6 +50,8 @@ export const routes = {
   regions: { fr: '/regions-desservies/', en: '/en/service-areas/' },
   contact: { fr: '/contact/', en: '/en/contact/' },
   careers: { fr: '/emplois/', en: '/en/careers/' },
+  warranty: { fr: '/garantie/', en: '/en/warranty/' },
+  privacy: { fr: '/politique-de-confidentialite/', en: '/en/privacy-policy/' },
 } as const;
 
 export const nav: { key: keyof typeof routes; fr: string; en: string }[] = [

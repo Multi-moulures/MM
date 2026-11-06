@@ -45,7 +45,7 @@ const groups: [string, string, [string, string, string][]][] = [
       <tr><td>{fr ? 'Couleurs' : 'Colours'}</td><td>{fr ? 'Assorties à votre toiture' : 'Matched to your roof'}</td></tr>
       <tr><td>{fr ? 'Matériau' : 'Material'}</td><td>{fr ? 'Acier galvanisé G90, 24 à 28 ga, prépeint' : 'G90 galvanized steel, 24 to 28 ga, prepainted'}</td></tr>
       <tr><td>{fr ? 'Essais' : 'Testing'}</td><td>CAN3-A93-M82 (R2003), UL Canada</td></tr>
-      <tr><td>{fr ? 'Garantie' : 'Warranty'}</td><td>{fr ? 'À vie sur défaut de fabrication, 10 ans sur la peinture' : 'Lifetime on manufacturing defects, 10 years on paint'}</td></tr>
+      <tr><td>{fr ? 'Garantie' : 'Warranty'}</td><td><a href={routes.warranty[lang]}>{fr ? 'À vie limitée sur les défauts de fabrication, 10 ans sur la peinture' : 'Limited lifetime on manufacturing defects, 10 years on paint'}</a></td></tr>
     </table>
   </div>
   <a class="mvband" href={mv}>

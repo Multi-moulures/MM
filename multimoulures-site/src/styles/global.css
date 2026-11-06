@@ -35,6 +35,7 @@ p{margin:0 0 1em;max-width:68ch}
 
 .btn.light{background:#fff;color:var(--mm-navy);border-color:#fff}
 .btns{display:flex;flex-wrap:wrap;gap:12px}
+.consent{font-size:14px;color:var(--mm-graphite);margin:0}
 .todo{background:#fff4d6;outline:1px dashed #c9a227;padding:0 4px}
 table.spec{width:100%;border-collapse:collapse;font-size:15px}
 table.spec th{background:var(--mm-navy);color:#fff;text-align:left;padding:10px 12px;font-weight:500}
