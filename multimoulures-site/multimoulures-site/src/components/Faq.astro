@@ -1,0 +1,17 @@
+---
+import Inner from './Inner.astro';
+import { routes, faq, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const items = faq[lang];
+const strip = (s: string) => s.replace(/<[^>]+>/g, '');
+const schema = [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: items.filter(([, a]) => !a.includes('todo')).map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: strip(a) } })) }];
+---
+<Inner lang={lang} alt={routes.faq[fr ? 'en' : 'fr']} schema={schema}
+  title={fr ? 'Questions fréquentes : délais, commandes, livraison | Multi-Moulures' : 'FAQ: turnaround, ordering, delivery | Multi-Moulures'}
+  description={fr ? 'Délai de 72 heures, commande par croquis, cueillette ou livraison, calibres et couleurs : les réponses aux questions des couvreurs.' : '72 hour turnaround, ordering from a sketch, pickup or delivery, gauges and colours: answers to roofers’ questions.'}
+  h1={fr ? 'Questions fréquentes' : 'Frequently asked questions'}>
+  <div style="max-width:820px">
+    {items.map(([q, a]) => <details open><summary>{q}</summary><p set:html={a} /></details>)}
+  </div>
+</Inner>

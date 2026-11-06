@@ -1,0 +1,156 @@
+---
+import Base from '../layouts/Base.astro';
+import { company, routes, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const other: Lang = fr ? 'en' : 'fr';
+const c = fr ? {
+  title: 'Moulures de métal et ventilation de toiture sur mesure | Multi-Moulures',
+  desc: 'Fabricant québécois de moulures de métal et de ventilation de toiture sur mesure. Plus de 40 000 feuilles en stock, deux usines, moulures prêtes en 72 heures.',
+  kicker: 'Fabricant québécois · Saint-Bruno-de-Montarville',
+  h1: ['Sur mesure.', 'Sans', 'compromis.'],
+  lead: 'Moulures de métal et produits de ventilation sur mesure, depuis plus de 35 ans.',
+  call: 'Appeler un conseiller', quote: 'Demander un prix en ligne',
+  pillars: [['Tous les profils.', 'Plus de 160 profils au catalogue, ou votre propre dessin.'], ['Toutes les couleurs.', 'Les palettes des grands fabricants de revêtement, en stock.'], ['Quand tu en as besoin.', 'Prêt en 72 heures, cueilli à Saint-Bruno ou livré au chantier.']],
+  nums: [['40\u00a0000+', 'feuilles en stock'], ['70', 'employés'], ['2', 'usines'], ['8', 'plieuses'], ['3', 'cisailles'], ['2', 'poinçonneuses CNC'], ['35', 'ans d’expérience']],
+  plantsK: 'Notre force', plantsH: 'Deux usines. Une seule exigence : la précision.', plantsP: 'Huit plieuses, dont une de 20 pieds, trois cisailles, deux poinçonneuses CNC et une équipe de 70 personnes qui plie pour les couvreurs depuis plus de 35 ans.', plantsL: 'Découvrir Multi-Moulures',
+  ventK: 'Ventilation de toiture', ventH: 'Quand l’industrie compte en semaines, nous livrons en 5 jours.', ventL: 'Voir nos produits de ventilation',
+  workK: 'Sur le chantier', workH: 'Nos pièces, installées.',
+  partH: 'Vos équipes sur le toit. Nos plieuses à l’atelier.', partP: 'Confiez-nous le volume, les pièces complexes et vos semaines de pointe : vos couvreurs restent là où ils rapportent.', partL: 'Calculer la valeur pour votre entreprise',
+  endH: 'Parlons de votre prochain projet.', endL: 'Ouvrir un compte entrepreneur',
+  photo: 'Photo à venir',
+} : {
+  title: 'Custom metal flashings and roof vents | Multi-Moulures',
+  desc: 'Quebec manufacturer of custom metal flashings and roof vents. Over 40,000 sheets in stock, two plants, flashings ready in 72 hours.',
+  kicker: 'Quebec manufacturer · Saint-Bruno-de-Montarville',
+  h1: ['Made to measure.', 'No', 'compromise.'],
+  lead: 'Custom metal flashings and ventilation products, for over 35 years.',
+  call: 'Call an advisor', quote: 'Request a quote online',
+  pillars: [['Every profile.', 'Over 160 catalogue profiles, or your own drawing.'], ['Every colour.', 'The palettes of the major cladding makers, in stock.'], ['When you need it.', 'Ready in 72 hours, picked up in Saint-Bruno or delivered to the jobsite.']],
+  nums: [['40,000+', 'sheets in stock'], ['70', 'employees'], ['2', 'plants'], ['8', 'brakes'], ['3', 'shears'], ['2', 'CNC punches'], ['35', 'years of experience']],
+  plantsK: 'Our strength', plantsH: 'Two plants. One standard: precision.', plantsP: 'Eight brakes, including a 20 foot brake, three shears, two CNC punches and a team of 70 that has been bending for roofers for over 35 years.', plantsL: 'Discover Multi-Moulures',
+  ventK: 'Roof ventilation', ventH: 'While the industry counts in weeks, we deliver in 5 days.', ventL: 'See our roof vents',
+  workK: 'On the jobsite', workH: 'Our parts, installed.',
+  partH: 'Your crews on the roof. Our brakes in the shop.', partP: 'Send us the volume, the complex parts and your peak weeks: your roofers stay where they earn.', partL: 'Calculate the value for your business',
+  endH: 'Let’s talk about your next project.', endL: 'Open a contractor account',
+  photo: 'Photo to come',
+};
+---
+<Base lang={lang} title={c.title} description={c.desc} alt={routes.home[other]} heroLogo>
+  <section class="hero">
+    <div class="hero-photo" aria-hidden="true"></div>
+    <div class="wrap hero-in">
+      <img class="hero-logo" src="/img/logo-mm-inverse.png" alt="Multi-Moulures, pliage de métal en feuille" width="1100" height="330" />
+      <p class="caps light">{c.kicker}</p>
+      <h1 class="slogan-h"><span class="s1">{c.h1[0]}</span> <span class="s2"><span class="swoosh">{c.h1[1]}</span> {c.h1[2]}</span></h1>
+      <p class="lead">{c.lead}</p>
+      <div class="btns">
+        <a class="btn copper" href={'tel:' + company.phone}>{c.call} · {company.phoneDisplay}</a>
+        <a class="textlink light" href={routes.order[lang]}>{c.quote}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillars"><div class="wrap pgrid">
+    {c.pillars.map(([h, p]) => <div class="pillar"><h2>{h}</h2><p>{p}</p></div>)}
+  </div></section>
+
+  <section class="nums"><div class="wrap ngrid">
+    {c.nums.map(([n, l]) => <div class="num"><span>{n}</span>{l}</div>)}
+  </div></section>
+
+  <section class="section"><div class="wrap split">
+    <div class="ph-slot tall"><span class="todo">{c.photo} : les deux usines</span></div>
+    <div>
+      <p class="caps">{c.plantsK}</p>
+      <h2>{c.plantsH}</h2>
+      <p class="lead">{c.plantsP}</p>
+      <a class="textlink" href={routes.about[lang]}>{c.plantsL} →</a>
+    </div>
+  </div></section>
+
+  <section class="vent"><div class="wrap vin">
+    <div>
+      <a class="mvlogo" href={company.ventilationSite}><img src="/img/logo-mv-inverse.png" alt="Multi-Ventilation" width="1200" height="313" loading="lazy" /></a>
+      <p class="caps light">{c.ventK}</p>
+      <h2>{c.ventH}</h2>
+      <div class="btns">
+        <a class="btn copper" href={routes.vents[lang]}>{c.ventL}</a>
+        <a class="textlink light" href={company.ventilationSite}>multiventilation.ca →</a>
+      </div>
+    </div>
+    <img src="/img/produits/airm300-base-ajustable.webp" alt="" loading="lazy" />
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <p class="caps">{c.workK}</p>
+    <h2>{c.workH}</h2>
+    <div class="work">
+      {[1, 2, 3].map(() => <div class="ph-slot sq"><span class="todo">{c.photo}</span></div>)}
+    </div>
+  </div></section>
+
+  <section class="section part"><div class="wrap split rev">
+    <div>
+      <h2>{c.partH}</h2>
+      <p class="lead">{c.partP}</p>
+      <a class="textlink" href={routes.calculator[lang]}>{c.partL} →</a>
+    </div>
+    <div class="ph-slot tall"><span class="todo">{c.photo} : couvreurs au travail</span></div>
+  </div></section>
+
+  <section class="end"><div class="wrap ein">
+    <h2>{c.endH}</h2>
+    <div class="btns">
+      <a class="btn copper" href={'tel:' + company.phone}>{c.call} · {company.phoneDisplay}</a>
+      <a class="textlink light" href={routes.account[lang]}>{c.endL}</a>
+    </div>
+  </div></section>
+</Base>
+
+<style>
+  .hero{position:relative;background:var(--mm-navy-ink);color:#fff;overflow:hidden}
+  .hero-photo{position:absolute;inset:0;background:url(/img/usine-hero.webp) center 60%/cover no-repeat}
+  .hero-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,41,74,.97) 0%,rgba(16,41,74,.94) 50%,rgba(16,41,74,.6) 100%)}
+  @media (max-width:800px){.hero-photo::after{background:rgba(16,41,74,.88)}}
+  .hero-in{position:relative;padding-block:clamp(48px,7vw,96px) clamp(64px,9vw,120px)}
+  .hero-logo{width:clamp(280px,42vw,560px);height:auto;margin:0 0 clamp(28px,4vw,48px) -2%}
+  .hero h1{font-family:'Roboto Condensed','Arial Narrow',sans-serif;font-weight:700;font-size:clamp(46px,7.6vw,96px);line-height:1;letter-spacing:-.01em;margin:14px 0 26px}
+  .s1{color:var(--mm-sky);display:block}
+  .s2{color:#fff;font-style:italic;display:block}
+  .swoosh{position:relative;display:inline-block}
+  .swoosh::after{content:'';position:absolute;left:4%;right:2%;bottom:-.08em;height:.14em;border-bottom:.07em solid var(--mm-copper);border-radius:0 0 50% 50% / 0 0 100% 100%}
+  .hero .lead{color:#dbe4ee;font-size:clamp(18px,2vw,22px);max-width:40ch;margin-bottom:32px}
+  .caps.light{color:var(--mm-sky)}
+  .textlink.light{color:#fff}
+  .btns{display:flex;flex-wrap:wrap;gap:20px 28px;align-items:center}
+  .pillars{border-bottom:1px solid var(--mm-rule)}
+  .nums{background:var(--mm-mist);padding:28px 0}
+  .ngrid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 12px}
+  @media (min-width:700px){.ngrid{grid-template-columns:repeat(4,1fr)}}
+  @media (min-width:1050px){.ngrid{grid-template-columns:repeat(7,1fr)}}
+  .num{display:grid;color:var(--mm-graphite);font-size:15px;line-height:1.2}
+  .num span{white-space:nowrap;font-family:var(--font-display);font-weight:800;font-size:clamp(28px,3vw,36px);color:var(--mm-navy);line-height:1.1}
+  .pgrid{display:grid;gap:0}
+  @media (min-width:800px){.pgrid{grid-template-columns:repeat(3,1fr)}}
+  .pillar{padding:36px 28px 32px 0;border-top:4px solid var(--mm-copper)}
+  @media (min-width:800px){.pillar{border-top:0;border-left:4px solid var(--mm-copper);padding:44px 28px}}
+  .pillar h2{font-size:clamp(24px,2.4vw,30px);margin-bottom:8px}
+  .pillar p{color:var(--mm-graphite);margin:0}
+  .split{display:grid;gap:40px;align-items:center}
+  @media (min-width:900px){.split{grid-template-columns:1fr 1fr}.split.rev>div:first-child{order:0}}
+  .tall{aspect-ratio:4/3;width:100%}
+  .sq{aspect-ratio:1;width:100%}
+  .mvlogo img{width:clamp(240px,30vw,360px);margin-bottom:24px}
+  .vent{background:var(--mm-navy);color:#fff;padding:clamp(56px,8vw,96px) 0}
+  .vin{display:grid;gap:32px;align-items:center}
+  @media (min-width:900px){.vin{grid-template-columns:1.4fr 1fr}}
+  .vent h2{color:#fff;font-size:clamp(28px,4vw,46px);line-height:1.12;margin:12px 0 28px}
+  .vent img{max-height:320px;width:auto;justify-self:center;filter:drop-shadow(0 20px 30px rgba(0,0,0,.35))}
+  .work{display:grid;gap:16px;margin-top:24px}
+  @media (min-width:700px){.work{grid-template-columns:repeat(3,1fr)}}
+  .part{background:var(--mm-copper-tint)}
+  .end{background:var(--mm-navy-ink);color:#fff;padding:clamp(56px,7vw,88px) 0}
+  .ein{display:grid;gap:24px;justify-items:start}
+  .end h2{color:#fff;font-size:clamp(28px,3.6vw,42px);margin:0}
+</style>

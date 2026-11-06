@@ -1,0 +1,60 @@
+---
+import Inner from './Inner.astro';
+import { routes, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const L = fr ? {
+  hours: 'Heures par semaine consacrées au pliage (toute l’équipe)', wage: 'Coût horaire d’un plieur, avantages inclus ($)', weeks: 'Semaines payées par année',
+  stock: 'Valeur moyenne du métal en inventaire ($)', carry: 'Coût de détention de l’inventaire (% par année)', equip: 'Équipement : entretien et amortissement par année ($)',
+  space: 'Espace d’atelier consacré au pliage par année ($)', scrap: 'Pertes et retailles (% du métal acheté)', metal: 'Achats de métal pour le pliage par année ($)', feet: 'Pieds linéaires pliés par année',
+  total: 'Coût annuel réel du pliage à l’interne', perFoot: 'Coût de pliage par pied linéaire, hors achat du métal', note: 'Comparez ce chiffre à notre prix pour les mêmes pièces.', cta: 'Demander un prix pour comparer',
+} : {
+  hours: 'Hours per week spent bending (whole team)', wage: 'Hourly cost of a bender, benefits included ($)', weeks: 'Paid weeks per year',
+  stock: 'Average value of metal in inventory ($)', carry: 'Inventory carrying cost (% per year)', equip: 'Equipment: maintenance and depreciation per year ($)',
+  space: 'Shop space used for bending per year ($)', scrap: 'Scrap and offcuts (% of metal bought)', metal: 'Metal bought for bending per year ($)', feet: 'Linear feet bent per year',
+  total: 'Real annual cost of bending in house', perFoot: 'Bending cost per linear foot, excluding metal purchases', note: 'Compare this number to our price for the same parts.', cta: 'Get a quote to compare',
+};
+const fields: [string, string, number][] = [['hours', L.hours, 0], ['wage', L.wage, 0], ['weeks', L.weeks, 52], ['stock', L.stock, 0], ['carry', L.carry, 20], ['equip', L.equip, 0], ['space', L.space, 0], ['metal', L.metal, 0], ['scrap', L.scrap, 0], ['feet', L.feet, 0]];
+---
+<Inner lang={lang} alt={routes.calculator[fr ? 'en' : 'fr']}
+  title={fr ? 'Plier à l’interne ou faire plier : combien coûte votre plieuse? | Multi-Moulures' : 'Bending in house or outsourcing: what does your brake really cost? | Multi-Moulures'}
+  description={fr ? 'Calculateur gratuit pour couvreurs : estimez le vrai coût annuel et par pied linéaire du pliage de moulures à l’interne.' : 'Free calculator for roofers: estimate the real annual and per linear foot cost of bending flashings in house.'}
+  kicker={fr ? 'Calculateur' : 'Calculator'}
+  h1={fr ? 'Combien vous coûte vraiment votre plieuse?' : 'What does your brake really cost?'}
+  lead={fr ? 'Entrez vos propres chiffres. Rien n’est envoyé : le calcul se fait dans votre navigateur.' : 'Enter your own numbers. Nothing is sent: the math runs in your browser.'}>
+  <div class="grid g2 calc">
+    <form id="calc" class="order" onsubmit="return false">
+      {fields.map(([id, label, v]) => <label>{label}<input type="number" min="0" step="any" id={id} value={v || ''} inputmode="decimal" /></label>)}
+    </form>
+    <div class="result">
+      <p class="caps">{L.total}</p>
+      <p class="big" id="total">0 $</p>
+      <table class="spec" id="breakdown"></table>
+      <p class="caps" style="margin-top:28px">{L.perFoot}</p>
+      <p class="big" id="perfoot">n/d</p>
+      <p>{L.note}</p>
+      <a class="btn" href={routes.order[lang]}>{L.cta}</a>
+    </div>
+  </div>
+  <script define:vars={{ fr }}>
+    const f = new Intl.NumberFormat(fr ? 'fr-CA' : 'en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 });
+    const f2 = new Intl.NumberFormat(fr ? 'fr-CA' : 'en-CA', { style: 'currency', currency: 'CAD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const v = (id) => parseFloat(document.getElementById(id).value) || 0;
+    const labels = fr ? ['Main-d’œuvre', 'Détention de l’inventaire', 'Équipement', 'Espace', 'Pertes de métal'] : ['Labour', 'Inventory carrying', 'Equipment', 'Space', 'Metal scrap'];
+    function run() {
+      const parts = [v('hours') * v('wage') * v('weeks'), v('stock') * v('carry') / 100, v('equip'), v('space'), v('metal') * v('scrap') / 100];
+      const total = parts.reduce((a, b) => a + b, 0);
+      document.getElementById('total').textContent = f.format(total);
+      document.getElementById('breakdown').innerHTML = parts.map((p, i) => `<tr><td>${labels[i]}</td><td>${f.format(p)}</td></tr>`).join('');
+      const feet = v('feet');
+      document.getElementById('perfoot').textContent = feet > 0 ? f2.format(total / feet) : 'n/d';
+    }
+    document.getElementById('calc').addEventListener('input', run);
+    run();
+  </script>
+</Inner>
+<style>
+  .result{background:var(--mm-ice);padding:32px;align-self:start;position:sticky;top:96px}
+  .big{font-family:var(--font-display);font-weight:800;font-size:clamp(36px,5vw,56px);color:var(--mm-navy);margin:0 0 12px;line-height:1}
+  @media (max-width:719px){.result{position:static}}
+</style>

@@ -1,0 +1,21 @@
+---
+const fr = true;
+---
+<a class="catdl" href="/docs/catalogue-multi-moulures.pdf" download="Catalogue-Multi-Moulures-novembre-2026.pdf">
+  <img src="/img/catalogue-couverture.webp" alt={fr ? 'Couverture du catalogue Multi-Moulures' : 'Multi-Moulures catalogue cover'} width="340" height="440" loading="lazy" />
+  <span>
+    <small>{fr ? 'Catalogue complet · PDF · 80 pages · 7 Mo' : 'Full catalogue · PDF · 80 pages · 7 MB'}</small>
+    <strong>{fr ? 'Télécharger le catalogue Multi-Moulures' : 'Download the Multi-Moulures catalogue'}</strong>
+    {fr ? 'La gamme de ventilation en ouverture, suivie des fiches techniques, des profils de moulures et des couleurs en inventaire. Édition novembre 2026.' : 'Spec sheets, flashing profiles, ventilation, colours and metals in stock. November 2026 edition (French).'}
+    <em>{fr ? 'Télécharger le PDF ↓' : 'Download PDF ↓'}</em>
+  </span>
+</a>
+<style>
+  .catdl{display:grid;grid-template-columns:110px 1fr;gap:24px;align-items:center;padding:20px 24px;margin:0 0 48px;background:var(--mm-ice);border-left:4px solid var(--mm-navy);text-decoration:none;color:var(--mm-slate)}
+  .catdl img{width:110px;box-shadow:0 6px 16px rgba(16,41,74,.18)}
+  .catdl span{display:grid;gap:4px}
+  .catdl small{font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mm-steel)}
+  .catdl strong{font-family:var(--font-display);font-size:clamp(19px,2vw,24px);color:var(--mm-navy);line-height:1.2}
+  .catdl em{font-style:normal;font-family:var(--font-display);font-weight:700;color:var(--mm-navy);text-decoration:underline;text-decoration-color:var(--mm-steel);text-underline-offset:4px;margin-top:4px}
+  @media (max-width:520px){.catdl{grid-template-columns:72px 1fr;gap:16px;padding:16px}.catdl img{width:72px}}
+</style>

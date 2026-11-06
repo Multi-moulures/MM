@@ -19,15 +19,14 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:locale" content="fr_CA" />
-  <link rel="icon" href="/img/mm.png" />
+  <link rel="icon" href="/img/mv.png" />
   <script type="application/ld+json" set:html={JSON.stringify([org, ...schema])} />
 </head>
 <body>
   <header class="top">
     <div class="wrap bar">
       <a class="brand" href="/" aria-label="Multi-Ventilation, accueil">
-        <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="word"><b>MULTI-VENTILATION</b><small>par Multi-Moulures</small></span>
+        <img class="logo" src="/img/logo-mv.png" alt="Multi-Ventilation, produits de ventilation en métal" width="1200" height="313" />
       </a>
       <nav aria-label="Navigation">{nav.map(([u, l]) => <a href={u} aria-current={path.startsWith(u) ? 'page' : undefined}>{l}</a>)}</nav>
       <div class="actions">
@@ -43,6 +42,7 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
   <footer class="foot">
     <div class="wrap fgrid">
       <div>
+        <img class="flogo" src="/img/logo-mv-inverse.png" alt="Multi-Ventilation" width="1200" height="313" loading="lazy" />
         <p class="slogan"><span>Sur mesure.</span> <em>En 5 jours.</em></p>
         <p class="fabout">Ventilation de toiture sur mesure, fabriquée au Québec en acier galvanisé prépeint canadien. Une division de <a href={site.parent}>Multi-Moulures</a>, fabricant depuis plus de 35 ans.</p>
       </div>
@@ -55,6 +55,7 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
         <p class="caps light">Liens</p>
         <p class="flinks">
           <a href="/produits/">Tous les produits</a>
+          <a href="/docs/catalogue-multi-moulures.pdf" download>Catalogue (PDF)</a>
           <a href="/calculateur-de-ventilation/">Calculateur de ventilation</a>
           <a href="/revendeurs/">Devenir revendeur</a>
           <a href="/demander-un-prix/">Demander un prix</a>
@@ -68,15 +69,10 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
 </html>
 <style>
   .top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--mm-rule)}
-  .bar{display:flex;align-items:center;gap:24px;min-height:72px}
+  .bar{display:flex;align-items:center;gap:24px;min-height:100px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
-  .mark{display:grid;gap:4px;width:34px;padding:6px 0;transform:skewX(-14deg)}
-  .mark i{display:block;height:5px;background:var(--mm-navy)}
-  .mark i:nth-child(2){background:var(--mm-steel);margin-left:5px}
-  .mark i:nth-child(3){background:var(--mm-sky);margin-left:10px}
-  .word{display:grid;line-height:1.05}
-  .word b{font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:.02em;color:var(--mm-navy)}
-  .word small{font-size:13px;color:var(--mm-graphite)}
+  .brand .logo{height:84px;width:auto;margin-block:8px}
+  @media (max-width:520px){.brand .logo{height:46px}}
   nav{display:flex;gap:20px;margin-left:auto}
   nav a{white-space:nowrap;font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--mm-slate);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
   nav a:hover,nav a[aria-current]{color:var(--mm-navy);border-color:var(--mm-steel)}
@@ -93,6 +89,7 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
   @media (max-width:440px){.actions .btn.small{display:none}}
   .foot{background:var(--gradient-footer);color:#fff;padding:56px 0 24px}
   .foot a{color:#fff}
+  .flogo{width:280px;height:auto;margin-bottom:20px}
   .fgrid{display:grid;gap:32px}
   @media (min-width:800px){.fgrid{grid-template-columns:1.4fr 1fr 1fr}}
   .slogan{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1.15;margin-bottom:12px}

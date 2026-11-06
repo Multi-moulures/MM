@@ -1,0 +1,78 @@
+---
+import Inner from './Inner.astro';
+import { routes, company, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const mv = company.ventilationSite;
+const groups: [string, string, [string, string, string][]][] = [
+  ['Aérateurs de toit', 'Roof vents', [
+    ['airm300-base-ajustable', 'AirM300', fr ? 'Jusqu’à 24 x 24 po, ≈ 410 à 1 640 PCM, testé CAN3-A93-M82' : 'Up to 24 x 24 in, ≈ 410 to 1,640 CFM, tested to CAN3-A93-M82'],
+    ['airm100-base-ajustable', 'AirM100', fr ? '12 x 12 po, ≈ 280 PCM, pentes 1/12 à 16/12' : '12 x 12 in, ≈ 280 CFM, 1/12 to 16/12 pitch'],
+    ['ventilateur-2422', fr ? 'Ventilateur 2422' : '2422 low profile vent', fr ? 'Surbaissé, ≈ 160 PCM, pentes 3/12 à 15/12' : 'Low profile, ≈ 160 CFM, 3/12 to 15/12 pitch'],
+    ['cmm-4', 'CMM 4', fr ? 'Clapet d’évacuation 4 po, salle de bain, sécheuse, hotte' : '4 in exhaust damper for bath, dryer and range hood'],
+    ['boite-a-clapets-multiples', fr ? 'Boîte à clapets multiples' : 'Multi damper box', fr ? 'Regroupe plusieurs sorties en une seule unité' : 'Groups several exhaust outlets in one unit']]],
+  ['Commercial, industriel et agricole', 'Commercial, industrial and agricultural', [
+    ['dome-480', fr ? 'Dôme 480' : 'Dome 480', fr ? 'Tirage naturel, 500 PCM et plus, 4, 6 et 8 pi' : 'Natural draft, 500 CFM and up, 4, 6 and 8 ft'],
+    ['col-de-cygne', fr ? 'Col de cygne' : 'Gooseneck', fr ? 'Sortie d’air demi-lune ICI, ≈ 250 PCM' : 'Half round ICI outlet, ≈ 250 CFM'],
+    ['louvre', 'Louvre', fr ? 'Grille statique, jusqu’à 520 po² de surface libre' : 'Static louvre, up to 520 sq in free area'],
+    ['vr-rectangulaire', fr ? 'VR rectangulaire et triangulaire' : 'Rectangular and triangular louvres', fr ? 'Ventilateurs statiques à lames' : 'Static blade vents'],
+    ['sortie-murale-commerciale', fr ? 'Sortie murale commerciale' : 'Commercial wall outlet', fr ? 'Demi-lune, 880 po², sur mesure' : 'Half round, 880 sq in, custom']]],
+  ['Soffites et sorties murales', 'Soffits and wall outlets', [
+    ['soffite-ventilation-cachee', fr ? 'Soffite à ventilation cachée' : 'Hidden vent soffit', fr ? '11,3 po²/pi², aucune perforation visible' : '11.3 sq in per sq ft, no visible holes'],
+    ['soffite-mural-anti-rafale', fr ? 'Soffite mural anti-rafale' : 'Storm proof wall soffit', fr ? '12 po²/pi lin., zones de vents forts' : '12 sq in per lin. ft, high wind areas'],
+    ['soffite-ventile-oblong-50', fr ? 'Soffites ventilés oblong et embossé' : 'Oblong and embossed vented soffits', fr ? 'De 13,5 à 77 po²/pi lin.' : '13.5 to 77 sq in per lin. ft'],
+    ['sortie-murale-de-ventilation', fr ? 'Sortie murale de ventilation' : 'Wall vent outlet', fr ? 'Persiennes fixes, 4 et 6 po' : 'Fixed louvres, 4 and 6 in']]],
+];
+---
+<Inner lang={lang} alt={routes.vents[fr ? 'en' : 'fr']}
+  title={fr ? 'Ventilation de toiture sur mesure en 5 jours, couleur assortie | Multi-Moulures' : 'Custom roof vents in 5 days, colour matched | Multi-Moulures'}
+  description={fr ? '21 produits de ventilation de toiture sur mesure fabriqués en 5 jours : AirM300 testé CAN3-A93-M82, Dôme 480, col de cygne, soffites ventilés. Couleur assortie à votre toiture.' : '21 custom roof ventilation products made in 5 days: AirM300 tested to CAN3-A93-M82, Dome 480, gooseneck, vented soffits. Colour matched to your roof.'}
+  kicker={fr ? 'Ventilation de toiture' : 'Roof ventilation'}
+  h1={fr ? 'Ventilation sur mesure en 5 jours' : 'Custom roof vents in 5 days'}
+  lead={fr ? 'Quand l’industrie compte en semaines, nous livrons en 5 jours. Toutes les grandeurs, toutes les couleurs, dans le même acier prépeint galvanisé que votre toiture.' : 'While the industry counts in weeks, we deliver in 5 days. Any size, any colour, in the same prepainted galvanized steel as your roof.'}>
+  <div class="grid g2">
+    <div>
+      <h2>{fr ? 'Pourquoi c’est différent' : 'Why it’s different'}</h2>
+      <p>{fr ? 'La plupart des aérateurs sont offerts en quelques grandeurs et couleurs standards, avec des délais de plusieurs semaines pour le sur mesure. Nous fabriquons chaque produit à partir de notre propre inventaire d’acier galvanisé G90 prépeint canadien, dans la couleur exacte de votre revêtement.' : 'Most roof vents come in a few standard sizes and colours, with weeks of lead time for anything custom. We make every product from our own stock of Canadian G90 prepainted galvanized steel, in the exact colour of your roofing.'}</p>
+      <p>{fr ? 'L’AirM300 et le Dôme 480 ont été testés selon la norme CAN3-A93-M82 (R2003) par UL Canada, laboratoire accrédité ISO/IEC 17025 : résistance au vent, à la pluie, à la corrosion et intégrité structurale.' : 'The AirM300 and Dome 480 were tested to CAN3-A93-M82 (R2003) by UL Canada, an ISO/IEC 17025 accredited lab: wind, rain, corrosion resistance and structural integrity.'}</p>
+      <p class="btns"><a class="btn" href={'tel:' + company.phone}>{fr ? 'Appeler un conseiller' : 'Call an advisor'}</a><a class="btn ghost" href={mv}>{fr ? 'Fiches complètes sur Multi-Ventilation' : 'Full specs on Multi-Ventilation'} →</a></p>
+    </div>
+    <table class="spec">
+      <tr><th colspan="2">{fr ? 'En bref' : 'At a glance'}</th></tr>
+      <tr><td>{fr ? 'Délai' : 'Turnaround'}</td><td><strong>{fr ? '5 jours' : '5 days'}</strong></td></tr>
+      <tr><td>{fr ? 'Gamme' : 'Range'}</td><td>{fr ? '21 produits' : '21 products'}</td></tr>
+      <tr><td>{fr ? 'Grandeurs' : 'Sizes'}</td><td>{fr ? 'Sur mesure' : 'Custom'}</td></tr>
+      <tr><td>{fr ? 'Couleurs' : 'Colours'}</td><td>{fr ? 'Assorties à votre toiture' : 'Matched to your roof'}</td></tr>
+      <tr><td>{fr ? 'Matériau' : 'Material'}</td><td>{fr ? 'Acier galvanisé G90, 24 à 28 ga, prépeint' : 'G90 galvanized steel, 24 to 28 ga, prepainted'}</td></tr>
+      <tr><td>{fr ? 'Essais' : 'Testing'}</td><td>CAN3-A93-M82 (R2003), UL Canada</td></tr>
+      <tr><td>{fr ? 'Garantie' : 'Warranty'}</td><td>{fr ? 'À vie sur défaut de fabrication, 10 ans sur la peinture' : 'Lifetime on manufacturing defects, 10 years on paint'}</td></tr>
+    </table>
+  </div>
+  <a class="mvband" href={mv}>
+    <img src="/img/logo-mv-inverse.png" alt="Multi-Ventilation" width="1200" height="313" loading="lazy" />
+    <span><strong>{fr ? 'Notre gamme de ventilation a son propre site.' : 'Our ventilation line has its own website.'}</strong>{fr ? 'Fiches techniques complètes, calculateur de ventilation, normes et essais, programme revendeurs.' : 'Full spec sheets, ventilation calculator, standards and testing, reseller program.'}<em>multiventilation.ca →</em></span>
+  </a>
+  {groups.map(([gf, ge, items]) => (
+    <section class="vg">
+      <h2>{fr ? gf : ge}</h2>
+      <div class="grid g4">
+        {items.map(([slug, name, d]) => (
+          <a class="card vc" href={`${mv}/produits/${slug}/`}>
+            <img src={`/img/produits/${slug}.webp`} alt={name} loading="lazy" />
+            <h3>{name}</h3><p>{d}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+</Inner>
+<style>
+  .vg{margin-top:48px}
+  .mvband{display:grid;gap:20px 40px;align-items:center;margin-top:56px;padding:clamp(24px,4vw,40px);background:var(--gradient-footer);color:#fff;text-decoration:none}
+  @media (min-width:800px){.mvband{grid-template-columns:minmax(260px,380px) 1fr}}
+  .mvband img{width:100%;max-width:380px}
+  .mvband span{display:grid;gap:6px;font-size:17px;color:#dbe4ee}
+  .mvband strong{font-family:var(--font-display);font-size:clamp(20px,2.2vw,26px);color:#fff;line-height:1.2}
+  .mvband em{font-style:normal;font-family:var(--font-display);font-weight:700;color:#fff;text-decoration:underline;text-decoration-color:var(--mm-copper);text-underline-offset:4px;margin-top:6px}
+  .vc img{height:150px;width:100%;object-fit:contain;background:var(--mm-mist);margin-bottom:12px}
+</style>

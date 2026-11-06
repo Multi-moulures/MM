@@ -1,0 +1,39 @@
+---
+import Inner from './Inner.astro';
+import { routes, company, type Lang } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+---
+<Inner lang={lang} alt={routes.order[fr ? 'en' : 'fr']}
+  title={fr ? 'Demander un prix : moulures et ventilation sur mesure | Multi-Moulures' : 'Get a quote: custom flashings and roof vents | Multi-Moulures'}
+  description={fr ? 'Envoyez une photo, un croquis, un PDF ou un DXF. Un conseiller valide vos mesures et la production démarre sans attendre l’acier.' : 'Send a photo, sketch, PDF or DXF. An advisor confirms your measurements and production starts without waiting for steel.'}
+  kicker={fr ? 'Un croquis suffit' : 'A sketch is enough'} h1={fr ? 'Demander un prix' : 'Get a quote'}
+  lead={fr ? 'Photo de cellulaire, dessin à main levée, PDF, DXF, liste de pièces ou vieille pièce. Envoyez ce que vous avez.' : 'Phone photo, hand drawing, PDF, DXF, a parts list or an old piece. Send what you have.'}>
+  <div class="grid g2">
+    <form class="order" method="post" action="#" enctype="multipart/form-data">
+      <label>{fr ? 'Nom et entreprise' : 'Name and company'}<input name="name" required autocomplete="organization" /></label>
+      <label>{fr ? 'Téléphone' : 'Phone'}<input name="phone" type="tel" required autocomplete="tel" /></label>
+      <label>{fr ? 'Courriel' : 'Email'}<input name="email" type="email" autocomplete="email" /></label>
+      <label>{fr ? 'Croquis, photo ou plan' : 'Sketch, photo or drawing'}<input name="file" type="file" multiple accept="image/*,.pdf,.dxf,.dwg" /></label>
+      <label>{fr ? 'Couleur, calibre, quantités, date requise' : 'Colour, gauge, quantities, date needed'}<textarea name="details" rows="5"></textarea></label>
+      <label>{fr ? 'Récupération' : 'Fulfilment'}
+        <select name="fulfil"><option>{fr ? 'Cueillette à Saint-Bruno' : 'Pickup in Saint-Bruno'}</option><option>{fr ? 'Livraison sur chantier' : 'Jobsite delivery'}</option></select>
+      </label>
+      <button class="btn" type="submit">{fr ? 'Envoyer ma demande' : 'Send my request'}</button>
+      <p class="todo">{fr ? 'Formulaire à brancher : envoi vers info@multimoulures.com.' : 'Form to connect: sends to info@multimoulures.com.'}</p>
+    </form>
+    <div>
+      <h2>{fr ? 'Ou plus simple encore' : 'Or even simpler'}</h2>
+      <p>{fr ? 'Appelez un conseiller technique :' : 'Call a technical advisor:'} <a href={'tel:' + company.phone}><strong>{company.phoneDisplay}</strong></a></p>
+      <p>{fr ? 'Écrivez-nous :' : 'Email us:'} <a href={'mailto:' + company.email}>{company.email}</a></p>
+      <div class="promise"><strong>{fr ? 'Réponse le jour même' : 'Same day answer'}</strong>{fr ? `Demande reçue avant ${company.quoteCutoff} un jour ouvrable : vous avez votre prix le jour même.` : 'Request received before 11 a.m. on a business day: you get your price the same day.'}</div>
+      <p class="small">{fr ? 'Lundi au vendredi, 7 h 30 à 16 h 30. Téléphone fermé de 12 h à 12 h 30.' : 'Monday to Friday, 7:30 a.m. to 4:30 p.m. Phones closed 12:00 to 12:30.'}</p>
+      <p class="small">{fr ? 'Vous êtes propriétaire ? Nos produits sont vendus aux professionnels : demandez à votre couvreur de commander chez nous.' : 'Homeowner? Our products are sold to professionals: ask your roofer to order from us.'}</p>
+    </div>
+  </div>
+</Inner>
+<style>
+  .promise{display:grid;gap:4px;border-left:4px solid var(--mm-copper);background:var(--mm-copper-tint);padding:16px 20px;margin:8px 0 20px}
+  .promise strong{font-family:var(--font-display);color:var(--mm-navy);font-size:19px}
+  .small{font-size:15px;color:var(--mm-graphite)}
+</style>

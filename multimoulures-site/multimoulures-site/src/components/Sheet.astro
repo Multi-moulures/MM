@@ -1,0 +1,46 @@
+---
+import Inner from './Inner.astro';
+import { routes, company, type Lang } from '../data/site';
+import { sheets, gaugeTable } from '../data/catalogue';
+const { lang, slug } = Astro.props as { lang: Lang; slug: string };
+const fr = lang === 'fr';
+const s = sheets.find((x) => x.slug === slug)!;
+const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: s.name[lang], description: s.desc[lang], brand: { '@type': 'Brand', name: 'Multi-Moulures' }, manufacturer: { '@id': 'https://multimoulures.com/#org' }, image: `https://multimoulures.com/img/produits/${s.slug}.webp`,
+  additionalProperty: s.specs[lang].map(([k, v]) => ({ '@type': 'PropertyValue', name: k, value: v })) }];
+---
+<Inner lang={lang} alt={routes.sheets[fr ? 'en' : 'fr'] + s.slug + '/'} schema={schema}
+  crumbs={[[fr ? 'Fiches techniques' : 'Spec sheets', routes.sheets[lang]]]}
+  title={`${s.name[lang]} : ${s.tag[lang].toLowerCase()} | Multi-Moulures`} description={s.desc[lang].slice(0, 155)}
+  kicker={s.group === 'premium' ? (fr ? 'Pliage premium' : 'Premium product') : (fr ? 'Pliage essentiels' : 'Essential profile')} h1={s.name[lang]} lead={s.tag[lang]}>
+  <div class="grid g2">
+    <div>
+      <img class="hero-img" src={`/img/produits/${s.slug}.webp`} alt={s.name[lang]} />
+      <p style="margin-top:24px">{s.desc[lang]}</p>
+      {s.use && <p><strong>{fr ? 'Applications : ' : 'Applications: '}</strong>{s.use[lang]}</p>}
+    </div>
+    <div class="tables">
+      <table class="spec">
+        <tr><th colspan="2">{fr ? 'Spécifications' : 'Specifications'}</th></tr>
+        {s.specs[lang].map(([k, v]) => <tr><td>{k}</td><td>{v}</td></tr>)}
+      </table>
+      {s.gauges && (
+        <table class="spec">
+          <tr><th>{fr ? 'Calibre' : 'Gauge'}</th><th>po</th><th>mm</th><th>lb/pi²</th></tr>
+          {s.gauges.map((g) => <tr><td>{g}</td><td>{gaugeTable[g][0]}</td><td>{gaugeTable[g][1]}</td><td>{gaugeTable[g][2]}</td></tr>)}
+        </table>
+      )}
+      {s.stock && (
+        <table class="spec">
+          <tr><th colspan="2">{fr ? 'En stock' : 'In stock'}</th></tr>
+          {s.stock[lang].map(([k, v]) => <tr><td>{k}</td><td>{v}</td></tr>)}
+        </table>
+      )}
+      <p class="btns"><a class="btn" href={'tel:' + company.phone}>{fr ? 'Appeler un conseiller' : 'Call an advisor'}</a><a class="btn ghost" href={routes.order[lang]}>{fr ? 'Demander un prix' : 'Get a quote'}</a></p>
+    </div>
+  </div>
+</Inner>
+<style>
+  .hero-img{width:100%;max-height:380px;object-fit:contain;background:var(--mm-mist)}
+  .tables{display:grid;gap:24px;align-content:start}
+  .tables table{font-variant-numeric:tabular-nums}
+</style>
