@@ -1,38 +1,46 @@
 ---
+import { langOf } from '../i18n';
 const { kind = 'couvreur' } = Astro.props as { kind?: string };
-const provinces = ['Québec', 'Ontario', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Île-du-Prince-Édouard', 'Terre-Neuve-et-Labrador', 'Manitoba', 'Saskatchewan', 'Alberta', 'Colombie-Britannique', 'Territoires', 'États-Unis', 'Autre pays'];
+const fr = langOf(Astro.url.pathname) === 'fr';
+const provinces = fr
+  ? ['Québec', 'Ontario', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Île-du-Prince-Édouard', 'Terre-Neuve-et-Labrador', 'Manitoba', 'Saskatchewan', 'Alberta', 'Colombie-Britannique', 'Territoires', 'États-Unis', 'Autre pays']
+  : ['Quebec', 'Ontario', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia', 'Territories', 'United States', 'Other country'];
+const L = fr
+  ? { who: 'Vous êtes', roofer: 'Couvreur ou entrepreneur', reseller: 'Revendeur, distributeur ou quincaillerie', other: 'Autre (architecte, propriétaire, gestionnaire)', prov: 'Province ou région', city: 'Ville', co: 'Entreprise', name: 'Votre nom', phone: 'Téléphone', email: 'Courriel', msg: 'Produits, grandeurs, couleur et quantités', send: 'Envoyer', todo: 'Formulaire à brancher : chaque demande doit arriver avec son type et sa région pour être dirigée vers la bonne personne.' }
+  : { who: 'You are', roofer: 'Roofer or contractor', reseller: 'Reseller, distributor or building supply store', other: 'Other (architect, owner, property manager)', prov: 'Province or region', city: 'City', co: 'Company', name: 'Your name', phone: 'Phone', email: 'Email', msg: 'Products, sizes, colour and quantities', send: 'Send', todo: 'Form to connect.' };
 ---
-<form class="order lead" method="post" action="#" data-lead>
+<form class="order lead" method="post" action="#" data-lead data-lang={fr ? 'fr' : 'en'}>
   <fieldset class="who">
-    <legend>Vous êtes</legend>
-    <label class="opt"><input type="radio" name="type" value="couvreur" checked={kind === 'couvreur'} /> Couvreur ou entrepreneur</label>
-    <label class="opt"><input type="radio" name="type" value="revendeur" checked={kind === 'revendeur'} /> Revendeur, distributeur ou quincaillerie</label>
-    <label class="opt"><input type="radio" name="type" value="autre" checked={kind === 'autre'} /> Autre (architecte, propriétaire, gestionnaire)</label>
+    <legend>{L.who}</legend>
+    <label class="opt"><input type="radio" name="type" value="couvreur" checked={kind === 'couvreur'} /> {L.roofer}</label>
+    <label class="opt"><input type="radio" name="type" value="revendeur" checked={kind === 'revendeur'} /> {L.reseller}</label>
+    <label class="opt"><input type="radio" name="type" value="autre" checked={kind === 'autre'} /> {L.other}</label>
   </fieldset>
-  <label>Province ou région<select name="province" required>{provinces.map((p) => <option>{p}</option>)}</select></label>
-  <label>Ville<input name="ville" required autocomplete="address-level2" /></label>
-  <label>Entreprise<input name="entreprise" autocomplete="organization" /></label>
-  <label>Votre nom<input name="nom" required autocomplete="name" /></label>
-  <label>Téléphone<input name="telephone" type="tel" required autocomplete="tel" /></label>
-  <label>Courriel<input name="courriel" type="email" autocomplete="email" /></label>
-  <label>Produits, grandeurs, couleur et quantités<textarea name="message" rows="4"></textarea></label>
-  <button class="btn" type="submit">Envoyer</button>
+  <label>{L.prov}<select name="province" required>{provinces.map((p) => <option>{p}</option>)}</select></label>
+  <label>{L.city}<input name="ville" required autocomplete="address-level2" /></label>
+  <label>{L.co}<input name="entreprise" autocomplete="organization" /></label>
+  <label>{L.name}<input name="nom" required autocomplete="name" /></label>
+  <label>{L.phone}<input name="telephone" type="tel" required autocomplete="tel" /></label>
+  <label>{L.email}<input name="courriel" type="email" autocomplete="email" /></label>
+  <label>{L.msg}<textarea name="message" rows="4"></textarea></label>
+  <button class="btn" type="submit">{L.send}</button>
   <p class="route" role="status" hidden></p>
-  <p class="todo">Formulaire à brancher : chaque demande doit arriver avec son type et sa région pour être dirigée vers la bonne personne.</p>
+  <p class="todo">{L.todo}</p>
 </form>
 <script>
   document.querySelectorAll('form[data-lead]').forEach((f) => {
     const out = f.querySelector('.route') as HTMLElement;
+    const fr = (f as HTMLElement).dataset.lang === 'fr';
     const msg = () => {
       const t = (f.querySelector('input[name=type]:checked') as HTMLInputElement)?.value;
-      const p = (f.querySelector('select[name=province]') as HTMLSelectElement).value;
-      const qc = p === 'Québec';
-      if (t === 'revendeur') return 'Notre équipe des ventes aux revendeurs vous contactera pour vous présenter les conditions de distribution' + (qc ? '.' : ' dans votre région.');
-      if (t === 'couvreur' && !qc) return 'Nous vous servirons directement ou vous dirigerons vers un revendeur Multi-Ventilation près de chez vous.';
-      return 'Un conseiller vous rappellera avec un prix et un délai de fabrication.';
+      const sel = f.querySelector('select[name=province]') as HTMLSelectElement;
+      const qc = sel.selectedIndex === 0;
+      if (t === 'revendeur') return fr ? 'Notre équipe des ventes aux revendeurs vous contactera pour vous présenter les conditions de distribution' + (qc ? '.' : ' dans votre région.') : 'Our reseller sales team will contact you with distribution terms' + (qc ? '.' : ' for your region.');
+      if (t === 'couvreur' && !qc) return fr ? 'Nous vous servirons directement ou vous dirigerons vers un revendeur Multi-Ventilation près de chez vous.' : 'We will serve you directly or refer you to a Multi-Ventilation reseller near you.';
+      return fr ? 'Un conseiller vous rappellera avec un prix et un délai de fabrication.' : 'An advisor will call you back with a price and a production date.';
     };
     f.addEventListener('change', () => { out.hidden = false; out.textContent = msg(); });
-    f.addEventListener('submit', (e) => { e.preventDefault(); out.hidden = false; out.textContent = 'Merci. ' + msg(); });
+    f.addEventListener('submit', (e) => { e.preventDefault(); out.hidden = false; out.textContent = (fr ? 'Merci. ' : 'Thank you. ') + msg(); });
   });
 </script>
 <style>

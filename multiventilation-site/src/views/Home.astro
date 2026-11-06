@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import MMBand from '../components/MMBand.astro';
+import { site } from '../data/site';
+import { getCategories, getProducts, routes, type Lang } from '../i18n';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const products = getProducts(lang);
+const categories = getCategories(lang);
+const strip = ['airm300-base-ajustable', 'dome-480', 'col-de-cygne', 'vr-triangulaire', 'cmm-4', 'airm300-base-pignon'];
+const catImg: Record<string, string> = { aerateurs: 'airm300-base-pignon', ici: 'col-de-cygne', evacuation: 'sortie-murale-de-ventilation', soffites: 'soffite-ventile-oblong' };
+const c = fr ? {
+  title: 'Ventilation de toiture sur mesure en 5 jours | Multi-Ventilation',
+  desc: 'Aérateurs de toit, dômes, clapets et soffites ventilés sur mesure, fabriqués en 5 jours au Québec dans la couleur exacte de votre toiture. AirM300 testé CAN3-A93-M82. Pour couvreurs et revendeurs.',
+  kicker: 'Multi-Ventilation · par Multi-Moulures', h1a: 'La ventilation de toiture, ', h1em: 'sur mesure', h1b: ', en 5 jours.',
+  lead: 'Toutes les grandeurs. Toutes les couleurs. Fabriquée au Québec dans l’acier prépeint de votre toiture.',
+  d1: ['Je suis couvreur', 'Un prix pour mon chantier', 'Grandeur, pente, couleur, quantités : réponse rapide d’un conseiller.', 'Demander un prix →'],
+  d2: ['Je suis revendeur', 'Offrir Multi-Ventilation', 'Distributeurs et quincailleries au Québec, en Ontario et dans les Maritimes.', 'Devenir revendeur →'],
+  prod: 'produits',
+  proof: [['5 jours', 'fabrication sur mesure'], ['Couleur exacte', 'acier prépeint de votre toiture'], ['UL Canada', 'AirM300 et Dôme 480 testés'], ['Garantie à vie', 'sur les défauts de fabrication']],
+  call: 'Parlez à un conseiller ventilation.', callBtn: 'Appeler',
+} : {
+  title: 'Custom roof ventilation in 5 days | Multi-Ventilation',
+  desc: 'Custom roof vents, ridge domes, exhaust caps and vented soffits, made in Quebec in 5 days in the exact colour of your roof. AirM300 tested to CAN3-A93-M82. For roofers and resellers.',
+  kicker: 'Multi-Ventilation · by Multi-Moulures', h1a: 'Roof ventilation, ', h1em: 'made to measure', h1b: ', in 5 days.',
+  lead: 'Every size. Every colour. Made in Quebec from the same prepainted steel as your roof.',
+  d1: ['I am a roofer', 'A price for my job', 'Size, pitch, colour, quantities: a quick answer from an advisor.', 'Get a quote →'],
+  d2: ['I am a reseller', 'Carry Multi-Ventilation', 'Distributors and building supply stores in Quebec, Ontario and the Maritimes.', 'Become a reseller →'],
+  prod: 'products',
+  proof: [['5 days', 'custom fabrication'], ['Exact colour', 'the prepainted steel of your roof'], ['UL Canada', 'AirM300 and 480 Dome tested'], ['Lifetime warranty', 'on manufacturing defects']],
+  call: 'Talk to a ventilation advisor.', callBtn: 'Call',
+};
+---
+<Base title={c.title} description={c.desc}>
+  <section class="hero">
+    <div class="wrap hin">
+      <p class="caps">{c.kicker}</p>
+      <h1>{c.h1a}<em>{c.h1em}</em>{c.h1b}</h1>
+      <p class="lead">{c.lead}</p>
+    </div>
+    <div class="strip">{strip.map((s) => <img src={`/img/${s}.webp`} alt="" />)}</div>
+  </section>
+  <section class="doors"><div class="wrap dg">
+    <a class="door" href={routes.quote[lang]}><span class="caps">{c.d1[0]}</span><b>{c.d1[1]}</b><span>{c.d1[2]}</span><em>{c.d1[3]}</em></a>
+    <a class="door alt" href={routes.resellers[lang]}><span class="caps">{c.d2[0]}</span><b>{c.d2[1]}</b><span>{c.d2[2]}</span><em>{c.d2[3]}</em></a>
+  </div></section>
+  <section class="section"><div class="wrap">
+    <div class="fam">
+      {categories.map((k) => (
+        <a href={`${routes.products[lang]}#${k.id}`}>
+          <img src={`/img/${catImg[k.id]}.webp`} alt="" loading="lazy" />
+          <span><b>{k.name}</b>{products.filter((p) => p.cat === k.id).length} {c.prod}</span>
+        </a>
+      ))}
+    </div>
+  </div></section>
+  <section class="proof"><div class="wrap pr">{c.proof.map(([b, s]) => <div><b>{b}</b>{s}</div>)}</div></section>
+  <section class="call"><div class="wrap cg">
+    <h2>{c.call}</h2>
+    <a class="btn copper" href={'tel:' + site.phone}>{c.callBtn} · {site.phoneDisplay}</a>
+  </div></section>
+  <MMBand />
+</Base>
+<style>
+  .hero{background:radial-gradient(ellipse at 70% 0%,var(--mm-navy) 0%,var(--mm-navy-ink) 70%);color:#fff;padding-top:clamp(56px,8vw,104px);overflow:hidden}
+  .hin{text-align:center;display:grid;justify-items:center}
+  .hero .caps{color:var(--mm-copper)}
+  .hero h1{color:#fff;font-size:clamp(38px,5.6vw,72px);line-height:1.05;max-width:18ch;margin:14px 0 20px}
+  .hero h1 em{color:var(--mm-sky)}
+  .hero .lead{color:#dbe4ee;max-width:46ch;text-align:center}
+  .strip{display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,2vw,28px);margin-top:40px;padding:0 16px}
+  @media (max-width:600px){.strip img:nth-child(n+5){display:none}}
+  .strip img{width:clamp(70px,13vw,180px);filter:drop-shadow(0 18px 24px rgba(0,0,0,.45))}
+  .doors{background:var(--mm-mist);padding:56px 0}
+  .dg{display:grid;gap:20px}
+  @media (min-width:800px){.dg{grid-template-columns:1fr 1fr}}
+  .door{display:grid;gap:8px;background:#fff;padding:32px;text-decoration:none;color:var(--mm-graphite);border-top:5px solid var(--mm-navy);box-shadow:0 10px 30px rgba(16,41,74,.08)}
+  .door.alt{border-top-color:var(--mm-copper)}
+  .door b{font-family:var(--font-display);font-size:26px;color:var(--mm-navy)}
+  .door em{font-style:normal;font-family:var(--font-display);font-weight:700;color:var(--mm-navy);margin-top:8px}
+  .door .caps{color:var(--mm-steel)} .door.alt .caps{color:var(--mm-copper-deep)}
+  .fam{display:grid;gap:16px}
+  @media (min-width:720px){.fam{grid-template-columns:repeat(4,1fr)}}
+  .fam a{display:grid;gap:12px;text-decoration:none;color:var(--mm-graphite)}
+  .fam img{aspect-ratio:1;width:100%;object-fit:contain;background:var(--mm-mist);padding:24px}
+  .fam b{display:block;font-family:var(--font-display);font-size:18px;color:var(--mm-navy)}
+  .proof{border-block:1px solid var(--mm-rule)}
+  .pr{display:grid;grid-template-columns:repeat(2,1fr)}
+  @media (min-width:900px){.pr{grid-template-columns:repeat(4,1fr)}}
+  .pr div{padding:28px 20px;display:grid;color:var(--mm-graphite);font-size:15px;border-left:1px solid var(--mm-rule)}
+  .pr b{font-family:var(--font-display);font-size:22px;color:var(--mm-navy)}
+  .call{background:var(--mm-copper-tint);padding:48px 0}
+  .cg{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+  .call h2{margin:0}
+  .btn.copper{background:var(--mm-copper);border-color:var(--mm-copper)}
+</style>

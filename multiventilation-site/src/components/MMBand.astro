@@ -1,0 +1,33 @@
+---
+import { site } from '../data/site';
+import { langOf } from '../i18n';
+const fr = langOf(Astro.url.pathname) === 'fr';
+const { tone = 'dark' } = Astro.props as { tone?: 'dark' | 'light' };
+---
+<section class={'mmb ' + tone}><div class="wrap mmg">
+  <a href={site.parent} class="mml"><img src={tone === 'dark' ? '/img/logo-mm-inverse.png' : '/img/mm-logo-couleur.png'} alt="Multi-Moulures" width="1100" height="330" loading="lazy" /></a>
+  <div>
+    <p class="caps">{fr ? 'Une division de Multi-Moulures' : 'A division of Multi-Moulures'}</p>
+    <h2>{fr ? 'Fabriqué par le plieur des couvreurs du Québec depuis plus de 35 ans.' : 'Made by the sheet metal bender Quebec roofers have trusted for over 35 years.'}</h2>
+    <ul class="nums">{fr ? <><li><b>2</b>usines</li><li><b>70</b>employés</li><li><b>8</b>plieuses</li><li><b>40&nbsp;000+</b>feuilles en stock</li></> : <><li><b>2</b>plants</li><li><b>70</b>employees</li><li><b>8</b>press brakes</li><li><b>40,000+</b>sheets in stock</li></>}</ul>
+    <a class="tl" href={site.parent}>{fr ? 'Moulures de métal sur mesure, chez Multi-Moulures →' : 'Custom metal flashings at Multi-Moulures →'}</a>
+  </div>
+</div></section>
+<style>
+  .mmb{padding:clamp(48px,7vw,88px) 0}
+  .mmb.dark{background:var(--mm-navy-ink);color:#fff}
+  .mmb.light{background:var(--mm-mist)}
+  .mmg{display:grid;gap:32px;align-items:center}
+  @media (min-width:900px){.mmg{grid-template-columns:minmax(260px,400px) 1fr;gap:64px}}
+  .mml img{width:100%;max-width:400px}
+  .mmb .caps{color:var(--mm-copper)}
+  .mmb.dark h2{color:#fff}
+  .mmb h2{font-size:clamp(24px,2.8vw,34px);max-width:28ch}
+  .nums{list-style:none;padding:0;margin:20px 0 24px;display:flex;flex-wrap:wrap;gap:12px 36px}
+  .nums li{display:grid;font-size:15px}
+  .dark .nums li{color:#dbe4ee}
+  .nums b{font-family:var(--font-display);font-size:30px;line-height:1.1}
+  .dark .nums b{color:#fff} .light .nums b{color:var(--mm-navy)}
+  .tl{font-family:var(--font-display);font-weight:700;text-decoration:underline;text-decoration-color:var(--mm-copper);text-decoration-thickness:2px;text-underline-offset:4px}
+  .dark .tl{color:#fff}
+</style>

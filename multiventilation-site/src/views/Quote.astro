@@ -1,0 +1,22 @@
+---
+import Inner from '../components/Inner.astro';
+import LeadForm from '../components/LeadForm.astro';
+import { site } from '../data/site';
+import type { Lang } from '../i18n';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const L = fr
+  ? { title: 'Demander un prix : ventilation de toiture sur mesure | Multi-Ventilation', desc: 'Demandez un prix pour vos aérateurs de toit, dômes, clapets ou soffites ventilés sur mesure. Couvreurs, entrepreneurs et revendeurs partout au Canada.', kicker: 'Demande de prix', h1: 'Demander un prix', lead: 'Dites-nous qui vous êtes et où vous êtes : votre demande va directement à la bonne personne.', h2: 'Ce qui nous aide à vous répondre vite', li: ['Le produit et la grandeur (par exemple, AirM300 16 x 16 po)', 'La pente du toit', 'La marque et le nom de la couleur de la toiture', 'Les quantités et la date requise'], call: 'Plus rapide encore : appelez-nous au' }
+  : { title: 'Get a quote: custom roof ventilation | Multi-Ventilation', desc: 'Get a quote on custom roof vents, ridge domes, exhaust caps or vented soffits. Roofers, contractors and resellers across Canada.', kicker: 'Quote request', h1: 'Get a quote', lead: 'Tell us who you are and where you are: your request goes straight to the right person.', h2: 'What helps us answer quickly', li: ['The product and size (for example, AirM300 16 x 16 in.)', 'The roof pitch', 'The roofing brand and colour name', 'Quantities and the date needed'], call: 'Faster still: call us at' };
+---
+<Inner title={L.title} description={L.desc} kicker={L.kicker} h1={L.h1} lead={L.lead}>
+  <div class="grid g2">
+    <LeadForm />
+    <div>
+      <h2>{L.h2}</h2>
+      <ul class="ticks">{L.li.map((x) => <li>{x}</li>)}</ul>
+      <p>{L.call} <a href={'tel:' + site.phone}><strong>{site.phoneDisplay}</strong></a>.</p>
+    </div>
+  </div>
+</Inner>
+<style>.ticks{padding-left:20px;display:grid;gap:6px}</style>

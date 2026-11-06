@@ -1,15 +1,22 @@
 ---
 import '../styles/global.css';
-import { site, nav } from '../data/site';
+import { site } from '../data/site';
+import { langOf, altPath, routes, t } from '../i18n';
 interface Props { title: string; description: string; schema?: object[] }
 const { title, description, schema = [] } = Astro.props;
 const path = Astro.url.pathname;
+const lang = langOf(path);
+const tx = t[lang];
+const nav = tx.nav;
+const alt = altPath(path);
+const frPath = lang === 'fr' ? path : alt;
+const enPath = lang === 'en' ? path : alt;
 const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': site.url + '/#org', name: site.name, url: site.url, telephone: site.phone, email: site.email,
   parentOrganization: { '@type': 'Organization', name: 'Multi-Moulures inc.', url: site.parent },
   address: { '@type': 'PostalAddress', streetAddress: site.street, addressLocality: site.city, addressRegion: site.region, postalCode: site.postal, addressCountry: 'CA' } };
 ---
 <!doctype html>
-<html lang="fr-CA">
+<html lang={lang === 'fr' ? 'fr-CA' : 'en-CA'}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -18,22 +25,26 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
   <link rel="canonical" href={site.url + path} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:locale" content="fr_CA" />
+  <link rel="alternate" hreflang="fr-CA" href={site.url + frPath} />
+  <link rel="alternate" hreflang="en-CA" href={site.url + enPath} />
+  <link rel="alternate" hreflang="x-default" href={site.url + frPath} />
+  <meta property="og:locale" content={lang === 'fr' ? 'fr_CA' : 'en_CA'} />
   <link rel="icon" href="/img/mv.png" />
   <script type="application/ld+json" set:html={JSON.stringify([org, ...schema])} />
 </head>
 <body>
   <header class="top">
     <div class="wrap bar">
-      <a class="brand" href="/" aria-label="Multi-Ventilation, accueil">
-        <img class="logo" src="/img/logo-mv.png" alt="Multi-Ventilation, produits de ventilation en métal" width="1200" height="313" />
+      <a class="brand" href={routes.home[lang]} aria-label="Multi-Ventilation">
+        <img class="logo" src="/img/logo-mv.png" alt="Multi-Ventilation" width="1200" height="313" />
       </a>
       <nav aria-label="Navigation">{nav.map(([u, l]) => <a href={u} aria-current={path.startsWith(u) ? 'page' : undefined}>{l}</a>)}</nav>
       <div class="actions">
-        <a class="btn small" href="/demander-un-prix/">Demander un prix</a>
+        <a class="lang" href={alt} hreflang={lang === 'fr' ? 'en' : 'fr'} aria-label={tx.switchName}><span class={lang === 'fr' ? 'on' : ''}>FR</span><span class={lang === 'en' ? 'on' : ''}>EN</span></a>
+        <a class="btn small copper" href={routes.quote[lang]}>{tx.quote}</a>
         <details class="menu">
           <summary aria-label="Menu"><span></span><span></span><span></span></summary>
-          <div class="drop">{nav.map(([u, l]) => <a href={u}>{l}</a>)}<a href="/demander-un-prix/">Demander un prix</a></div>
+          <div class="drop">{nav.map(([u, l]) => <a href={u}>{l}</a>)}<a href={routes.quote[lang]}>{tx.quote}</a><a href={alt}>{tx.switchName}</a></div>
         </details>
       </div>
     </div>
@@ -43,27 +54,26 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
     <div class="wrap fgrid">
       <div>
         <img class="flogo" src="/img/logo-mv-inverse.png" alt="Multi-Ventilation" width="1200" height="313" loading="lazy" />
-        <p class="slogan"><span>Sur mesure.</span> <em>En 5 jours.</em></p>
-        <p class="fabout">Ventilation de toiture sur mesure, fabriquée au Québec en acier galvanisé prépeint canadien. Une division de <a href={site.parent}>Multi-Moulures</a>, fabricant depuis plus de 35 ans.</p>
+        <p class="slogan"><span>{tx.slogan[0]}</span> <em>{tx.slogan[1]}</em></p>
+        <p class="fabout">{tx.about} <a href={site.parent}>Multi-Moulures</a>{tx.aboutEnd}</p>
       </div>
       <div>
         <p class="caps light">Contact</p>
         <p><a href={'tel:' + site.phone}>{site.phoneDisplay}</a><br /><a href={'tel:' + site.phone2}>{site.phone2Display}</a><br /><a href={'mailto:' + site.email}>{site.email}</a></p>
-        <p>{site.street}<br />{site.city} (Québec) {site.postal}</p>
+        <p>{site.street}<br />{site.city}{tx.province === '(Québec)' ? ' (Québec)' : tx.province} {site.postal}</p>
       </div>
       <div>
-        <p class="caps light">Liens</p>
+        <p class="caps light">{tx.links}</p>
         <p class="flinks">
-          <a href="/produits/">Tous les produits</a>
-          <a href="/docs/catalogue-multi-moulures.pdf" download>Catalogue (PDF)</a>
-          <a href="/calculateur-de-ventilation/">Calculateur de ventilation</a>
-          <a href="/revendeurs/">Devenir revendeur</a>
-          <a href="/demander-un-prix/">Demander un prix</a>
-          <a href={site.parent}>Moulures sur mesure (Multi-Moulures)</a>
+          <a href={routes.products[lang]}>{tx.all}</a>
+          <a href="/docs/catalogue-multi-moulures.pdf" download>{tx.catalogue}</a>
+          <a href={routes.resellers[lang]}>{tx.becomeReseller}</a>
+          <a href={routes.quote[lang]}>{tx.quote}</a>
+          <a href={site.parent}>{tx.parentLink}</a>
         </p>
       </div>
     </div>
-    <div class="wrap legal">© {new Date().getFullYear()} {site.legal} Tous droits réservés.</div>
+    <div class="wrap legal">© {new Date().getFullYear()} {tx.legal} {tx.rights}</div>
   </footer>
 </body>
 </html>
@@ -78,6 +88,10 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
   nav a:hover,nav a[aria-current]{color:var(--mm-navy);border-color:var(--mm-steel)}
   .actions{display:flex;align-items:center;gap:16px}
   .btn.small{padding:10px 16px;font-size:14px;white-space:nowrap}
+  .btn.copper{background:var(--mm-copper);border-color:var(--mm-copper)}
+  .lang{display:flex;border:1px solid var(--mm-rule);text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:13px}
+  .lang span{padding:8px 10px;color:var(--mm-ash)}
+  .lang span.on{background:var(--mm-navy);color:#fff}
   .menu{position:relative;display:none}
   @media (max-width:1100px){nav{display:none}.actions{margin-left:auto}.menu{display:block}}
   .menu summary{list-style:none;cursor:pointer;width:44px;height:44px;display:grid;place-content:center;gap:5px;border:1px solid var(--mm-rule)}

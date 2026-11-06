@@ -1,5 +1,6 @@
 ---
-const fr = true;
+import { langOf } from '../i18n';
+const fr = langOf(Astro.url.pathname) === 'fr';
 ---
 <a class="catdl" href="/docs/catalogue-multi-moulures.pdf" download="Catalogue-Multi-Moulures-novembre-2026.pdf">
   <img src="/img/catalogue-couverture.webp" alt={fr ? 'Couverture du catalogue Multi-Moulures' : 'Multi-Moulures catalogue cover'} width="340" height="440" loading="lazy" />

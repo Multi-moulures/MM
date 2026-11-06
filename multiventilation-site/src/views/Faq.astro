@@ -1,0 +1,11 @@
+---
+import Inner from '../components/Inner.astro';
+import { getFaq, type Lang } from '../i18n';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const faq = getFaq(lang);
+const schema = [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }];
+---
+<Inner schema={schema} title={fr ? 'Questions fréquentes sur la ventilation de toiture | Multi-Ventilation' : 'Roof ventilation FAQ | Multi-Ventilation'} description={fr ? 'Délais, couleurs, normes, ventilation d’entretoit, garantie et revente : les réponses aux questions des couvreurs et des revendeurs.' : 'Lead times, colours, testing, attic ventilation, warranty and reselling: answers for roofers and resellers.'} h1={fr ? 'Questions fréquentes' : 'Frequently asked questions'}>
+  <div style="max-width:820px">{faq.map(([q, a]) => <details open><summary>{q}</summary><p>{a}</p></details>)}</div>
+</Inner>

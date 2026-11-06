@@ -4,6 +4,7 @@
   --mm-navy:#004e94; --mm-navy-deep:#003464; --mm-navy-ink:#10294a;
   --mm-steel:#2e78b7; --mm-steel-line:#1d568f; --mm-sky:#93b5da;
   --mm-ice:#e0ebf4; --mm-mist:#ebeff1; --mm-zebra:#ebedee; --mm-rule:#d5d8dc;
+  --mm-copper:#b5612a; --mm-copper-deep:#8f4a1e; --mm-copper-tint:#f6e9df;
   --mm-ink:#2c2e35; --mm-graphite:#56585d; --mm-slate:#3a3d44; --mm-ash:#8a8d93; --mm-white:#fff;
   --gradient-footer:linear-gradient(90deg,var(--mm-navy-deep) 0%,#00407b 50%,var(--mm-navy) 100%);
   --gradient-wash:linear-gradient(90deg,var(--mm-mist) 0%,#f3f5f6 60%,#fff 100%);

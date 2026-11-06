@@ -1,0 +1,57 @@
+---
+import Inner from '../components/Inner.astro';
+import Card from '../components/Card.astro';
+import { site } from '../data/site';
+import { getCategories, getProducts, productUrl, routes, type Lang } from '../i18n';
+const { lang, slug } = Astro.props as { lang: Lang; slug: string };
+const fr = lang === 'fr';
+const products = getProducts(lang);
+const p = products.find((x) => x.slug === slug)!;
+const cat = getCategories(lang).find((c) => c.id === p.cat)!;
+const others = products.filter((x) => x.cat === p.cat && x.slug !== p.slug).slice(0, 4);
+const L = fr
+  ? { prods: 'Produits', title: `${p.name} : ${p.sub.toLowerCase()}, sur mesure en 5 jours | Multi-Ventilation`, tags: ['Fabriqué en 5 jours', 'Couleur assortie', 'Acier canadien', 'Formats sur mesure'], pitch: 'Pentes', tested: 'Testé CAN3-A93-M82', quote: 'Demander un prix', specs: 'Spécifications techniques', note: 'Débits estimés à partir de la surface libre de ventilation (SFVA). Garantie à vie sur les défauts de fabrication, 10 ans sur la peinture.', lab: 'Testé selon CAN3-A93-M82 (R2003) par UL Canada', same: 'Dans la même catégorie', mat: 'Acier galvanisé G90 prépeint' }
+  : { prods: 'Products', title: `${p.name}: ${p.sub.toLowerCase()}, custom made in 5 days | Multi-Ventilation`, tags: ['Made in 5 days', 'Colour matched', 'Canadian steel', 'Custom sizes'], pitch: 'Pitch', tested: 'Tested to CAN3-A93-M82', quote: 'Get a quote', specs: 'Technical specifications', note: 'Airflow estimated from the net free ventilating area (NFVA). Lifetime warranty on manufacturing defects, 10 years on paint.', lab: 'Tested to CAN3-A93-M82 (R2003) by UL Canada', same: 'In the same category', mat: 'Prepainted G90 galvanized steel' };
+const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.name, description: p.desc, image: `${site.url}/img/${p.slug}.webp`, url: site.url + productUrl(p.slug, lang), brand: { '@type': 'Brand', name: 'Multi-Ventilation' }, manufacturer: { '@type': 'Organization', name: 'Multi-Moulures inc.', url: site.parent }, material: L.mat, additionalProperty: p.specs.map(([k, v]) => ({ '@type': 'PropertyValue', name: k, value: v })) }];
+---
+<Inner schema={schema} crumbs={[[L.prods, routes.products[lang]], [cat.name, `${routes.products[lang]}#${cat.id}`]]} title={L.title} description={p.desc.slice(0, 155)} kicker={cat.name} h1={p.name} lead={p.sub}>
+  {p.check && <p class="todo" style="margin-bottom:24px">{p.check}</p>}
+  <div class="grid g2 top">
+    <img class="hero-img" src={`/img/${p.slug}.webp`} alt={p.name} />
+    <div>
+      <div class="metric"><span class="v">{p.metric.v}</span><span class="u">{p.metric.u}</span></div>
+      <p class="ml">{p.metric.label}</p>
+      {p.metric.note && <p class="mn">{p.metric.note}</p>}
+      <p style="margin-top:20px">{p.desc}</p>
+      <ul class="tags">
+        {L.tags.map((x) => <li>{x}</li>)}
+        {p.pitch && <li>{L.pitch} {p.pitch}</li>}{p.tested && <li>{L.tested}</li>}
+      </ul>
+      <p class="btns"><a class="btn copper" href={routes.quote[lang]}>{L.quote}</a><a class="btn ghost" href={'tel:' + site.phone}>{site.phoneDisplay}</a></p>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:48px">
+    <table class="spec"><tr><th colspan="2">{L.specs}</th></tr>{p.specs.map(([k, v]) => <tr><td>{k}</td><td>{v}</td></tr>)}</table>
+    <div>
+      <div class="scroll"><table class="spec"><tr>{p.table.head.map((h) => <th>{h}</th>)}</tr>{p.table.rows.map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}</table></div>
+      {p.table.note && <p class="mn">{p.table.note}</p>}
+      <p class="mn">{L.note}</p>
+      {p.tested && <p class="mn">{L.lab}</p>}
+    </div>
+  </div>
+  {others.length > 0 && <section style="margin-top:64px"><h2>{L.same}</h2><div class="grid g4">{others.map((o) => <Card p={o} lang={lang} />)}</div></section>}
+</Inner>
+<style>
+  .hero-img{width:100%;max-height:420px;object-fit:contain;background:var(--mm-mist)}
+  .top{align-items:start}
+  .metric{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:800;color:var(--mm-navy);line-height:1}
+  .v{font-size:clamp(44px,6vw,72px)}.u{font-size:24px}
+  .ml{margin:6px 0 0;font-weight:500}
+  .mn{font-size:14px;color:var(--mm-graphite);margin-top:8px}
+  .tags{list-style:none;padding:0;margin:16px 0 24px;display:flex;flex-wrap:wrap;gap:6px}
+  .tags li{background:var(--mm-ice);color:var(--mm-navy);padding:5px 10px;font-size:14px;font-weight:500}
+  .btn.copper{background:var(--mm-copper);border-color:var(--mm-copper)}
+  .scroll{overflow-x:auto;min-width:0}
+  .scroll td,.scroll th{white-space:nowrap}
+  table.spec{font-variant-numeric:tabular-nums}
+</style>

@@ -1,8 +1,9 @@
 ---
 import type { Product } from '../data/produits';
-const { p } = Astro.props as { p: Product };
+import { productUrl, type Lang } from '../i18n';
+const { p, lang = 'fr' } = Astro.props as { p: Product; lang?: Lang };
 ---
-<a class="card pc" href={`/produits/${p.slug}/`}>
+<a class="card pc" href={productUrl(p.slug, lang)}>
   <img src={`/img/${p.slug}.webp`} alt={p.name} loading="lazy" />
   <h3>{p.name}</h3>
   <p><strong>{p.metric.v} {p.metric.u}</strong> · {p.metric.label.split(',')[0].toLowerCase()}</p>

@@ -1,0 +1,25 @@
+---
+import Inner from '../components/Inner.astro';
+import Card from '../components/Card.astro';
+import CatalogueDownload from '../components/CatalogueDownload.astro';
+import { site } from '../data/site';
+import { getCategories, getProducts, productUrl, type Lang } from '../i18n';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const products = getProducts(lang), categories = getCategories(lang);
+const schema = [{ '@context': 'https://schema.org', '@type': 'ItemList', name: fr ? 'Produits Multi-Ventilation' : 'Multi-Ventilation products', numberOfItems: products.length, itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: site.url + productUrl(p.slug, lang) })) }];
+---
+<Inner schema={schema}
+  title={fr ? `Produits de ventilation de toiture sur mesure : ${products.length} modèles | Multi-Ventilation` : `Custom roof ventilation products: ${products.length} models | Multi-Ventilation`}
+  description={fr ? 'AirM300, AirM100, Dôme 480, col de cygne, louvres, clapets d’évacuation et soffites ventilés, fabriqués sur mesure en 5 jours au Québec.' : 'AirM300, AirM100, 480 Dome, gooseneck vents, louvres, exhaust caps and vented soffits, custom made in 5 days in Quebec.'}
+  kicker={fr ? `${products.length} produits` : `${products.length} products`} h1={fr ? 'Produits de ventilation' : 'Ventilation products'}
+  lead={fr ? 'Chaque produit se fabrique dans la grandeur et la couleur de votre choix, en 5 jours.' : 'Every product is made in the size and colour of your choice, in 5 days.'}>
+  <CatalogueDownload />
+  {categories.map((c) => (
+    <section id={c.id} class="cat">
+      <h2>{c.name}</h2><p>{c.lead}</p>
+      <div class="grid g4">{products.filter((p) => p.cat === c.id).map((p) => <Card p={p} lang={lang} />)}</div>
+    </section>
+  ))}
+</Inner>
+<style>.cat{margin-bottom:56px;scroll-margin-top:96px}.cat>p{color:var(--mm-graphite)}</style>
