@@ -1,10 +1,10 @@
 // Données tirées du catalogue Fiches-Cartable v03 (28 oct. 2026), section Produits de ventilation.
 export type Cat = 'aerateurs' | 'ici' | 'evacuation' | 'soffites';
 export const categories: { id: Cat; name: string; lead: string }[] = [
-  { id: 'aerateurs', name: 'Aérateurs de toit', lead: 'Évacuation de l’air des combles, toutes pentes, toutes couleurs.' },
-  { id: 'ici', name: 'Commercial, industriel et agricole', lead: 'Grands débits et sorties robustes pour les bâtiments ICI et agricoles.' },
-  { id: 'evacuation', name: 'Clapets et sorties d’évacuation', lead: 'Sorties de sécheuse, salle de bain, hotte et prises d’air.' },
-  { id: 'soffites', name: 'Soffites ventilés', lead: 'L’entrée d’air qui complète votre système de ventilation.' },
+  { id: 'aerateurs', name: 'Ventilateurs de toit (aérateurs)', lead: 'Ventilateurs d’entretoit pour toitures en pente et toits plats, dans toutes les couleurs.' },
+  { id: 'ici', name: 'Ventilation de toiture commerciale, industrielle et agricole', lead: 'Grandes surfaces de ventilation et sorties robustes pour les bâtiments ICI et agricoles.' },
+  { id: 'evacuation', name: 'Clapets d’évacuation et sorties murales', lead: 'Sorties de sécheuse, de ventilateur de salle de bain et de hotte, et prises d’air.' },
+  { id: 'soffites', name: 'Soffites ventilés en acier', lead: 'L’entrée d’air qui complète votre système de ventilation de toiture.' },
 ];
 
 export type Product = {
@@ -69,8 +69,8 @@ export const products: Product[] = [
     metric: { v: '≥ 500', u: 'PCM', label: 'Débit d’air estimé', note: 'Estimation basée sur la surface libre de ventilation' },
     pitch: '2/12 à 16/12', tested: true,
     specs: [['Débit d’air estimé', '500 PCM et plus'], ['Ouverture standard', '12 x 46 po'], ['Formats disponibles', '4 pi, 6 pi et 8 pi'], ['Plage de pente', '2/12 à 16/12'], ['Matériel', 'Acier galvanisé G90 26 ga'], ...std, ['Norme d’essai', 'CAN3-A93-M82 (R2003)'], ['Laboratoire', 'UL Canada (ISO/IEC 17025)']],
-    table: { head: ['Calibre', 'Modèle', 'Largeur de base', 'Hauteur totale', 'Longueur totale', 'SFVA'], rows: [['26 ga', '4 pi', '10 po', '13 po', '46 1/2 po', '250 po²'], ['26 ga', '6 pi', '10 po', '13 po', '70 1/2 po', '380 po²'], ['26 ga', '8 pi', '10 po', '13 po', '94 1/2 po', '500 po²']] },
-    check: 'Le catalogue indique une SFVA de 242 po² en en-tête, mais 250, 380 et 500 po² dans le tableau. À harmoniser.' },
+    table: { head: ['Calibre', 'Modèle', 'Largeur de base', 'Hauteur totale', 'Longueur totale', 'SFVA'], rows: [['26 ga', '4 pi', '10 po', '13 po', '46 1/2 po', '242 po²'], ['26 ga', '6 pi', '10 po', '13 po', '70 1/2 po', '380 po²'], ['26 ga', '8 pi', '10 po', '13 po', '94 1/2 po', '500 po²']] },
+  },
   { slug: 'col-de-cygne', name: 'Col de cygne', cat: 'ici', sub: 'Sortie d’air pour toitures commerciales et industrielles',
     desc: 'Sortie d’air statique conçue pour les bâtiments institutionnels, commerciaux et industriels (ICI). Son profil en demi-lune offre une protection maximale contre les intempéries tout en assurant un débit d’air optimal. Grillage pare-oiseaux intégré de série.',
     metric: { v: '≈ 250', u: 'PCM', label: 'Débit d’air estimé', note: 'Surface libre de 120 po²' },

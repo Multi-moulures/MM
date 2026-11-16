@@ -1,6 +1,7 @@
 import { products as productsFr, categories as categoriesFr, type Product } from './data/produits';
 import { productsEn, categoriesEn } from './data/produits-en';
 import { faq as faqFr } from './data/site';
+import { faqMore } from './data/seo';
 
 export type Lang = 'fr' | 'en';
 export const langOf = (path: string): Lang => (path === '/en' || path.startsWith('/en/') ? 'en' : 'fr');
@@ -34,12 +35,12 @@ export const faqEn: [string, string][] = [
   ['What is your lead time?', 'Our custom ventilation products are made in 5 days, in the size and colour of your choice.'],
   ['Can you match my roof colour?', 'Yes. We fabricate our vents, caps and soffits from the same prepainted galvanized steel used by metal roofing manufacturers. We match the Ideal Roofing, Vicwest, MAC, Agway Metals and Color Steels palettes, and we can match a sample if your colour is not listed.'],
   ['Are your vents tested?', 'The AirM300 and the 480 Dome were tested to CAN3-A93-M82 (R2003) by UL Canada, an ISO/IEC 17025 accredited laboratory, for wind resistance, rain, corrosion and structural integrity.'],
-  ['How much ventilation does an attic need?', 'The National Building Code of Canada generally calls for a net free ventilating area of at least 1/300 of the insulated ceiling area, split between intake (soffits) and exhaust (roof vents). Always confirm with the applicable code and your roofing manufacturer’s requirements.'],
+  ['How much ventilation does an attic need?', 'The National Building Code of Canada generally calls for (Article 9.19.1.2) a net free ventilating area of at least 1/300 of the insulated ceiling area, more for some low-slope roofs, split between intake (soffits) and exhaust (roof vents). Always confirm with the applicable code and your roofing manufacturer’s requirements.'],
   ['What is the warranty?', 'A limited lifetime warranty on manufacturing defects: free replacement for 10 years, then a 50% credit on a replacement part for life. Paint is covered for 10 years. The warranty transfers to the next owner and requires professional installation. See our warranty page for details.'],
   ['Do you sell to resellers?', 'Yes. Distributors, building supply stores and dealers can resell our products, in Quebec and across Canada. See the Resellers page.'],
   ['I am a roofer outside Quebec. How do I order?', 'Enter your region in the quote form. We will serve you directly or refer you to a reseller near you.'],
 ];
-export const getFaq = (lang: Lang) => (lang === 'fr' ? faqFr : faqEn);
+export const getFaq = (lang: Lang) => [...(lang === 'fr' ? faqFr : faqEn), ...faqMore[lang]];
 
 export const t = {
   fr: {

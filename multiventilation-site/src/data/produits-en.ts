@@ -3,10 +3,10 @@ import type { Cat } from './produits';
 type T = { name: string; sub: string; desc: string; metric: { label: string; note?: string; v?: string; u?: string }; pitch?: string; specs: [string, string][]; table: { head: string[]; rows: string[][]; note?: string } };
 
 export const categoriesEn: Record<Cat, { name: string; lead: string }> = {
-  aerateurs: { name: 'Roof vents', lead: 'Attic exhaust for every pitch and every colour.' },
-  ici: { name: 'Commercial, industrial and agricultural', lead: 'High airflow and rugged outlets for ICI and farm buildings.' },
-  evacuation: { name: 'Exhaust caps and wall vents', lead: 'Dryer, bathroom fan, range hood and fresh-air outlets.' },
-  soffites: { name: 'Vented soffits', lead: 'The air intake that completes your ventilation system.' },
+  aerateurs: { name: 'Roof vents (attic ventilators)', lead: 'Attic ventilators for sloped and flat roofs, in every colour.' },
+  ici: { name: 'Commercial, industrial and agricultural roof ventilation', lead: 'Large ventilating areas and rugged outlets for ICI and farm buildings.' },
+  evacuation: { name: 'Exhaust caps and wall vents', lead: 'Dryer, bathroom fan and range hood outlets, and fresh-air intakes.' },
+  soffites: { name: 'Vented steel soffits', lead: 'The air intake that completes your roof ventilation system.' },
 };
 
 const std: [string, string][] = [['Finish', 'Prepainted steel'], ['Screen', 'Built-in perforated steel rodent-resistant screen'], ['Wind protection', 'Wind deflector']];

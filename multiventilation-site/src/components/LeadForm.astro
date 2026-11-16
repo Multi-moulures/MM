@@ -1,7 +1,8 @@
 ---
-import { langOf, routes } from '../i18n';
+import { langOf, routes, getProducts } from '../i18n';
 const { kind = 'couvreur' } = Astro.props as { kind?: string };
 const fr = langOf(Astro.url.pathname) === 'fr';
+const names = Object.fromEntries(getProducts(fr ? 'fr' : 'en').map((p) => [p.slug, p.name]));
 const provinces = fr
   ? ['Québec', 'Ontario', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Île-du-Prince-Édouard', 'Terre-Neuve-et-Labrador', 'Manitoba', 'Saskatchewan', 'Alberta', 'Colombie-Britannique', 'Territoires', 'États-Unis', 'Autre pays']
   : ['Quebec', 'Ontario', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia', 'Territories', 'United States', 'Other country'];
@@ -9,7 +10,8 @@ const L = fr
   ? { who: 'Vous êtes', roofer: 'Couvreur ou entrepreneur', reseller: 'Revendeur, distributeur ou quincaillerie', other: 'Autre (architecte, propriétaire, gestionnaire)', prov: 'Province ou région', city: 'Ville', co: 'Entreprise', name: 'Votre nom', phone: 'Téléphone', email: 'Courriel', msg: 'Produits, grandeurs, couleur et quantités', send: 'Envoyer', todo: 'Formulaire à brancher : chaque demande doit arriver avec son type et sa région pour être dirigée vers la bonne personne.' }
   : { who: 'You are', roofer: 'Roofer or contractor', reseller: 'Reseller, distributor or building supply store', other: 'Other (architect, owner, property manager)', prov: 'Province or region', city: 'City', co: 'Company', name: 'Your name', phone: 'Phone', email: 'Email', msg: 'Products, sizes, colour and quantities', send: 'Send', todo: 'Form to connect.' };
 ---
-<form class="order lead" method="post" action="#" data-lead data-lang={fr ? 'fr' : 'en'}>
+<form class="order lead" method="post" action="#" data-lead data-lang={fr ? 'fr' : 'en'} data-names={JSON.stringify(names)}>
+  <input type="hidden" name="produit" value="" />
   <fieldset class="who">
     <legend>{L.who}</legend>
     <label class="opt"><input type="radio" name="type" value="couvreur" checked={kind === 'couvreur'} /> {L.roofer}</label>
@@ -33,6 +35,13 @@ const L = fr
   document.querySelectorAll('form[data-lead]').forEach((f) => {
     const out = f.querySelector('.route') as HTMLElement;
     const fr = (f as HTMLElement).dataset.lang === 'fr';
+    const slug = new URLSearchParams(location.search).get('produit');
+    const names = JSON.parse((f as HTMLElement).dataset.names || '{}');
+    if (slug && names[slug]) {
+      (f.querySelector('input[name=produit]') as HTMLInputElement).value = slug;
+      const ta = f.querySelector('textarea[name=message]') as HTMLTextAreaElement;
+      if (!ta.value) ta.value = (fr ? 'Produit : ' : 'Product: ') + names[slug] + (fr ? '\nGrandeur : \nPente : \nCouleur : \nQuantité : ' : '\nSize: \nPitch: \nColour: \nQuantity: ');
+    }
     const msg = () => {
       const t = (f.querySelector('input[name=type]:checked') as HTMLInputElement)?.value;
       const sel = f.querySelector('select[name=province]') as HTMLSelectElement;

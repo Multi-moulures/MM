@@ -2,16 +2,15 @@
 import Base from '../layouts/Base.astro';
 import MMBand from '../components/MMBand.astro';
 import { site } from '../data/site';
-import { getCategories, getProducts, routes, type Lang } from '../i18n';
+import { getProducts, routes, type Lang } from '../i18n';
+import { apps, appsOf } from '../data/seo';
 const { lang } = Astro.props as { lang: Lang };
 const fr = lang === 'fr';
 const products = getProducts(lang);
-const categories = getCategories(lang);
 const strip = ['airm300-base-ajustable', 'dome-480', 'col-de-cygne', 'vr-triangulaire', 'cmm-4', 'airm300-base-pignon'];
-const catImg: Record<string, string> = { aerateurs: 'airm300-base-pignon', ici: 'col-de-cygne', evacuation: 'sortie-murale-de-ventilation', soffites: 'soffite-ventile-oblong' };
 const c = fr ? {
-  title: 'Ventilation de toiture sur mesure en 5 jours | Multi-Ventilation',
-  desc: 'Aérateurs de toit, dômes, clapets et soffites ventilés sur mesure, fabriqués en 5 jours au Québec dans la couleur exacte de votre toiture. AirM300 testé CAN3-A93-M82. Pour couvreurs et revendeurs.',
+  title: 'Ventilateurs de toit et ventilation de toiture | Multi-Ventilation',
+  desc: 'Fabricant québécois de ventilateurs de toit, aérateurs d’entretoit et soffites ventilés en acier, pour toitures métalliques, toits plats et bâtiments agricoles.',
   kicker: 'Multi-Ventilation · par Multi-Moulures', h1a: 'La ventilation de toiture, ', h1em: 'sur mesure', h1b: ', en 5 jours.',
   lead: 'Toutes les grandeurs. Toutes les couleurs. Fabriquée au Québec dans l’acier prépeint de votre toiture.',
   d1: ['Je suis couvreur', 'Un prix pour mon chantier', 'Grandeur, pente, couleur, quantités : réponse rapide d’un conseiller.', 'Demander un prix →'],
@@ -20,8 +19,8 @@ const c = fr ? {
   proof: [['5 jours', 'fabrication sur mesure'], ['Couleur exacte', 'acier prépeint de votre toiture'], ['UL Canada', 'AirM300 et Dôme 480 testés'], ['Garantie à vie', 'limitée, sur les défauts de fabrication']],
   call: 'Parlez à un conseiller ventilation.', callBtn: 'Appeler',
 } : {
-  title: 'Custom roof ventilation in 5 days | Multi-Ventilation',
-  desc: 'Custom roof vents, ridge domes, exhaust caps and vented soffits, made in Quebec in 5 days in the exact colour of your roof. AirM300 tested to CAN3-A93-M82. For roofers and resellers.',
+  title: 'Roof vents and attic ventilation, made in Canada | Multi-Ventilation',
+  desc: 'Canadian manufacturer of custom roof vents, attic ventilators and vented steel soffits for metal roofs, flat roofs and farm buildings, made in 5 days.',
   kicker: 'Multi-Ventilation · by Multi-Moulures', h1a: 'Roof ventilation, ', h1em: 'made to measure', h1b: ', in 5 days.',
   lead: 'Every size. Every colour. Made in Quebec from the same prepainted steel as your roof.',
   d1: ['I am a roofer', 'A price for my job', 'Size, pitch, colour, quantities: a quick answer from an advisor.', 'Get a quote →'],
@@ -46,10 +45,10 @@ const c = fr ? {
   </div></section>
   <section class="section"><div class="wrap">
     <div class="fam">
-      {categories.map((k) => (
-        <a href={`${routes.products[lang]}#${k.id}`}>
-          <img src={`/img/${catImg[k.id]}.webp`} alt="" loading="lazy" />
-          <span><b>{k.name}</b>{products.filter((p) => p.cat === k.id).length} {c.prod}</span>
+      {apps.map((a) => (
+        <a href={`${routes.products[lang]}#app-${a.id}`}>
+          <img src={`/img/${a.img}.webp`} alt={a[lang][0]} loading="lazy" width="300" height="300" />
+          <span><b>{a[lang][0]}</b>{products.filter((p) => appsOf(p).includes(a.id)).length} {c.prod}</span>
         </a>
       ))}
     </div>
@@ -80,7 +79,8 @@ const c = fr ? {
   .door em{font-style:normal;font-family:var(--font-display);font-weight:700;color:var(--mm-navy);margin-top:8px}
   .door .caps{color:var(--mm-steel)} .door.alt .caps{color:var(--mm-copper-deep)}
   .fam{display:grid;gap:16px}
-  @media (min-width:720px){.fam{grid-template-columns:repeat(4,1fr)}}
+  @media (min-width:720px){.fam{grid-template-columns:repeat(3,1fr)}}
+  @media (min-width:1100px){.fam{grid-template-columns:repeat(5,1fr)}}
   .fam a{display:grid;gap:12px;text-decoration:none;color:var(--mm-graphite)}
   .fam img{aspect-ratio:1;width:100%;object-fit:contain;background:var(--mm-mist);padding:24px}
   .fam b{display:block;font-family:var(--font-display);font-size:18px;color:var(--mm-navy)}
