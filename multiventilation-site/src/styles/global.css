@@ -33,7 +33,7 @@ p{margin:0 0 1em;max-width:68ch}
 .btn.ghost:hover{background:var(--mm-ice)}
 .btn.light{background:#fff;color:var(--mm-navy);border-color:#fff}
 .btns{display:flex;flex-wrap:wrap;gap:12px}
-.todo{background:#fff4d6;outline:1px dashed #c9a227;padding:0 4px}
+.todo{display:none}
 table.spec{width:100%;border-collapse:collapse;font-size:15px}
 table.spec th{background:var(--mm-navy);color:#fff;text-align:left;padding:10px 12px;font-weight:500}
 table.spec td{padding:10px 12px;border-bottom:1px solid var(--mm-rule)}

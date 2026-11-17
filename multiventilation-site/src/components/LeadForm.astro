@@ -29,7 +29,6 @@ const L = fr
   <p class="consent">{fr ? <>En envoyant ce formulaire, vous acceptez que Multi-Moulures utilise vos renseignements pour répondre à votre demande, selon notre <a href={routes.privacy.fr}>politique de confidentialité</a>.</> : <>By sending this form, you agree that Multi-Moulures may use your information to answer your request, as described in our <a href={routes.privacy.en}>privacy policy</a>.</>}</p>
   <button class="btn" type="submit">{L.send}</button>
   <p class="route" role="status" hidden></p>
-  <p class="todo">{L.todo}</p>
 </form>
 <script>
   document.querySelectorAll('form[data-lead]').forEach((f) => {
@@ -51,7 +50,28 @@ const L = fr
       return fr ? 'Un conseiller vous rappellera avec un prix et un délai de fabrication.' : 'An advisor will call you back with a price and a production date.';
     };
     f.addEventListener('change', () => { out.hidden = false; out.textContent = msg(); });
-    f.addEventListener('submit', (e) => { e.preventDefault(); out.hidden = false; out.textContent = (fr ? 'Merci. ' : 'Thank you. ') + msg(); });
+    // En attendant le service de formulaires : la demande s'ouvre dans le logiciel de courriel du visiteur, adressée à info@.
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(f as HTMLFormElement);
+      const g = (k: string) => String(d.get(k) || '');
+      const type = { couvreur: fr ? 'Couvreur ou entrepreneur' : 'Roofer or contractor', revendeur: fr ? 'Revendeur' : 'Reseller', autre: fr ? 'Autre' : 'Other' }[g('type')] || g('type');
+      const lines = [
+        (fr ? 'Type : ' : 'Type: ') + type,
+        (fr ? 'Province : ' : 'Province: ') + g('province'),
+        (fr ? 'Ville : ' : 'City: ') + g('ville'),
+        (fr ? 'Entreprise : ' : 'Company: ') + g('entreprise'),
+        (fr ? 'Nom : ' : 'Name: ') + g('nom'),
+        (fr ? 'Téléphone : ' : 'Phone: ') + g('telephone'),
+        (fr ? 'Courriel : ' : 'Email: ') + g('courriel'),
+        (fr ? 'Transmettre au revendeur de ma région : ' : 'Share with my regional reseller: ') + (g('partage_revendeur') ? (fr ? 'oui' : 'yes') : (fr ? 'non' : 'no')),
+        '', g('message'),
+      ];
+      const subject = (fr ? 'Demande de prix Multi-Ventilation : ' : 'Multi-Ventilation quote request: ') + (g('entreprise') || g('nom'));
+      location.href = 'mailto:info@multimoulures.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
+      out.hidden = false;
+      out.textContent = (fr ? 'Votre logiciel de courriel s’ouvre avec votre demande : il ne reste qu’à l’envoyer. ' : 'Your email app is opening with your request: just press send. ') + msg();
+    });
   });
 </script>
 <style>

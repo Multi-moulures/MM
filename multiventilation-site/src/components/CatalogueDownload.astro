@@ -2,12 +2,12 @@
 import { langOf } from '../i18n';
 const fr = langOf(Astro.url.pathname) === 'fr';
 ---
-<a class="catdl" href="/docs/catalogue-multi-moulures.pdf" download="Catalogue-Multi-Moulures-novembre-2026.pdf">
-  <img src="/img/catalogue-couverture.webp" alt={fr ? 'Couverture du catalogue Multi-Moulures' : 'Multi-Moulures catalogue cover'} width="340" height="440" loading="lazy" />
+<a class="catdl" href="/docs/catalogue-multi-ventilation.pdf" download="Catalogue-Multi-Ventilation-novembre-2026.pdf">
+  <img src="/img/catalogue-mv-couverture.webp" alt={fr ? 'Couverture du catalogue de ventilation' : 'Ventilation catalogue cover'} width="340" height="440" loading="lazy" />
   <span>
-    <small>{fr ? 'Catalogue complet · PDF · 80 pages · 7 Mo' : 'Full catalogue · PDF · 80 pages · 7 MB'}</small>
-    <strong>{fr ? 'Télécharger le catalogue Multi-Moulures' : 'Download the Multi-Moulures catalogue'}</strong>
-    {fr ? 'La gamme de ventilation en ouverture, suivie des fiches techniques, des profils de moulures et des couleurs en inventaire. Édition novembre 2026.' : 'Spec sheets, flashing profiles, ventilation, colours and metals in stock. November 2026 edition (French).'}
+    <small>{fr ? 'Catalogue · PDF · 58 pages · 10 Mo' : 'Catalogue · PDF · 58 pages · 10 MB'}</small>
+    <strong>{fr ? 'Télécharger le catalogue de ventilation' : 'Download the ventilation catalogue'}</strong>
+    {fr ? 'Fiches techniques de tous nos produits de ventilation, avec dimensions et surfaces de ventilation, suivies des produits de pliage premium. Édition novembre 2026.' : 'Spec sheets for all our ventilation products, with dimensions and ventilating areas, followed by our premium bending products. November 2026 edition (French).'}
     <em>{fr ? 'Télécharger le PDF ↓' : 'Download PDF ↓'}</em>
   </span>
 </a>
