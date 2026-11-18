@@ -6,7 +6,7 @@ export const site = {
   phone: '+1-450-441-1226', phoneDisplay: '(450) 441-1226',
   phone2: '+1-514-990-4848', phone2Display: '(514) 990-4848',
   email: 'info@multimoulures.com',
-  street: '1410, rue Hocquart', city: 'Saint-Bruno-de-Montarville', region: 'QC', postal: 'J3V 6B5',
+  street: '1410, rue Hocquart', city: 'Saint-Bruno-de-Montarville', region: 'QC', postal: 'J3V 6E1',
 };
 export const nav = [
   ['/produits/', 'Produits'],

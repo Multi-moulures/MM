@@ -7,7 +7,7 @@ export function privacy(lang: 'fr' | 'en', brand: 'mm' | 'mv'): Section[] {
   const mv = brand === 'mv';
   if (lang === 'fr') return [
     { h: 'Qui sommes-nous', p: [
-      `${mv ? 'Multi-Ventilation est une division de Multi-Moulures inc.' : 'Multi-Moulures inc.'} (« Multi-Moulures », « nous ») fabrique des moulures de métal et des produits de ventilation sur mesure au 1410, rue Hocquart, Saint-Bruno-de-Montarville (Québec) J3V 6B5.`,
+      `${mv ? 'Multi-Ventilation est une division de Multi-Moulures inc.' : 'Multi-Moulures inc.'} (« Multi-Moulures », « nous ») fabrique des moulures de métal et des produits de ventilation sur mesure au 1410, rue Hocquart, Saint-Bruno-de-Montarville (Québec) J3V 6E1.`,
       'Cette politique explique, en termes simples, quels renseignements personnels nous recueillons, pourquoi, comment nous les protégeons et quels sont vos droits. Elle s’applique aux sites multimoulures.com et multiventilation.ca, ainsi qu’aux renseignements que vous nous transmettez par téléphone ou par courriel.',
     ] },
     { h: 'Responsable de la protection des renseignements personnels', p: [
@@ -60,7 +60,7 @@ export function privacy(lang: 'fr' | 'en', brand: 'mm' | 'mv'): Section[] {
   ];
   return [
     { h: 'Who we are', p: [
-      `${mv ? 'Multi-Ventilation is a division of Multi-Moulures inc.' : 'Multi-Moulures inc.'} ("Multi-Moulures", "we") manufactures custom metal flashings and ventilation products at 1410 rue Hocquart, Saint-Bruno-de-Montarville, Quebec J3V 6B5.`,
+      `${mv ? 'Multi-Ventilation is a division of Multi-Moulures inc.' : 'Multi-Moulures inc.'} ("Multi-Moulures", "we") manufactures custom metal flashings and ventilation products at 1410 rue Hocquart, Saint-Bruno-de-Montarville, Quebec J3V 6E1.`,
       'This policy explains, in plain terms, what personal information we collect, why, how we protect it and what your rights are. It applies to multimoulures.com and multiventilation.ca, and to information you send us by phone or email.',
     ] },
     { h: 'Person in charge of the protection of personal information', p: [
