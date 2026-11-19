@@ -3,6 +3,7 @@ export const site = {
   legal: 'Multi-Ventilation, une division de Multi-Moulures inc.',
   url: 'https://multiventilation.ca',
   parent: 'https://multimoulures.com',
+  parentLive: false, // passer à true quand le nouveau multimoulures.com sera en ligne (page /couleurs-et-metaux/)
   phone: '+1-450-441-1226', phoneDisplay: '(450) 441-1226',
   phone2: '+1-514-990-4848', phone2Display: '(514) 990-4848',
   email: 'info@multimoulures.com',
