@@ -1,0 +1,22 @@
+---
+import Inner from '../components/Inner.astro';
+import { privacy, privacyUpdated } from '../data/privacy';
+import type { Lang } from '../i18n';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const sections = privacy(lang, 'mv');
+---
+<Inner title={fr ? 'Politique de confidentialité | Multi-Ventilation' : 'Privacy policy | Multi-Ventilation'} description={fr ? 'Comment Multi-Ventilation, une division de Multi-Moulures, recueille, utilise et protège vos renseignements personnels (Loi 25).' : 'How Multi-Ventilation, a division of Multi-Moulures, collects, uses and protects your personal information.'} h1={fr ? 'Politique de confidentialité' : 'Privacy policy'} lead={(fr ? 'Dernière mise à jour : ' : 'Last updated: ') + privacyUpdated[lang]}>
+  <div class="pol">
+    <p class="todo">{fr ? 'Ébauche à faire valider par Laurie avant la mise en ligne.' : 'Draft, to be reviewed before launch.'}</p>
+    <nav class="toc">{sections.map((s, i) => <a href={`#s${i + 1}`}>{i + 1}. {s.h}</a>)}</nav>
+    {sections.map((s, i) => <section id={`s${i + 1}`}><h2>{i + 1}. {s.h}</h2>{s.p.map((x) => <p>{x}</p>)}{s.todo && fr && <p class="todo">{s.todo}</p>}</section>)}
+  </div>
+</Inner>
+<style>
+  .pol{max-width:780px}
+  .toc{display:grid;gap:4px;margin:8px 0 40px;padding:20px 24px;background:var(--mm-mist)}
+  .toc a{color:var(--mm-navy);font-size:16px}
+  .pol section{margin-bottom:36px;scroll-margin-top:110px}
+  .pol h2{font-size:24px}
+</style>

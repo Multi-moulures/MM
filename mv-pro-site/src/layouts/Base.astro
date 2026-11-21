@@ -1,0 +1,114 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+import { langOf, altPath, routes, t } from '../i18n';
+interface Props { title: string; description: string; schema?: object[]; noindex?: boolean }
+const { title, description, schema = [] } = Astro.props;
+const path = Astro.url.pathname;
+const lang = langOf(path);
+const tx = t[lang];
+const nav = tx.nav;
+const alt = altPath(path);
+const frPath = lang === 'fr' ? path : alt;
+const enPath = lang === 'en' ? path : alt;
+const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': site.url + '/#org', name: site.name, url: site.url, telephone: site.phone, email: site.email,
+  logo: site.url + '/img/logo-mv.png', description: lang === 'fr' ? 'Fabricant québécois de ventilateurs de toit, aérateurs, soffites ventilés et clapets d’évacuation sur mesure en acier prépeint.' : 'Quebec manufacturer of custom roof vents, attic ventilators, vented soffits and exhaust caps in prepainted steel.',
+  areaServed: ['CA-QC', 'CA-ON', 'CA-NB', 'CA-NS', 'CA-PE'],
+  contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone, email: site.email, contactType: 'sales', areaServed: 'CA', availableLanguage: ['fr', 'en'] }],
+  parentOrganization: { '@type': 'Organization', name: 'Multi-Moulures inc.', url: site.parent },
+  address: { '@type': 'PostalAddress', streetAddress: site.street, addressLocality: site.city, addressRegion: site.region, postalCode: site.postal, addressCountry: 'CA' } };
+---
+<!doctype html>
+<html lang={lang === 'fr' ? 'fr-CA' : 'en-CA'}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="icon" href="/img/mv.png" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap bar">
+      <a class="brand" href={routes.pro[lang]} aria-label="Multi-Ventilation">
+        <img class="logo" src="/img/logo-mv.png" alt="Multi-Ventilation" width="1200" height="313" />
+      </a>
+      <nav aria-label="Navigation">{nav.map(([u, l]) => <a href={u} aria-current={path.startsWith(u) ? 'page' : undefined}>{l}</a>)}</nav>
+      <div class="actions">
+        <a class="lang" href={alt} hreflang={lang === 'fr' ? 'en' : 'fr'} aria-label={tx.switchName}><span class={lang === 'fr' ? 'on' : ''}>FR</span><span class={lang === 'en' ? 'on' : ''}>EN</span></a>
+        <a class="btn small copper" href={routes.quote[lang]}>{tx.quote}</a>
+        <details class="menu">
+          <summary aria-label="Menu"><span></span><span></span><span></span></summary>
+          <div class="drop">{nav.map(([u, l]) => <a href={u}>{l}</a>)}<a href={routes.quote[lang]}>{tx.quote}</a><a href={alt}>{tx.switchName}</a></div>
+        </details>
+      </div>
+    </div>
+  </header>
+  <main><slot /></main>
+  <footer class="foot">
+    <div class="wrap fgrid">
+      <div>
+        <img class="flogo" src="/img/logo-mv-inverse.png" alt="Multi-Ventilation" width="1200" height="313" loading="lazy" />
+        <p class="slogan"><span>{tx.slogan[0]}</span> <em>{tx.slogan[1]}</em></p>
+        <p class="fabout">{tx.about} <a href={site.parent}>Multi-Moulures</a>{tx.aboutEnd}</p>
+      </div>
+      <div>
+        <p class="caps light">Contact</p>
+        <p><a href={'tel:' + site.phone}>{site.phoneDisplay}</a><br /><a href={'tel:' + site.phone2}>{site.phone2Display}</a><br /><a href={'mailto:' + site.email}>{site.email}</a></p>
+        <p>{site.street}<br />{site.city}{tx.province === '(Québec)' ? ' (Québec)' : tx.province} {site.postal}</p>
+      </div>
+      <div>
+        <p class="caps light">{tx.links}</p>
+        <p class="flinks">
+          <a href={routes.products[lang]}>{tx.all}</a>
+          <a href="https://multiventilation.ca/docs/catalogue-multi-ventilation.pdf" download>{tx.catalogue}</a>
+          <a href={routes.resellers[lang]}>{tx.becomeReseller}</a>
+          <a href={routes.quote[lang]}>{tx.quote}</a>
+          <a href={site.parent}>{tx.parentLink}</a>
+          <a href={routes.warranty[lang]}>{tx.warranty}</a>
+          <a href={routes.pro[lang]}>{lang === 'fr' ? 'Accès pro' : 'Pro access'}</a>
+          <a href={routes.privacy[lang]}>{tx.privacy}</a>
+        </p>
+      </div>
+    </div>
+    <div class="wrap legal">© {new Date().getFullYear()} {tx.legal} {tx.rights}</div>
+  </footer>
+</body>
+</html>
+<style>
+  .top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--mm-rule)}
+  .bar{display:flex;align-items:center;gap:24px;min-height:100px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+  .brand .logo{height:84px;width:auto;margin-block:8px}
+  @media (max-width:520px){.brand .logo{height:46px}}
+  nav{display:flex;gap:20px;margin-left:auto}
+  nav a{white-space:nowrap;font-family:var(--font-display);font-weight:600;font-size:14px;color:var(--mm-slate);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
+  nav a:hover,nav a[aria-current]{color:var(--mm-navy);border-color:var(--mm-steel)}
+  .actions{display:flex;align-items:center;gap:16px}
+  .btn.small{padding:10px 16px;font-size:14px;white-space:nowrap}
+  .btn.copper{background:var(--mm-copper);border-color:var(--mm-copper)}
+  .lang{display:flex;border:1px solid var(--mm-rule);text-decoration:none;font-family:var(--font-display);font-weight:700;font-size:13px}
+  .lang span{padding:8px 10px;color:var(--mm-ash)}
+  .lang span.on{background:var(--mm-navy);color:#fff}
+  .menu{position:relative;display:none}
+  @media (max-width:1100px){nav{display:none}.actions{margin-left:auto}.menu{display:block}}
+  .menu summary{list-style:none;cursor:pointer;width:44px;height:44px;display:grid;place-content:center;gap:5px;border:1px solid var(--mm-rule)}
+  .menu summary::-webkit-details-marker{display:none}
+  .menu summary span{display:block;width:20px;height:2px;background:var(--mm-navy)}
+  .drop{position:absolute;right:0;top:52px;background:#fff;border:1px solid var(--mm-rule);min-width:240px;display:grid;box-shadow:0 8px 24px rgba(16,41,74,.12)}
+  .drop a{padding:14px 18px;text-decoration:none;font-family:var(--font-display);font-weight:600;font-size:15px;color:var(--mm-navy);border-bottom:1px solid var(--mm-mist)}
+  @media (max-width:520px){.word small{display:none}.word b{font-size:16px}.btn.small{padding:9px 12px;font-size:13px}}
+  @media (max-width:440px){.actions .btn.small{display:none}}
+  .foot{background:var(--gradient-footer);color:#fff;padding:56px 0 24px}
+  .foot a{color:#fff}
+  .flogo{width:280px;height:auto;margin-bottom:20px}
+  .fgrid{display:grid;gap:32px}
+  @media (min-width:800px){.fgrid{grid-template-columns:1.4fr 1fr 1fr}}
+  .slogan{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1.15;margin-bottom:12px}
+  .slogan span{color:var(--mm-sky)}
+  .fabout{color:var(--mm-sky)}
+  .caps.light{color:var(--mm-sky)}
+  .flinks{display:grid;gap:6px}
+  .legal{border-top:1px solid #0a4d8a;margin-top:32px;padding-top:16px;font-size:13px;color:var(--mm-sky)}
+</style>
