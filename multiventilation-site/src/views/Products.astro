@@ -3,7 +3,7 @@ import Inner from '../components/Inner.astro';
 import Card from '../components/Card.astro';
 import CatalogueDownload from '../components/CatalogueDownload.astro';
 import { site } from '../data/site';
-import { getCategories, getProducts, productUrl, type Lang } from '../i18n';
+import { getCategories, getProducts, productUrl, routes, type Lang } from '../i18n';
 import { apps, appsOf } from '../data/seo';
 const { lang } = Astro.props as { lang: Lang };
 const fr = lang === 'fr';
@@ -28,8 +28,9 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'ItemList', name: f
   {categories.map((c) => (
     <section id={c.id} class="cat">
       <h2>{c.name}</h2><p>{c.lead}</p>
+      {c.id === 'aerateurs' && <p class="ranges"><span>{fr ? 'Gammes :' : 'Ranges:'}</span><a href={routes.products[lang] + 'airm/'}>{fr ? 'Tous les AirM' : 'All AirM'}</a><a href={routes.products[lang] + 'airm300/'}>AirM300</a><a href={routes.products[lang] + 'airm100/'}>AirM100</a></p>}
       <div class="grid g4">{products.filter((p) => p.cat === c.id).map((p) => <Card p={p} lang={lang} />)}</div>
     </section>
   ))}
 </Inner>
-<style>.finder{margin-bottom:48px}.apps{display:grid;gap:16px}@media (min-width:800px){.apps{grid-template-columns:repeat(3,1fr)}}@media (min-width:1150px){.apps{grid-template-columns:repeat(5,1fr)}}.app{border:1px solid var(--mm-rule);border-top:4px solid var(--mm-copper);padding:18px;scroll-margin-top:110px}.app h3{margin-bottom:4px}.app p{font-size:14px;color:var(--mm-graphite)}.app ul{padding-left:18px;margin:0;display:grid;gap:4px;font-size:15px}.cat{margin-bottom:56px;scroll-margin-top:96px}.cat>p{color:var(--mm-graphite)}</style>
+<style>.finder{margin-bottom:48px}.apps{display:grid;gap:16px}@media (min-width:800px){.apps{grid-template-columns:repeat(3,1fr)}}@media (min-width:1150px){.apps{grid-template-columns:repeat(5,1fr)}}.app{border:1px solid var(--mm-rule);border-top:4px solid var(--mm-copper);padding:18px;scroll-margin-top:110px}.app h3{margin-bottom:4px}.app p{font-size:14px;color:var(--mm-graphite)}.app ul{padding-left:18px;margin:0;display:grid;gap:4px;font-size:15px}.cat{margin-bottom:56px;scroll-margin-top:96px}.cat>p{color:var(--mm-graphite)}.ranges{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 20px}.ranges span{font-weight:600;color:var(--mm-ink,inherit);margin-right:4px}.ranges a{border:1px solid var(--mm-navy);padding:6px 14px;text-decoration:none;font-weight:600}</style>

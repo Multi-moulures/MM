@@ -11,6 +11,7 @@ const p = products.find((x) => x.slug === slug)!;
 const cat = getCategories(lang).find((c) => c.id === p.cat)!;
 const others = products.filter((x) => x.cat === p.cat && x.slug !== p.slug).slice(0, 4);
 const h = headline(p, lang);
+const fam = p.slug.startsWith('airm300') ? 'airm300' : p.slug.startsWith('airm100') ? 'airm100' : '';
 const kw = keyword(p, lang);
 const myApps = appsOf(p).map((id) => apps.find((a) => a.id === id)!);
 const quoteUrl = `${routes.quote[lang]}?produit=${p.slug}`;
@@ -47,6 +48,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.
       </ul>
       <p class="btns"><a class="btn copper" href={quoteUrl}>{L.quote}</a><a class="btn ghost" href={'tel:' + site.phone}>{site.phoneDisplay}</a></p>
       <p class="mn">{L.custom}</p>
+      {fam && <p class="fam"><a href={`${routes.products[lang]}${fam}/`}>{fr ? `Voir toutes les bases ${fam === 'airm300' ? 'AirM300' : 'AirM100'}` : `See all ${fam === 'airm300' ? 'AirM300' : 'AirM100'} bases`} →</a></p>}
     </div>
   </div>
 
@@ -80,6 +82,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.
   .metric{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:800;color:var(--mm-navy);line-height:1}
   .v{font-size:clamp(44px,6vw,72px)}.u{font-size:24px}
   .ml{margin:6px 0 0;font-weight:500}
+  .fam{margin-top:12px;font-weight:600}
   .mn{font-size:14px;color:var(--mm-graphite);margin-top:8px}
   .tags{list-style:none;padding:0;margin:16px 0 24px;display:flex;flex-wrap:wrap;gap:6px}
   .tags li{background:var(--mm-ice);color:var(--mm-navy);padding:5px 10px;font-size:14px;font-weight:500}
