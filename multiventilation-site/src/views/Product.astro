@@ -1,4 +1,5 @@
 ---
+import { realisations } from '../data/realisations';
 import Inner from '../components/Inner.astro';
 import Card from '../components/Card.astro';
 import { site } from '../data/site';
@@ -74,9 +75,18 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.
       {p.tested && <p class="mn">{L.lab}</p>}
     </div>
   </div>
+  {realisations[p.slug] && (
+    <section class="real"><h2>{lang === 'fr' ? 'Réalisations' : 'Projects'}</h2>
+      {realisations[p.slug].map((ph) => <figure><img src={ph.src} alt={ph[lang]} width={ph.w} height={ph.h} loading="lazy" /><figcaption>{ph[lang]}</figcaption></figure>)}
+    </section>
+  )}
   {others.length > 0 && <section style="margin-top:64px"><h2>{L.same}</h2><div class="grid g4">{others.map((o) => <Card p={o} lang={lang} />)}</div></section>}
 </Inner>
 <style>
+  .real{margin-top:64px}
+  .real figure{margin:0 0 28px}
+  .real img{width:100%;height:auto;display:block}
+  .real figcaption{font-size:14px;color:var(--mm-graphite);margin-top:8px}
   .hero-img{width:100%;max-height:420px;object-fit:contain;background:var(--mm-mist)}
   .top{align-items:start}
   .metric{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:800;color:var(--mm-navy);line-height:1}

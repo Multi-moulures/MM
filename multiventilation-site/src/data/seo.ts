@@ -16,7 +16,7 @@ export function appsOf(p: Product): AppId[] {
   const a: AppId[] = [];
   if (p.pitch) a.push('pente');
   if (p.slug === 'airm300-base-plate' || p.slug === 'boite-a-clapets-multiples') a.push('plat');
-  if (p.cat === 'ici') a.push('agricole');
+  if (p.cat === 'ici' && p.slug !== 'persiennes-architecturales') a.push('agricole');
   if (p.cat === 'soffites') a.push('entrees');
   if (p.cat === 'evacuation' || p.slug === 'sortie-murale-commerciale') a.push('murales');
   return [...new Set(a)];
@@ -25,12 +25,12 @@ export function appsOf(p: Product): AppId[] {
 // Mot-clé principal par produit, pour le titre et la description.
 const kwFr: Record<string, string> = {
   aerateurs: 'ventilateur de toit', ici: 'ventilation commerciale', evacuation: 'clapet d’évacuation', soffites: 'soffite ventilé en acier',
-  'airm300-base-plate': 'ventilateur de toit plat', 'airm300-base-pignon': 'ventilateur de faîte', 'dome-480': 'ventilateur de toit agricole', 'louvre': 'louvre de ventilation',
+  'airm300-base-plate': 'ventilateur de toit plat', 'airm300-base-pignon': 'ventilateur de faîte', 'dome-480': 'ventilateur de toit agricole', 'louvre': 'louvre de ventilation', 'persiennes-architecturales': 'persiennes architecturales',
   'sortie-murale-de-ventilation': 'sortie murale', 'sortie-murale-commerciale': 'sortie murale', 'boite-a-clapets-multiples': 'sortie de toit multiple', 'cmm-4': 'clapet de toiture', 'vr-rectangulaire': 'ventilateur de toit', 'vr-triangulaire': 'ventilateur de toit', 'col-de-cygne': 'ventilateur commercial',
 };
 const kwEn: Record<string, string> = {
   aerateurs: 'roof vent', ici: 'commercial roof ventilation', evacuation: 'exhaust cap', soffites: 'vented steel soffit',
-  'airm300-base-plate': 'flat roof ventilator', 'airm300-base-pignon': 'ridge vent', 'dome-480': 'agricultural roof ventilator', 'louvre': 'wall louvre',
+  'airm300-base-plate': 'flat roof ventilator', 'airm300-base-pignon': 'ridge vent', 'dome-480': 'agricultural roof ventilator', 'louvre': 'wall louvre', 'persiennes-architecturales': 'architectural louvres',
   'sortie-murale-de-ventilation': 'wall vent', 'sortie-murale-commerciale': 'wall vent', 'boite-a-clapets-multiples': 'roof exhaust box', 'cmm-4': 'roof exhaust cap', 'vr-rectangulaire': 'roof vent', 'vr-triangulaire': 'roof vent', 'col-de-cygne': 'commercial roof vent',
 };
 export function seoTitle(name: string, kw: string, l: L) {

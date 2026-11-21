@@ -14,6 +14,9 @@ export const routes = {
   faq: { fr: '/faq/', en: '/en/faq/' },
   warranty: { fr: '/garantie/', en: '/en/warranty/' },
   privacy: { fr: '/politique-de-confidentialite/', en: '/en/privacy-policy/' },
+  pro: { fr: '/pro/', en: '/en/pro/' },
+  proRoofers: { fr: '/pro/couvreurs/', en: '/en/pro/roofers/' },
+  proDealers: { fr: '/pro/marchands/', en: '/en/pro/dealers/' },
 };
 export const productUrl = (slug: string, lang: Lang) => routes.products[lang] + slug + '/';
 

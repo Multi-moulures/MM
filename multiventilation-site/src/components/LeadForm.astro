@@ -34,12 +34,13 @@ const L = fr
   document.querySelectorAll('form[data-lead]').forEach((f) => {
     const out = f.querySelector('.route') as HTMLElement;
     const fr = (f as HTMLElement).dataset.lang === 'fr';
-    const slug = new URLSearchParams(location.search).get('produit');
+    const qs = new URLSearchParams(location.search);
+    const slug = qs.get('produit'), size = qs.get('grandeur') || '', qty = qs.get('quantite') || '';
     const names = JSON.parse((f as HTMLElement).dataset.names || '{}');
     if (slug && names[slug]) {
       (f.querySelector('input[name=produit]') as HTMLInputElement).value = slug;
       const ta = f.querySelector('textarea[name=message]') as HTMLTextAreaElement;
-      if (!ta.value) ta.value = (fr ? 'Produit : ' : 'Product: ') + names[slug] + (fr ? '\nGrandeur : \nPente : \nCouleur : \nQuantité : ' : '\nSize: \nPitch: \nColour: \nQuantity: ');
+      if (!ta.value) ta.value = (fr ? 'Produit : ' : 'Product: ') + names[slug] + (fr ? `\nGrandeur : ${size}\nPente : \nCouleur : \nQuantité : ${qty}` : `\nSize: ${size}\nPitch: \nColour: \nQuantity: ${qty}`);
     }
     const msg = () => {
       const t = (f.querySelector('input[name=type]:checked') as HTMLInputElement)?.value;

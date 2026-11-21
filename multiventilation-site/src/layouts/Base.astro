@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import { site } from '../data/site';
 import { langOf, altPath, routes, t } from '../i18n';
-interface Props { title: string; description: string; schema?: object[] }
-const { title, description, schema = [] } = Astro.props;
+interface Props { title: string; description: string; schema?: object[]; noindex?: boolean }
+const { title, description, schema = [], noindex = false } = Astro.props;
 const path = Astro.url.pathname;
 const lang = langOf(path);
 const tx = t[lang];
@@ -25,6 +25,7 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex,nofollow" />}
   <link rel="canonical" href={site.url + path} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
