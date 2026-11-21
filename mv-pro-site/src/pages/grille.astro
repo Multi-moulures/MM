@@ -1,0 +1,41 @@
+---
+import Portal from '../layouts/Portal.astro';
+import { prix, sizesFor } from '../data/prix';
+import { categories } from '../data/items';
+import { getProducts, productUrl } from '../i18n';
+const products = getProducts('fr');
+---
+<Portal title="Grille de prix" h1="Grille de prix" lead="Format standard, calibre standard, couleur du groupe Standard. Votre coût inclut votre rabais." active="grille">
+  <p class="mn" id="pct"></p>
+  {categories.map((c) => (
+    <section class="cat">
+      <h2>{c.name}</h2>
+      <div class="scroll"><table class="list">
+        <thead><tr><th>Produit</th><th>Grandeur</th><th>PDSF</th><th>Votre coût</th><th>Marge</th></tr></thead>
+        <tbody>
+        {products.filter((p) => p.cat === c.id).flatMap((p) => sizesFor(p.slug, 'fr').map((z, i) => {
+          const r = prix[z.key] ?? {};
+          return <tr data-p={r.pdsf ?? ''} data-k={r.cout ?? ''} data-custom={z.custom ? '1' : ''}>
+            <td>{i === 0 ? <a href={productUrl(p.slug, 'fr')} target="_blank" rel="noopener">{p.name}</a> : ''}</td><td>{z.label}</td>
+            <td class="c-p"></td><td class="c-k"></td><td class="c-m"></td></tr>;
+        }))}
+        </tbody>
+      </table></div>
+    </section>
+  ))}
+</Portal>
+<script>
+  import { fmt } from '../scripts/config.js';
+  document.addEventListener('me', (e) => {
+    const pct = e.detail.dealer?.pct || 0;
+    document.getElementById('pct').textContent = `Rabais appliqué à votre coût : ${pct} %.`;
+    document.querySelectorAll('tr[data-p]').forEach((tr) => {
+      const set = (c, v, soon) => { const td = tr.querySelector(c); td.textContent = v; td.classList.toggle('soon', !!soon); };
+      if (tr.dataset.custom) { set('.c-p', 'Sur soumission', 1); set('.c-k', 'Sur soumission', 1); set('.c-m', '', 0); return; }
+      const p = tr.dataset.p === '' ? null : +tr.dataset.p, k = tr.dataset.k === '' ? null : Math.round(+tr.dataset.k * (1 - pct / 100) * 100) / 100;
+      set('.c-p', fmt(p), p == null); set('.c-k', fmt(k), k == null);
+      set('.c-m', p != null && k != null ? `${fmt(p - k)} (${Math.round(((p - k) / p) * 100)} %)` : 'À venir', !(p != null && k != null));
+    });
+  });
+</script>
+<style>.cat{margin-bottom:32px}.cat h2{font-size:22px}</style>

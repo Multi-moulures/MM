@@ -1,0 +1,163 @@
+---
+import Portal from '../layouts/Portal.astro';
+import { items, cfg, prodHtml } from '../data/items';
+const DATA = JSON.stringify({ items, cfg, prodHtml });
+---
+<Portal title="Soumission" h1="Soumission client" active="quote">
+  <script is:inline type="application/json" id="data" set:html={DATA}></script>
+  <div class="dq">
+    <div class="qtop">
+      <div><p class="caps">Soumission</p><h2 id="qnum">…</h2><p class="mn" id="qfrom"></p></div>
+      <div class="noprint stat"><label>Statut<select name="status"><option value="brouillon">Brouillon</option><option value="envoyée">Envoyée au client</option><option value="acceptée">Acceptée</option><option value="perdue">Perdue</option></select></label></div>
+      <div class="onlyprint"><p class="mn" id="qdate"></p></div>
+    </div>
+    <details class="client" open>
+      <summary class="noprint">Client (facultatif)</summary>
+      <div class="form">
+        <label>Nom<input name="client_name" /></label>
+        <label>Téléphone<input name="client_phone" /></label>
+        <label>Courriel<input name="client_email" type="email" /></label>
+        <label>Adresse du chantier<input name="client_site" /></label>
+      </div>
+    </details>
+    <div class="lines"></div>
+    <p class="noprint"><button type="button" class="btn ghost sm" data-a="add">+ Ajouter un produit</button></p>
+    <label class="notes">Notes<textarea name="notes" rows="2"></textarea></label>
+    <div class="sum">
+      <div><span>Total au PDSF</span><strong data-o="pdsf">0</strong></div>
+      <div><span>Rabais total</span><strong data-o="disc">0</strong></div>
+      <div><span>Total client avant taxes</span><strong data-o="client">0</strong></div>
+    </div>
+    <div class="internal noprint"><p class="caps">Interne, non imprimé</p>
+      <div class="sum"><div><span>Votre coût total</span><strong data-o="cost">0</strong></div><div><span>Votre marge</span><strong data-o="margin">0</strong></div></div>
+    </div>
+    <p class="mn">Prix valides 30 jours. Taxes et livraison en sus.</p>
+    <p class="btns noprint">
+      <button type="button" class="btn ghost" data-a="print">Imprimer ou enregistrer en PDF</button>
+      <button type="button" class="btn copper" data-a="order">Commander à Multi-Moulures</button>
+      <button type="button" class="btn ghost sm" data-a="del">Supprimer</button>
+      <span class="mn" id="saved"></span>
+    </p>
+    <p class="mn noprint" id="ordered"></p>
+  </div>
+</Portal>
+<script>
+  import { api, fmt, esc, makeConfigurator } from '../scripts/config.js';
+  const DATA = JSON.parse(document.getElementById('data').textContent);
+  const id = +new URLSearchParams(location.search).get('id');
+  const root = document.querySelector('.dq'), wrap = root.querySelector('.lines'), lines = [];
+  const out = (k, v) => (root.querySelector(`[data-o=${k}]`).textContent = v);
+  const F = (n) => root.querySelector(`[name=${n}]`);
+  let me, q, pct = 0, timer, locked = false, totals = {};
+
+  const recalc = () => {
+    let tp = 0, ts = 0, tc = 0;
+    lines.forEach((ln) => {
+      const s = ln.k.chosen(), qty = Math.max(1, parseInt(ln.q.value) || 1), p = ln.k.price('p'), base = ln.k.price('k');
+      const cost = base == null ? null : Math.round(base * (1 - pct / 100) * 100) / 100;
+      if (ln.auto && p != null) ln.v.value = p.toFixed(2);
+      const v = parseFloat(ln.v.value), c = (n) => ln.el.querySelector(`[data-c=${n}]`);
+      c('pdsf').textContent = !s.z ? (s.pending ? '' : 'Sur soumission') : fmt(p);
+      c('st').textContent = ln.k.status();
+      if (p != null && !isNaN(v)) { const d = p - v; c('disc').textContent = d > 0 ? `${fmt(d * qty)} (${Math.round((d / p) * 100)} %)` : ''; tp += p * qty; } else c('disc').textContent = '';
+      c('tot').textContent = isNaN(v) ? 'À venir' : fmt(v * qty);
+      if (!isNaN(v)) ts += v * qty; if (cost != null) tc += cost * qty;
+      c('warn').textContent = cost != null && !isNaN(v) && v < cost ? 'Prix sous votre coût.' : '';
+      ln.snap = { ...ln.k.state(), qty, sell: isNaN(v) ? null : v, auto: ln.auto, desc: ln.k.desc(), pdsf: p, cost };
+    });
+    totals = { totalPdsf: tp, totalClient: ts, totalCost: tc };
+    out('pdsf', fmt(tp)); out('disc', fmt(Math.max(0, tp - ts))); out('client', fmt(ts));
+    out('cost', tc ? fmt(tc) : 'À venir'); out('margin', tc ? `${fmt(ts - tc)} (${ts ? Math.round(((ts - tc) / ts) * 100) : 0} %)` : 'À venir');
+  };
+  const save = () => {
+    if (locked) return;
+    clearTimeout(timer);
+    document.getElementById('saved').textContent = 'Enregistrement…';
+    timer = setTimeout(async () => {
+      recalc();
+      const body = { status: F('status').value, client_name: F('client_name').value, client_phone: F('client_phone').value, client_email: F('client_email').value, client_site: F('client_site').value,
+        total: totals.totalClient, data: { lines: lines.map((l) => l.snap), notes: F('notes').value, ...totals } };
+      try { await api(`/api/quotes/${id}`, { method: 'PUT', body }); document.getElementById('saved').textContent = 'Enregistré'; }
+      catch (e) { document.getElementById('saved').textContent = e.message; }
+    }, 600);
+  };
+  const change = () => { recalc(); save(); };
+  const add = (init = {}) => {
+    const el = document.createElement('div'); el.className = 'line';
+    el.innerHTML = `<button type="button" class="x noprint" aria-label="Retirer">×</button><div class="cfg"></div>
+      <div class="nums"><label>Quantité<input name="q" type="number" min="1" value="${init.qty || 1}"></label>
+      <div><span>PDSF</span><b data-c="pdsf"></b></div>
+      <label><span class="noprint">Votre prix</span><span class="onlyprint">Prix</span><input name="v" type="number" min="0" step="0.01"><small class="warn noprint" data-c="warn"></small></label>
+      <div><span>Rabais</span><b data-c="disc"></b></div><div><span>Total</span><b data-c="tot"></b></div></div>
+      <p class="mn" data-c="st"></p>`;
+    wrap.appendChild(el);
+    const ln = { el, auto: init.auto !== false, q: el.querySelector('[name=q]'), v: el.querySelector('[name=v]') };
+    if (init.sell != null) ln.v.value = init.sell;
+    ln.k = makeConfigurator(DATA, el.querySelector('.cfg'), () => { ln.auto = true; change(); }, init);
+    ln.q.addEventListener('input', change);
+    ln.v.addEventListener('input', () => { ln.auto = false; change(); });
+    el.querySelector('.x').addEventListener('click', () => { el.remove(); lines.splice(lines.indexOf(ln), 1); change(); });
+    lines.push(ln);
+  };
+
+  document.addEventListener('me', async (e) => {
+    me = e.detail; pct = me.dealer?.pct || 0;
+    try { q = await api(`/api/quotes/${id}`); } catch (err) { root.innerHTML = `<p class="err">${esc(err.message)}</p>`; return; }
+    document.getElementById('qnum').textContent = q.number;
+    document.getElementById('qfrom').textContent = me.dealer ? me.dealer.company : '';
+    document.getElementById('qdate').textContent = new Date(q.created).toLocaleDateString('fr-CA');
+    ['client_name', 'client_phone', 'client_email', 'client_site'].forEach((n) => (F(n).value = q[n] || ''));
+    F('status').value = q.status === 'commandée' ? 'acceptée' : q.status;
+    F('notes').value = q.data.notes || '';
+    (q.data.lines || []).forEach((l) => add(l));
+    if (!lines.length) add();
+    recalc();
+    if (q.ordered) {
+      locked = true;
+      root.querySelectorAll('input,select,textarea,button:not([data-a=print])').forEach((x) => (x.disabled = true));
+      document.getElementById('ordered').textContent = `Commandée le ${new Date(q.ordered).toLocaleString('fr-CA')}. Cette soumission ne peut plus être modifiée.`;
+    }
+    root.querySelectorAll('.client input,[name=status],[name=notes]').forEach((x) => x.addEventListener('input', save));
+    root.querySelector('[data-a=add]').addEventListener('click', () => { add(); change(); });
+    root.querySelector('[data-a=print]').addEventListener('click', () => window.print());
+    root.querySelector('[data-a=del]').addEventListener('click', async () => {
+      if (!confirm('Supprimer cette soumission?')) return;
+      await api(`/api/quotes/${id}`, { method: 'DELETE' }); location.href = '/';
+    });
+    root.querySelector('[data-a=order]').addEventListener('click', async (ev) => {
+      if (!confirm('Envoyer cette soumission comme commande à Multi-Moulures (test de portail)?')) return;
+      ev.target.disabled = true;
+      clearTimeout(timer); recalc();
+      try {
+        await api(`/api/quotes/${id}`, { method: 'PUT', body: { status: 'acceptée', client_name: F('client_name').value, client_phone: F('client_phone').value, client_email: F('client_email').value, client_site: F('client_site').value, total: totals.totalClient, data: { lines: lines.map((l) => l.snap), notes: F('notes').value, ...totals } } });
+        await api(`/api/quotes/${id}/order`, { method: 'POST' });
+        alert('Commande envoyée à Multi-Moulures.'); location.reload();
+      } catch (err) { alert(err.message); ev.target.disabled = false; }
+    });
+  });
+</script>
+<style is:global>
+  .dq{border:1px solid var(--mm-rule);border-top:4px solid var(--mm-copper);padding:24px}
+  .qtop{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:12px}
+  .qtop h2{margin:0}
+  .stat label{display:grid;gap:4px;font-weight:600;font-size:14px;min-width:220px}
+  .client{margin:8px 0 20px}.client summary{font-weight:700;cursor:pointer;margin-bottom:10px}
+  .line{border:1px solid var(--mm-rule);padding:14px;margin-bottom:10px;position:relative}
+  .cfg{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .cfg .f-p,.cfg .f-c{grid-column:span 2}
+  .cfg label,.nums label,.notes{display:grid;gap:4px;font-weight:600;font-size:14px}
+  .nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-top:10px;align-items:end}
+  .nums div span{display:block;font-size:13px;color:var(--mm-graphite)}
+  .x{position:absolute;top:4px;right:8px;border:0;background:none;font-size:22px;cursor:pointer;color:var(--mm-graphite)}
+  .warn{display:block;color:#b42318;font-size:12px}
+  .notes{margin-top:12px}
+  .sum{display:flex;gap:40px;flex-wrap:wrap;margin:20px 0 8px}
+  .sum span{display:block;font-size:14px;color:var(--mm-graphite)}
+  .sum strong{font-family:var(--font-display);font-size:26px;color:var(--mm-navy)}
+  .internal{background:var(--mm-ice);padding:12px 16px;margin-top:12px}
+  .btn.copper{background:var(--mm-copper);border-color:var(--mm-copper)}
+  .onlyprint{display:none}
+  @media print{.onlyprint{display:block}.dq{border:0;padding:0}.line{break-inside:avoid}
+    #app input,#app select,#app textarea{border:0;padding:0;appearance:none;-webkit-appearance:none;background:none}
+    #app input::-webkit-inner-spin-button{display:none}.client summary{display:none}}
+</style>

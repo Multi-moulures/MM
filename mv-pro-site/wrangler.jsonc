@@ -1,0 +1,22 @@
+{
+  // Portail pro Multi-Ventilation : pages statiques (dist) + API (worker/index.js).
+  "name": "mv-pro",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-19",
+  "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  "d1_databases": [
+    // Base D1 « mv-pro »
+    { "binding": "DB", "database_name": "mv-pro", "database_id": "b525f656-a077-4e1e-9dc7-840cfd55dca9" }
+  ],
+  "send_email": [
+    // TEMPORAIRE : marc@ (remettre info@multimoulures.com ici et dans MAIL_TO).
+    { "name": "MAIL", "destination_address": "marc@multimoulures.com" }
+  ],
+  "vars": {
+    "ADMINS": "marc@multimoulures.com,charles@multimoulures.com",
+    "DEMO_DOMAIN": "multimoulures.com",
+    "MAIL_FROM": "portail@multiventilation.ca",
+    "MAIL_TO": "marc@multimoulures.com"
+  },
+  "observability": { "enabled": true }
+}

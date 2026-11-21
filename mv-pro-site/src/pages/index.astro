@@ -1,4 +1,27 @@
 ---
-import V from '../views/Pro.astro';
+import Portal from '../layouts/Portal.astro';
 ---
-<V lang="fr" role="hub" />
+<Portal title="Mes soumissions" h1="Mes soumissions" lead="Préparez vos soumissions client, suivez-les, et transformez-les en commande à Multi-Moulures." active="home">
+  <p class="btns"><button class="btn" id="newq">+ Nouvelle soumission</button></p>
+  <p id="tier" class="mn"></p>
+  <div class="scroll"><table class="list" id="ql">
+    <thead><tr><th>Numéro</th><th>Client</th><th>Statut</th><th>Total client</th><th>Modifiée</th><th></th></tr></thead>
+    <tbody><tr><td colspan="6" class="mn">Chargement…</td></tr></tbody>
+  </table></div>
+</Portal>
+<script>
+  import { api, fmt, esc } from '../scripts/config.js';
+  document.addEventListener('me', async (e) => {
+    const me = e.detail;
+    if (me.dealer) document.getElementById('tier').textContent = `Votre niveau de prix : ${me.dealer.tierName} (rabais de ${me.dealer.pct} % sur le coût de base).`;
+    document.getElementById('newq').addEventListener('click', async (ev) => {
+      ev.target.disabled = true;
+      try { const q = await api('/api/quotes', { method: 'POST' }); location.href = `/soumission/?id=${q.id}`; }
+      catch (err) { alert(err.message); ev.target.disabled = false; }
+    });
+    const rows = await api('/api/quotes');
+    const tb = document.querySelector('#ql tbody');
+    tb.innerHTML = rows.length ? rows.map((q) => `<tr><td><a href="/soumission/?id=${q.id}">${esc(q.number)}</a></td><td>${esc(q.client_name || '—')}</td><td><span class="pill ${esc(q.status)}">${esc(q.status)}</span></td><td>${fmt(q.total)}</td><td>${new Date(q.updated).toLocaleDateString('fr-CA')}</td><td><a href="/soumission/?id=${q.id}">Ouvrir</a></td></tr>`).join('')
+      : '<tr><td colspan="6" class="mn">Aucune soumission pour l’instant. Cliquez sur « Nouvelle soumission » pour commencer.</td></tr>';
+  });
+</script>

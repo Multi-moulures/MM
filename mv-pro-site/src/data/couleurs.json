@@ -1,0 +1,436 @@
+[
+ {
+  "brand": "Ideal Roofing",
+  "kind": "steel",
+  "series": [
+   {
+    "series": "PERSPECTRA PLUS (SMP)",
+    "colors": [
+     "Blanc",
+     "Blanc polaire",
+     "Blanc os",
+     "Blanc cambridge",
+     "Lin antique",
+     "Beige",
+     "Galet kaki",
+     "Gris pierre",
+     "Gris régent",
+     "Gris ardoise",
+     "Gris cendré",
+     "Gris charbon",
+     "Fusain",
+     "Noir",
+     "Café",
+     "Brun cacao",
+     "Brun métro",
+     "Brun foncé",
+     "Acajou",
+     "Ardoise brunie",
+     "Bourgogne",
+     "Rouge",
+     "Rouge tuile",
+     "Rouge vif",
+     "Orange international",
+     "Vert tilleul",
+     "Vert moyen",
+     "Vert forêt",
+     "Turquoise pacifique",
+     "Bleu héron",
+     "Bleu ardoise",
+     "Bleu royal"
+    ]
+   },
+   {
+    "series": "WAKEFIELD BRIDGE",
+    "colors": [
+     "Argent",
+     "Gris granite",
+     "Pierre volcanique",
+     "Ardoise anglaise",
+     "Ardoise noire",
+     "Noir mica",
+     "Gris graphite",
+     "Expresso",
+     "Brun mustang",
+     "Brun sépia",
+     "Caramel",
+     "Argile toscane",
+     "Terre cuite",
+     "Automne adirondack",
+     "Cuivre classique",
+     "Vert alpin",
+     "Bleu boréal"
+    ]
+   },
+   {
+    "series": "SÉRIE 10 000 (PVDF)",
+    "colors": [
+     "Bronze",
+     "Brun chocolat",
+     "Cordouan",
+     "Fruit sauvage",
+     "Rouge canneberge",
+     "Vert hivernal",
+     "Vert patine",
+     "Bleu crépuscule",
+     "Bleu marin",
+     "Gris maritime",
+     "Noir minuit"
+    ]
+   },
+   {
+    "series": "MÉTALLISÉ (PVDF MÉTALLIQUE ET PERSPECTRA MÉTALLISÉ)",
+    "colors": [
+     "Argent",
+     "Carbone",
+     "Cuivre classique",
+     "Étain",
+     "Gris métallique"
+    ]
+   }
+  ],
+  "count": 65,
+  "note": null
+ },
+ {
+  "brand": "Vicwest",
+  "kind": "steel",
+  "series": [
+   {
+    "series": "SIGNATURE",
+    "colors": [
+     "Blanc pur",
+     "Blanc vif",
+     "Blanc impérial",
+     "Blanc os",
+     "Blanc cambridge",
+     "Ivoire",
+     "Ivoire bambou",
+     "Lin antique",
+     "Beige",
+     "Peau de daim",
+     "Galet kaki",
+     "Gris pierre",
+     "Gris régent",
+     "Gris charbon",
+     "Fusain",
+     "Carbone",
+     "Noir",
+     "Brun café",
+     "Brun chêne",
+     "Brun métro",
+     "Brun foncé",
+     "Baies sauvages",
+     "Bourgogne",
+     "Rouge foncé",
+     "Rouge tuile",
+     "Rouge vif",
+     "Orange international",
+     "Jaune or",
+     "Vert tilleul",
+     "Vert cendré",
+     "Vert cabec",
+     "Vert marin",
+     "Vert mélèze",
+     "Vert forêt",
+     "Vert foncé",
+     "Pacifique turquoise",
+     "Bleu héron",
+     "Bleu ardoise",
+     "Bleu labrador",
+     "Bleu royal"
+    ]
+   },
+   {
+    "series": "SIGNATURE MAT",
+    "colors": [
+     "Ébène",
+     "Graphite",
+     "Ombre gris foncé",
+     "Ardoise ambrée",
+     "Gris régent",
+     "Villa grecque",
+     "Expresso"
+    ]
+   },
+   {
+    "series": "EXPRESSENCE",
+    "colors": [
+     "Érable naturel",
+     "Bois de rose chaleureux",
+     "Cèdre d’automne",
+     "Cèdre de montagne",
+     "Cèdre vieilli",
+     "Cèdre foncé",
+     "Noyer foncé",
+     "Bois de grange moucheté",
+     "Brun antique",
+     "Terre cuite",
+     "Gris vieilli",
+     "Gris mica",
+     "Ruisseau argenté",
+     "Acier vieilli",
+     "Zinc naturel",
+     "Orage nocturne"
+    ]
+   },
+   {
+    "series": "FINIS MÉTALLIQUES PVDF",
+    "colors": [
+     "Argent brillant",
+     "Étain",
+     "Carbone",
+     "Cuivre"
+    ]
+   }
+  ],
+  "count": 67,
+  "note": null
+ },
+ {
+  "brand": "MAC Metal Architectural",
+  "kind": "steel",
+  "series": [
+   {
+    "series": "INSPIRATION",
+    "colors": [
+     "Blanc titane",
+     "Gris métallique",
+     "Gris ardoise",
+     "Gris fusain",
+     "Noir titane",
+     "Noir onyx",
+     "Brun foncé",
+     "Rouge grès",
+     "Rouge vif",
+     "Vert anglais",
+     "Bleu automne",
+     "Cuivre métallisé"
+    ]
+   },
+   {
+    "series": "SIGNATURE",
+    "colors": [
+     "Zinc brossé",
+     "Quartz cendré",
+     "Anthracite",
+     "Bronze cuivré"
+    ]
+   },
+   {
+    "series": "HARRYWOOD (IMITATION DE BOIS)",
+    "colors": [
+     "Chêne blanc",
+     "Pin scandinave",
+     "Liège",
+     "Cèdre",
+     "Teck",
+     "Bouleau Fumé",
+     "Frêne Gris",
+     "Torréfié",
+     "Noyer Noir"
+    ]
+   }
+  ],
+  "count": 25,
+  "note": "Rouleaux de ce fournisseur en stock : acier 24 et 26 ga, en 16 po et 24 po x 100 pi."
+ },
+ {
+  "brand": "Agway Metals",
+  "kind": "steel",
+  "series": [
+   {
+    "series": "PERSPECTRA PLUS, DURANAR XL, KYNAR 500, IMPRIMÉS ET MÉTALLIQUES",
+    "colors": [
+     "Blanc pur",
+     "Blanc vif",
+     "Blanc intérieur",
+     "Blanc cambridge",
+     "Blanc os",
+     "Lin antique",
+     "Beige",
+     "Peau de daim",
+     "Fauve",
+     "Caillou kaki",
+     "Argent",
+     "Gris pierre",
+     "Gris régent",
+     "Gris ardoise",
+     "Gris foncé",
+     "Fusain",
+     "Graphite",
+     "Ébène",
+     "Noir",
+     "Café",
+     "Brun métro",
+     "Brun chêne",
+     "Brun foncé",
+     "Brun sépia",
+     "Brun",
+     "Bourgogne",
+     "Rouge foncé",
+     "Colonial Red",
+     "Rouge tuile",
+     "Rouge vif",
+     "Orange international",
+     "Or",
+     "Vert brumeux",
+     "Vert",
+     "Vert melcher’s",
+     "Turquoise pacifique",
+     "Bleu héron",
+     "Bleu ardoise",
+     "Bleu brillant",
+     "Grain de bois de cerisier",
+     "Cendres grillées",
+     "Silver birch",
+     "Natural zinc",
+     "Argent métalisé",
+     "Étain",
+     "Cuivre"
+    ]
+   }
+  ],
+  "count": 46,
+  "note": null
+ },
+ {
+  "brand": "Color Steels",
+  "kind": "steel",
+  "series": [
+   {
+    "series": "COULEURS STANDARD",
+    "colors": [
+     "Blanc arctique",
+     "Sable",
+     "Pebble",
+     "Gris pierre",
+     "Fusain",
+     "Noir",
+     "Bronze foncé",
+     "Brun métro",
+     "Cordouan",
+     "Rouge colonial",
+     "Fruit sauvage",
+     "Bleu crépuscule",
+     "Bleu ardoise",
+     "Vert blizzard",
+     "Hart green",
+     "Noir mat"
+    ]
+   }
+  ],
+  "count": 16,
+  "note": null
+ },
+ {
+  "brand": "Gentek",
+  "kind": "alu",
+  "series": [
+   {
+    "series": "Rouleaux 0,020 po, 24 po x 100 pi",
+    "colors": [
+     "Blanc pur",
+     "Blanc glacier",
+     "Blanc mat",
+     "Blanc semi-lustré",
+     "Vanille",
+     "Ivoire",
+     "Amande",
+     "Cachemire",
+     "Beige Lambeth",
+     "Beige antique",
+     "Blé mûr",
+     "Chamois",
+     "Sablon",
+     "Sable royal",
+     "Sable Monterey",
+     "Sable du désert",
+     "Sable L/G",
+     "Sable XL",
+     "Sable sandalwood",
+     "Tan",
+     "Kaki",
+     "Kaki XL",
+     "Argile",
+     "Argile royal",
+     "Ambre",
+     "Café",
+     "Brun muscade",
+     "Brun marron",
+     "Brun commercial",
+     "Brun antique",
+     "Brun grange",
+     "Brun Rockport",
+     "Espresso",
+     "Bronze fenêtre",
+     "Aluminium cuivre",
+     "Bois de santal",
+     "Bois fumé",
+     "Bois de grange XL",
+     "Bois d’épave",
+     "Cèdre XL",
+     "Noyer XL",
+     "Barista XL",
+     "Renard roux XL",
+     "Acadia XL",
+     "Falaise XL",
+     "Yellowstone XL",
+     "Sierra XL",
+     "Pierre de rivière XL",
+     "Pierre des champs",
+     "Gris pierre",
+     "Poussière de lune",
+     "Gris colombe",
+     "Gris brume XL",
+     "Gris 04",
+     "Gris métallique",
+     "Étain",
+     "Gris cendré",
+     "Gris granite",
+     "Gris Chesapeake",
+     "Gris Hudson",
+     "Gris orageux",
+     "Vent de fumée",
+     "Loup gris XL",
+     "Ardoise",
+     "Graphite",
+     "Minerai de fer",
+     "Charbon",
+     "Noir",
+     "Littoral XL",
+     "Bleu littoral",
+     "Bleu Wedgewood",
+     "Bleu Rockwell",
+     "Bleu océan",
+     "Bleu d’Écosse",
+     "Bleu crépuscule",
+     "Bleu minuit",
+     "Vagues de minuit",
+     "Sauge",
+     "Fougère des prés",
+     "Genévrier",
+     "Vert forêt",
+     "Rouge vif",
+     "Rouge campagne XL",
+     "Rouge colonial",
+     "Rouge majestueux",
+     "Bourgogne",
+     "Brun",
+     "Carbone"
+    ]
+   },
+   {
+    "series": "Rouleaux bicolores 0,027 po, 24 po x 125 pi",
+    "colors": [
+     "Blanc / Gris granite",
+     "Noir / Brun",
+     "Charbon / Minerai de fer",
+     "Zinc anthracite / Carbone"
+    ]
+   }
+  ],
+  "count": 92,
+  "note": null
+ }
+]

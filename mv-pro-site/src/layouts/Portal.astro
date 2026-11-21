@@ -1,0 +1,83 @@
+---
+import Inner from '../components/Inner.astro';
+interface Props { title: string; h1: string; lead?: string; active: 'home' | 'grille' | 'admin' | 'quote' }
+const { title, h1, lead, active } = Astro.props;
+---
+<Inner noindex title={`${title} | Portail pro Multi-Ventilation`} description="Portail pro Multi-Ventilation" kicker="Portail pro" h1={h1} lead={lead}>
+  <nav class="pnav">
+    <span class="who" id="who">…</span>
+    <a href="/" class={active === 'home' ? 'on' : ''}>Mes soumissions</a>
+    <a href="/grille/" class={active === 'grille' ? 'on' : ''}>Grille de prix</a>
+    <a href="/admin/" class={active === 'admin' ? 'on' : ''} id="adminlink" hidden>Administration</a>
+    <a href="/cdn-cgi/access/logout" class="out">Se déconnecter</a>
+  </nav>
+  <div id="noaccess" hidden>
+    <div class="box">
+      <h2>Demander un accès</h2>
+      <p>Votre courriel n’est pas encore associé à un compte. Remplissez ce formulaire et nous créerons votre accès.</p>
+      <form id="reqform" class="form">
+        <label>Nom<input name="name" required /></label>
+        <label>Entreprise<input name="company" required /></label>
+        <label>Téléphone<input name="phone" /></label>
+        <label>Vous êtes<select name="type"><option value="marchand">Marchand</option><option value="couvreur">Couvreur</option></select></label>
+        <label>Ville<input name="city" /></label>
+        <label class="full">Message<textarea name="message" rows="3"></textarea></label>
+        <p class="full"><button class="btn" type="submit">Envoyer la demande</button> <span id="reqmsg" class="mn"></span></p>
+      </form>
+    </div>
+  </div>
+  <div id="app" hidden><slot /></div>
+</Inner>
+<script>
+  import { api } from '../scripts/config.js';
+  const who = document.getElementById('who');
+  api('/api/me').then((me) => {
+    window.__me = me;
+    if (me.admin) document.getElementById('adminlink').hidden = false;
+    if (!me.dealer && !me.admin) throw Object.assign(new Error(''), { data: { needAccess: true } });
+    if (me.dealer && !me.dealer.active && !me.admin) throw Object.assign(new Error(''), { data: { needAccess: true } });
+    who.textContent = me.dealer ? me.dealer.company : me.email;
+    document.getElementById('app').hidden = false;
+    document.dispatchEvent(new CustomEvent('me', { detail: me }));
+  }).catch((e) => {
+    who.textContent = '';
+    if (e.data?.needAccess || e.status === 403) {
+      document.getElementById('noaccess').hidden = false;
+      document.getElementById('reqform').addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const f = Object.fromEntries(new FormData(ev.target));
+        const m = document.getElementById('reqmsg');
+        try { await api('/api/access-request', { method: 'POST', body: f }); m.textContent = 'Merci, votre demande a été envoyée. Nous vous répondrons rapidement.'; ev.target.querySelector('button').disabled = true; }
+        catch (err) { m.textContent = err.message; }
+      });
+    } else {
+      document.getElementById('app').hidden = false;
+      document.getElementById('app').innerHTML = `<p class="err">Le portail n’a pas pu charger votre compte (${e.message}).</p>`;
+    }
+  });
+</script>
+<style is:global>
+  a.lang,.langs,[aria-label="Langue"],[aria-label="Language"]{display:none!important}
+  .pnav{display:flex;flex-wrap:wrap;gap:6px 20px;align-items:center;border-bottom:1px solid var(--mm-rule);padding-bottom:14px;margin-bottom:28px}
+  .pnav .who{font-weight:700;color:var(--mm-navy);margin-right:auto;font-family:var(--font-display);font-size:18px}
+  .pnav a{text-decoration:none;font-weight:600;padding:4px 0;border-bottom:2px solid transparent}
+  .pnav a.on{border-color:var(--mm-copper)}
+  .pnav a.out{color:var(--mm-graphite);font-weight:500}
+  #app input,#app select,#app textarea,.form input,.form select,.form textarea{font:inherit;padding:9px;border:1px solid var(--mm-rule);background:#fff;width:100%}
+  .form{display:grid;gap:12px;max-width:760px}
+  @media (min-width:700px){.form{grid-template-columns:1fr 1fr}}
+  .form label{display:grid;gap:4px;font-weight:600;font-size:14px}
+  .form .full{grid-column:1/-1}
+  .box{border:1px solid var(--mm-rule);border-top:4px solid var(--mm-copper);padding:24px}
+  .mn{font-size:14px;color:var(--mm-graphite)}
+  .err{color:#b42318}
+  .soon{color:var(--mm-graphite);font-style:italic}
+  .btn.sm{padding:6px 12px;font-size:14px}
+  table.list{width:100%;border-collapse:collapse}
+  table.list th{text-align:left;font-size:13px;color:var(--mm-graphite);border-bottom:2px solid var(--mm-rule);padding:8px}
+  table.list td{padding:10px 8px;border-bottom:1px solid var(--mm-rule)}
+  .pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--mm-ice)}
+  .pill.commandée{background:#d1fadf;color:#05603a}.pill.perdue{background:#fee4e2;color:#912018}.pill.acceptée{background:#fef0c7;color:#93370d}
+  #app [hidden]{display:none!important}
+  @media print{header.top,footer.foot,.page-head,.pnav,.noprint{display:none!important}}
+</style>

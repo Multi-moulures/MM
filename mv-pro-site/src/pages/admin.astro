@@ -1,0 +1,99 @@
+---
+import Portal from '../layouts/Portal.astro';
+---
+<Portal title="Administration" h1="Administration" lead="Marchands, niveaux de rabais, demandes d’accès et soumissions." active="admin">
+  <div id="notadmin" hidden><p class="err">Cette page est réservée aux administrateurs.</p></div>
+  <div id="adm" hidden>
+    <section class="blk">
+      <h2>Niveaux de rabais</h2>
+      <p class="mn">Rabais appliqué au coût de base. Modifier un niveau met à jour tous les marchands de ce niveau.</p>
+      <div class="tiers" id="tiers"></div>
+      <p><button class="btn sm" id="savetiers">Enregistrer les niveaux</button> <span class="mn" id="tmsg"></span></p>
+    </section>
+
+    <section class="blk">
+      <h2>Marchands</h2>
+      <p><button class="btn sm" id="newd">+ Créer un marchand</button></p>
+      <form id="dform" class="form box" hidden>
+        <input type="hidden" name="id" />
+        <label>Entreprise<input name="company" required /></label>
+        <label>Type<select name="type"><option value="marchand">Marchand</option><option value="couvreur">Couvreur</option></select></label>
+        <label>Niveau de prix<select name="tier"><option value="n1">Niveau 1</option><option value="n2">Niveau 2</option><option value="n3">Niveau 3</option><option value="custom">Personnalisé</option></select></label>
+        <label class="cp" hidden>Rabais personnalisé (%)<input name="custom_pct" type="number" min="0" max="90" step="0.5" /></label>
+        <label class="full">Courriels autorisés (un par ligne)<textarea name="emails" rows="3" placeholder="prenom@entreprise.com"></textarea></label>
+        <label>Téléphone<input name="phone" /></label>
+        <label>Adresse<input name="address" /></label>
+        <label class="full">Notes internes<textarea name="notes" rows="2"></textarea></label>
+        <label class="chk"><input type="checkbox" name="active" checked /> Compte actif</label>
+        <p class="full"><button class="btn" type="submit">Enregistrer</button> <button class="btn ghost" type="button" id="cancel">Annuler</button> <span class="mn" id="dmsg"></span></p>
+        <p class="full mn">Démo : seuls les courriels @multimoulures.com peuvent se connecter. Au lancement, les courriels ajoutés ici seront autorisés automatiquement dans Cloudflare Access.</p>
+      </form>
+      <div class="scroll"><table class="list" id="dl"><thead><tr><th>Entreprise</th><th>Type</th><th>Niveau</th><th>Rabais</th><th>Courriels</th><th>Soumissions</th><th>Statut</th><th></th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section class="blk">
+      <h2>Demandes d’accès</h2>
+      <div class="scroll"><table class="list" id="rl"><thead><tr><th>Date</th><th>Nom</th><th>Entreprise</th><th>Type</th><th>Courriel</th><th>Téléphone</th><th>Ville</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section class="blk">
+      <h2>Toutes les soumissions</h2>
+      <div class="scroll"><table class="list" id="al"><thead><tr><th>Numéro</th><th>Marchand</th><th>Client</th><th>Statut</th><th>Total client</th><th>Modifiée</th></tr></thead><tbody></tbody></table></div>
+    </section>
+  </div>
+</Portal>
+<script>
+  import { api, fmt, esc } from '../scripts/config.js';
+  document.addEventListener('me', async (e) => {
+    if (!e.detail.admin) { document.getElementById('notadmin').hidden = false; return; }
+    document.getElementById('adm').hidden = false;
+    const form = document.getElementById('dform'), F = (n) => form.elements[n];
+    let tiers = [], dealers = [];
+    const loadTiers = async () => {
+      tiers = await api('/api/admin/tiers');
+      document.getElementById('tiers').innerHTML = tiers.map((t) => `<label>${esc(t.id.toUpperCase())}<input data-t="${t.id}" data-f="name" value="${esc(t.name)}"><span class="pc"><input data-t="${t.id}" data-f="pct" type="number" min="0" max="90" step="0.5" value="${t.pct}"> %</span></label>`).join('');
+    };
+    const loadDealers = async () => {
+      dealers = await api('/api/admin/dealers');
+      document.querySelector('#dl tbody').innerHTML = dealers.map((d) => `<tr><td><b>${esc(d.company)}</b></td><td>${esc(d.type)}</td><td>${d.custom_pct != null ? 'Personnalisé' : esc(d.tier_name)}</td><td>${d.custom_pct != null ? d.custom_pct : d.tier_pct} %</td><td>${d.emails.map(esc).join('<br>')}</td><td>${d.quotes}</td><td>${d.active ? 'Actif' : '<span class="err">Désactivé</span>'}</td><td><button class="btn ghost sm" data-edit="${d.id}">Modifier</button></td></tr>`).join('') || '<tr><td colspan="8" class="mn">Aucun marchand.</td></tr>';
+    };
+    const loadOther = async () => {
+      const rq = await api('/api/admin/requests');
+      document.querySelector('#rl tbody').innerHTML = rq.map((r) => `<tr><td>${new Date(r.created).toLocaleDateString('fr-CA')}</td><td>${esc(r.name)}</td><td>${esc(r.company)}</td><td>${esc(r.type)}</td><td>${esc(r.email)}</td><td>${esc(r.phone)}</td><td>${esc(r.city)}</td></tr>`).join('') || '<tr><td colspan="7" class="mn">Aucune demande.</td></tr>';
+      const qs = await api('/api/quotes?all=1');
+      document.querySelector('#al tbody').innerHTML = qs.map((q) => `<tr><td><a href="/soumission/?id=${q.id}">${esc(q.number)}</a></td><td>${esc(q.company)}</td><td>${esc(q.client_name || '—')}</td><td><span class="pill ${esc(q.status)}">${esc(q.status)}</span></td><td>${fmt(q.total)}</td><td>${new Date(q.updated).toLocaleDateString('fr-CA')}</td></tr>`).join('') || '<tr><td colspan="6" class="mn">Aucune soumission.</td></tr>';
+    };
+    const toggleCp = () => (form.querySelector('.cp').hidden = F('tier').value !== 'custom');
+    F('tier').addEventListener('change', toggleCp);
+    const open = (d) => {
+      form.reset(); form.hidden = false;
+      F('id').value = d?.id || ''; F('company').value = d?.company || ''; F('type').value = d?.type || 'marchand';
+      F('tier').value = d ? (d.custom_pct != null ? 'custom' : d.tier) : 'n1'; F('custom_pct').value = d?.custom_pct ?? '';
+      F('emails').value = (d?.emails || []).join('\n'); F('phone').value = d?.phone || ''; F('address').value = d?.address || ''; F('notes').value = d?.notes || '';
+      F('active').checked = d ? !!d.active : true; toggleCp(); form.scrollIntoView({ behavior: 'smooth' });
+    };
+    document.getElementById('newd').addEventListener('click', () => open(null));
+    document.getElementById('cancel').addEventListener('click', () => (form.hidden = true));
+    document.querySelector('#dl').addEventListener('click', (ev) => { const b = ev.target.closest('[data-edit]'); if (b) open(dealers.find((d) => d.id === +b.dataset.edit)); });
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const body = { id: F('id').value, company: F('company').value, type: F('type').value, tier: F('tier').value, custom_pct: F('custom_pct').value, emails: F('emails').value, phone: F('phone').value, address: F('address').value, notes: F('notes').value, active: F('active').checked };
+      try { await api('/api/admin/dealers', { method: body.id ? 'PUT' : 'POST', body }); form.hidden = true; await loadDealers(); }
+      catch (err) { document.getElementById('dmsg').textContent = err.message; }
+    });
+    document.getElementById('savetiers').addEventListener('click', async () => {
+      const t = tiers.map((x) => ({ id: x.id, name: document.querySelector(`[data-t="${x.id}"][data-f=name]`).value, pct: document.querySelector(`[data-t="${x.id}"][data-f=pct]`).value }));
+      try { await api('/api/admin/tiers', { method: 'PUT', body: { tiers: t } }); document.getElementById('tmsg').textContent = 'Enregistré'; await loadDealers(); }
+      catch (err) { document.getElementById('tmsg').textContent = err.message; }
+    });
+    await Promise.all([loadTiers(), loadDealers(), loadOther()]);
+  });
+</script>
+<style>
+  .blk{margin-bottom:48px}
+  .tiers{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}
+  .tiers label{display:grid;gap:6px;font-weight:600;font-size:13px;border:1px solid var(--mm-rule);padding:12px;min-width:200px}
+  .tiers .pc{display:flex;align-items:center;gap:6px}
+  .tiers input{font:inherit;padding:8px;border:1px solid var(--mm-rule)}
+  .chk{display:flex!important;align-items:center;gap:8px}.chk input{width:auto!important}
+</style>
