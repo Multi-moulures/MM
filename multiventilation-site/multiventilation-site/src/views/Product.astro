@@ -1,0 +1,111 @@
+---
+import { realisations } from '../data/realisations';
+import Inner from '../components/Inner.astro';
+import Card from '../components/Card.astro';
+import { site } from '../data/site';
+import { apps, appsOf, headline, keyword, seoTitle, clip } from '../data/seo';
+import { getCategories, getProducts, productUrl, routes, type Lang } from '../i18n';
+const { lang, slug } = Astro.props as { lang: Lang; slug: string };
+const fr = lang === 'fr';
+const products = getProducts(lang);
+const p = products.find((x) => x.slug === slug)!;
+const cat = getCategories(lang).find((c) => c.id === p.cat)!;
+const others = products.filter((x) => x.cat === p.cat && x.slug !== p.slug).slice(0, 4);
+const h = headline(p, lang);
+const fam = p.slug.startsWith('airm300') ? 'airm300' : p.slug.startsWith('airm100') ? 'airm100' : '';
+const kw = keyword(p, lang);
+const myApps = appsOf(p).map((id) => apps.find((a) => a.id === id)!);
+const quoteUrl = `${routes.quote[lang]}?produit=${p.slug}`;
+const L = fr
+  ? { prods: 'Produits', title: seoTitle(p.name, kw, 'fr'), desc: `${p.name}, ${p.sub.toLowerCase()}. ${h.label.split(',')[0]} : ${h.v} ${h.u}. Fabriqué au Québec sur mesure, dans la couleur de votre toiture, en 5 jours.`,
+      tags: ['Fabriqué en 5 jours', 'Couleur assortie', 'Acier canadien', 'Formats sur mesure'], pitch: 'Pentes', tested: 'Testé selon CAN3-A93-M82', quote: 'Demander un prix pour ce produit', custom: 'Besoin d’un format sur mesure ? Indiquez vos dimensions dans la demande de prix ou appelez un conseiller technique.',
+      specs: 'Spécifications techniques', dims: 'Dimensions et formats', note: 'Les débits en PCM sont des estimations calculées à partir de la surface libre de ventilation (SFVA).', war: 'Garantie à vie limitée sur les défauts de fabrication, 10 ans sur la peinture',
+      lab: 'Testé selon la norme CAN3-A93-M82 (R2003) par UL Canada, laboratoire accrédité ISO/IEC 17025. Il s’agit d’essais de performance selon la norme, et non d’une certification de produit.', same: 'Dans la même catégorie', mat: 'Acier galvanisé G90 prépeint',
+      appsH: 'Applications', colH: 'Couleurs offertes', col: 'Fabriqué dans l’acier prépeint des palettes d’Ideal Roofing, Vicwest, MAC, Agway Metals et Color Steels, ou assorti à partir d’un échantillon.', colL: 'Voir les couleurs en inventaire', colQ: 'Demander votre couleur',
+      instH: 'Installation', inst: ['Installation par un couvreur ou un entrepreneur professionnel, selon les règles de l’art. C’est une condition de la garantie.', 'L’étanchéité autour du produit (solins, membranes, scellants) relève de l’installateur.'], instPitch: 'Pentes compatibles :', instGuide: 'Guide d’installation détaillé : en préparation. D’ici là, nos conseillers techniques répondent aux couvreurs au',
+      docH: 'Documentation technique', docCat: 'Catalogue de ventilation (PDF, 31 pages, 5,6 Mo)', docTable: 'Tableau des dimensions et surfaces de ventilation : sur cette page', docLab: 'Rapport d’essai UL Canada : disponible sur demande', docWar: 'Conditions de garantie' }
+  : { prods: 'Products', title: seoTitle(p.name, kw, 'en'), desc: `${p.name}, ${p.sub.toLowerCase()}. ${h.label.split(',')[0]}: ${h.v} ${h.u}. Custom made in Quebec, in the colour of your roof, in 5 days.`,
+      tags: ['Made in 5 days', 'Colour matched', 'Canadian steel', 'Custom sizes'], pitch: 'Pitch', tested: 'Tested to CAN3-A93-M82', quote: 'Get a quote for this product', custom: 'Need a custom size? Enter your dimensions in the quote request or call a technical advisor.',
+      specs: 'Technical specifications', dims: 'Sizes and dimensions', note: 'CFM figures are estimates calculated from the net free ventilating area (NFVA).', war: 'Limited lifetime warranty on manufacturing defects, 10 years on paint',
+      lab: 'Tested to CAN3-A93-M82 (R2003) by UL Canada, an ISO/IEC 17025 accredited laboratory. These are performance tests to the standard, not a product certification.', same: 'In the same category', mat: 'Prepainted G90 galvanized steel',
+      appsH: 'Applications', colH: 'Available colours', col: 'Made from prepainted steel in the Ideal Roofing, Vicwest, MAC, Agway Metals and Color Steels palettes, or matched from a sample.', colL: 'See the colours in stock', colQ: 'Ask for your colour',
+      instH: 'Installation', inst: ['Installed by a professional roofer or contractor, following good roofing practice. This is a condition of the warranty.', 'Weatherproofing around the product (flashing, membranes, sealants) is the installer’s responsibility.'], instPitch: 'Compatible pitch:', instGuide: 'Detailed installation guide: in preparation. In the meantime, our technical advisors answer roofers at',
+      docH: 'Technical documentation', docCat: 'Ventilation catalogue (PDF, French, 31 pages, 5.6 MB)', docTable: 'Sizes and ventilating area table: on this page', docLab: 'UL Canada test report: available on request', docWar: 'Warranty terms' };
+const props = p.specs.map(([k, v]) => ({ '@type': 'PropertyValue', name: k, value: v }));
+const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.name, description: p.desc, category: cat.name, image: `${site.url}/img/${p.slug}.webp`, url: site.url + productUrl(p.slug, lang), sku: p.slug, brand: { '@type': 'Brand', name: 'Multi-Ventilation' }, manufacturer: { '@type': 'Organization', name: 'Multi-Moulures inc.', url: site.parent }, material: L.mat, countryOfOrigin: 'CA', additionalProperty: props }];
+---
+<Inner schema={schema} crumbs={[[L.prods, routes.products[lang]], [cat.name, `${routes.products[lang]}#${cat.id}`]]} title={L.title} description={clip(L.desc)} kicker={cat.name} h1={p.name} lead={p.sub}>
+  <div class="grid g2 top">
+    <img class="hero-img" src={`/img/${p.slug}.webp`} alt={`${p.name}, ${kw}`} width="540" height="420" />
+    <div>
+      <div class="metric"><span class="v">{h.v}</span><span class="u">{h.u}</span></div>
+      <p class="ml">{h.label}</p>
+      {h.note && <p class="mn">{h.note}</p>}
+      {h.est && <p class="mn">{h.est}</p>}
+      <p style="margin-top:20px">{p.desc}</p>
+      <ul class="tags">
+        {L.tags.map((x) => <li>{x}</li>)}
+        {p.pitch && <li>{L.pitch} {p.pitch}</li>}{p.tested && <li>{L.tested}</li>}
+      </ul>
+      <p class="btns"><a class="btn copper" href={quoteUrl}>{L.quote}</a><a class="btn ghost" href={'tel:' + site.phone}>{site.phoneDisplay}</a></p>
+      <p class="mn">{L.custom}</p>
+      {fam && <p class="fam"><a href={`${routes.products[lang]}${fam}/`}>{fr ? `Voir toutes les bases ${fam === 'airm300' ? 'AirM300' : 'AirM100'}` : `See all ${fam === 'airm300' ? 'AirM300' : 'AirM100'} bases`} →</a></p>}
+    </div>
+  </div>
+
+  <div class="info">
+    {myApps.length > 0 && <section><h2>{L.appsH}</h2><ul class="apps">{myApps.map((a) => <li><a href={`${routes.products[lang]}#app-${a.id}`}>{a[lang][0]}</a></li>)}</ul></section>}
+    <section><h2>{L.colH}</h2><p>{L.col}</p><p>{site.parentLive ? <a href={site.parent + '/couleurs-et-metaux/'}>{L.colL} →</a> : <a href={quoteUrl}>{L.colQ} →</a>}</p></section>
+    <section><h2>{L.instH}</h2><ul>{L.inst.map((x) => <li>{x}</li>)}{p.pitch && <li>{L.instPitch} {p.pitch}.</li>}<li>{L.instGuide} <a href={'tel:' + site.phone}>{site.phoneDisplay}</a>.</li></ul></section>
+    <section><h2>{L.docH}</h2><ul class="docs">
+      <li><a href="/docs/catalogue-multi-ventilation.pdf" download>{L.docCat}</a></li>
+      <li>{L.docTable}</li>
+      {p.tested && <li>{L.docLab}</li>}
+      <li><a href={routes.warranty[lang]}>{L.docWar}</a></li>
+    </ul></section>
+  </div>
+
+  <div class="grid g2" style="margin-top:48px">
+    <table class="spec"><caption class="sr">{L.specs} : {p.name}</caption><tr><th colspan="2" scope="col">{L.specs}</th></tr>{p.specs.map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}</table>
+    <div>
+      <h2 class="th">{L.dims}</h2>
+      <div class="scroll"><table class="spec"><caption class="sr">{L.dims} : {p.name}</caption><tr>{p.table.head.map((x) => <th scope="col">{x}</th>)}</tr>{p.table.rows.map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}</table></div>
+      {p.table.note && <p class="mn">{p.table.note}</p>}
+      <p class="mn">{L.note} <a href={routes.warranty[lang]}>{L.war}</a>.</p>
+      {p.tested && <p class="mn">{L.lab}</p>}
+    </div>
+  </div>
+  {realisations[p.slug] && (
+    <section class="real"><h2>{lang === 'fr' ? 'Réalisations' : 'Projects'}</h2>
+      {realisations[p.slug].map((ph) => <figure><img src={ph.src} alt={ph[lang]} width={ph.w} height={ph.h} loading="lazy" /><figcaption>{ph[lang]}</figcaption></figure>)}
+    </section>
+  )}
+  {others.length > 0 && <section style="margin-top:64px"><h2>{L.same}</h2><div class="grid g4">{others.map((o) => <Card p={o} lang={lang} />)}</div></section>}
+</Inner>
+<style>
+  .real{margin-top:64px}
+  .real figure{margin:0 0 28px}
+  .real img{width:100%;height:auto;display:block}
+  .real figcaption{font-size:14px;color:var(--mm-graphite);margin-top:8px}
+  .hero-img{width:100%;max-height:420px;object-fit:contain;background:var(--mm-mist)}
+  .top{align-items:start}
+  .metric{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:800;color:var(--mm-navy);line-height:1}
+  .v{font-size:clamp(44px,6vw,72px)}.u{font-size:24px}
+  .ml{margin:6px 0 0;font-weight:500}
+  .fam{margin-top:12px;font-weight:600}
+  .mn{font-size:14px;color:var(--mm-graphite);margin-top:8px}
+  .tags{list-style:none;padding:0;margin:16px 0 24px;display:flex;flex-wrap:wrap;gap:6px}
+  .tags li{background:var(--mm-ice);color:var(--mm-navy);padding:5px 10px;font-size:14px;font-weight:500}
+  .btn.copper{background:var(--mm-copper);border-color:var(--mm-copper)}
+  .info{display:grid;gap:8px 40px;margin-top:48px;padding-top:32px;border-top:1px solid var(--mm-rule)}
+  @media (min-width:900px){.info{grid-template-columns:1fr 1fr}}
+  .info h2,.th{font-size:22px}
+  .info ul{padding-left:20px;display:grid;gap:6px}
+  .apps{list-style:none;padding:0!important;display:flex!important;flex-wrap:wrap;gap:8px}
+  .apps a{display:inline-block;border:1px solid var(--mm-navy);padding:6px 12px;text-decoration:none;font-weight:500}
+  .scroll{overflow-x:auto;min-width:0}
+  .scroll td,.scroll th{white-space:nowrap}
+  table.spec{font-variant-numeric:tabular-nums}
+  table.spec th[scope=row]{font-weight:400;text-align:left;padding:10px 12px;border-bottom:1px solid var(--mm-rule);background:transparent;color:inherit}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
