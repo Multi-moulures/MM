@@ -11,8 +11,8 @@ const products = getProducts(lang), categories = getCategories(lang);
 const schema = [{ '@context': 'https://schema.org', '@type': 'ItemList', name: fr ? 'Produits Multi-Ventilation' : 'Multi-Ventilation products', numberOfItems: products.length, itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: site.url + productUrl(p.slug, lang) })) }];
 ---
 <Inner schema={schema}
-  title={fr ? 'Ventilateurs de toit, aérateurs et soffites ventilés | Multi-Ventilation' : 'Roof vents, attic ventilators and vented soffits | Multi-Ventilation'}
-  description={fr ? `${products.length} produits de ventilation de toiture : ventilateurs pour toits en pente et toits plats, ventilation agricole, soffites ventilés et clapets.` : `${products.length} roof ventilation products: roof vents for sloped and flat roofs, agricultural and commercial ventilation, vented soffits, exhaust caps. Made in Quebec in 5 days.`}
+  title={fr ? 'Ventilateurs de toit et soffites ventilés | Multi-Ventilation' : 'Roof Vents and Vented Soffits | Multi-Ventilation'}
+  description={fr ? `${products.length} produits de ventilation de toiture sur mesure : ventilateurs AirM, dôme agricole, soffites, louvres et sorties murales. Demandez un prix.` : `${products.length} custom roof ventilation products: AirM roof vents, agricultural dome, vented soffits, louvres and wall vents. Request a quote.`}
   kicker={fr ? `${products.length} produits` : `${products.length} products`} h1={fr ? 'Produits de ventilation de toiture' : 'Roof ventilation products'}
   lead={fr ? 'Chaque produit se fabrique dans la grandeur et la couleur de votre choix, en 5 jours.' : 'Every product is made in the size and colour of your choice, in 5 days.'}>
   <section class="finder" aria-labelledby="by-app">

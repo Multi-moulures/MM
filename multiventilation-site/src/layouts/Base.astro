@@ -1,9 +1,18 @@
 ---
+import '@fontsource/montserrat/500.css';
+import '@fontsource/montserrat/600.css';
+import '@fontsource/montserrat/700.css';
+import '@fontsource/montserrat/800.css';
+import '@fontsource/montserrat/700-italic.css';
+import '@fontsource/roboto-condensed/300.css';
+import '@fontsource/roboto-condensed/400.css';
+import '@fontsource/roboto-condensed/500.css';
+import '@fontsource/roboto-condensed/700.css';
 import '../styles/global.css';
 import { site } from '../data/site';
 import { langOf, altPath, routes, t } from '../i18n';
-interface Props { title: string; description: string; schema?: object[]; noindex?: boolean }
-const { title, description, schema = [], noindex = false } = Astro.props;
+interface Props { title: string; description: string; schema?: object[]; noindex?: boolean; image?: string }
+const { title, description, schema = [], noindex = false, image = '/img/og-multi-ventilation.jpg' } = Astro.props;
 const path = Astro.url.pathname;
 const lang = langOf(path);
 const tx = t[lang];
@@ -11,11 +20,12 @@ const nav = tx.nav;
 const alt = altPath(path);
 const frPath = lang === 'fr' ? path : alt;
 const enPath = lang === 'en' ? path : alt;
+const web = { '@context': 'https://schema.org', '@type': 'WebSite', '@id': site.url + '/#website', url: site.url, name: 'Multi-Ventilation', inLanguage: ['fr-CA', 'en-CA'], publisher: { '@id': site.url + '/#org' } };
 const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': site.url + '/#org', name: site.name, url: site.url, telephone: site.phone, email: site.email,
   logo: site.url + '/img/logo-mv.png', description: lang === 'fr' ? 'Fabricant québécois de ventilateurs de toit, aérateurs, soffites ventilés et clapets d’évacuation sur mesure en acier prépeint.' : 'Quebec manufacturer of custom roof vents, attic ventilators, vented soffits and exhaust caps in prepainted steel.',
   areaServed: ['CA-QC', 'CA-ON', 'CA-NB', 'CA-NS', 'CA-PE'],
   contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone, email: site.email, contactType: 'sales', areaServed: 'CA', availableLanguage: ['fr', 'en'] }],
-  parentOrganization: { '@type': 'Organization', name: 'Multi-Moulures inc.', url: site.parent },
+  parentOrganization: { '@type': 'Organization', '@id': 'https://multimoulures.com/#org', name: 'Multi-Moulures inc.', url: site.parent },
   address: { '@type': 'PostalAddress', streetAddress: site.street, addressLocality: site.city, addressRegion: site.region, postalCode: site.postal, addressCountry: 'CA' } };
 ---
 <!doctype html>
@@ -36,16 +46,16 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
   <link rel="icon" href="/img/mv.png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={site.url + path} />
-  <meta property="og:image" content={site.url + '/img/logo-mv.png'} />
+  <meta property="og:image" content={site.url + image} />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:site_name" content="Multi-Ventilation" />
-  <script is:inline>if (/\.workers\.dev$/.test(location.hostname)) { var m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex,nofollow'; document.head.appendChild(m); }</script>
-  <script type="application/ld+json" set:html={JSON.stringify([org, ...schema])} />
+  <script type="application/ld+json" set:html={JSON.stringify([org, web, ...schema])} />
 </head>
 <body>
   <header class="top">
     <div class="wrap bar">
       <a class="brand" href={routes.home[lang]} aria-label="Multi-Ventilation">
-        <img class="logo" src="/img/logo-mv.png" alt="Multi-Ventilation" width="1200" height="313" />
+        <img class="logo" src="/img/logo-mv.webp" alt="Multi-Ventilation" width="600" height="157" />
       </a>
       <nav aria-label="Navigation">{nav.map(([u, l]) => <a href={u} aria-current={path.startsWith(u) ? 'page' : undefined}>{l}</a>)}</nav>
       <div class="actions">
@@ -62,7 +72,7 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
   <footer class="foot">
     <div class="wrap fgrid">
       <div>
-        <img class="flogo" src="/img/logo-mv-inverse.png" alt="Multi-Ventilation" width="1200" height="313" loading="lazy" />
+        <img class="flogo" src="/img/logo-mv-inverse.webp" alt="Multi-Ventilation" width="600" height="157" loading="lazy" />
         <p class="slogan"><span>{tx.slogan[0]}</span> <em>{tx.slogan[1]}</em></p>
         <p class="fabout">{tx.about} <a href={site.parent}>Multi-Moulures</a>{tx.aboutEnd}</p>
       </div>
@@ -76,6 +86,8 @@ const org = { '@context': 'https://schema.org', '@type': 'Organization', '@id': 
         <p class="flinks">
           <a href={routes.products[lang]}>{tx.all}</a>
           <a href="/docs/catalogue-multi-ventilation.pdf" download>{tx.catalogue}</a>
+          <a href={routes.colours[lang]}>{lang === 'fr' ? 'Couleurs' : 'Colours'}</a>
+          <a href={routes.about[lang]}>{lang === 'fr' ? 'À propos' : 'About'}</a>
           <a href={routes.resellers[lang]}>{tx.becomeReseller}</a>
           <a href={routes.quote[lang]}>{tx.quote}</a>
           <a href={site.parent}>{tx.parentLink}</a>

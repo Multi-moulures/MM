@@ -25,12 +25,12 @@ export function appsOf(p: Product): AppId[] {
 // Mot-clé principal par produit, pour le titre et la description.
 const kwFr: Record<string, string> = {
   aerateurs: 'ventilateur de toit', ici: 'ventilation commerciale', evacuation: 'clapet d’évacuation', soffites: 'soffite ventilé en acier',
-  'airm300-base-plate': 'ventilateur de toit plat', 'airm300-base-pignon': 'ventilateur de faîte', 'dome-480': 'ventilateur de toit agricole', 'louvre': 'louvre de ventilation', 'persiennes-architecturales': 'persiennes architecturales',
+  'airm300-base-plate': 'ventilateur de toit plat', 'airm300-base-pignon': 'ventilateur de faîte', 'dome-480': 'ventilateur de toit agricole', 'louvre': 'louvre de ventilation', 'persiennes-architecturales': 'persiennes architecturales', 'faitiere-ventilee': 'faîtière ventilée', 'solin-de-mansarde-ventile': 'entrée d’air de toit mansardé',
   'sortie-murale-de-ventilation': 'sortie murale', 'sortie-murale-commerciale': 'sortie murale', 'boite-a-clapets-multiples': 'sortie de toit multiple', 'cmm-4': 'clapet de toiture', 'vr-rectangulaire': 'ventilateur de toit', 'vr-triangulaire': 'ventilateur de toit', 'col-de-cygne': 'ventilateur commercial',
 };
 const kwEn: Record<string, string> = {
   aerateurs: 'roof vent', ici: 'commercial roof ventilation', evacuation: 'exhaust cap', soffites: 'vented steel soffit',
-  'airm300-base-plate': 'flat roof ventilator', 'airm300-base-pignon': 'ridge vent', 'dome-480': 'agricultural roof ventilator', 'louvre': 'wall louvre', 'persiennes-architecturales': 'architectural louvres',
+  'airm300-base-plate': 'flat roof ventilator', 'airm300-base-pignon': 'ridge vent', 'dome-480': 'agricultural roof ventilator', 'louvre': 'wall louvre', 'persiennes-architecturales': 'architectural louvres', 'faitiere-ventilee': 'ridge vent', 'solin-de-mansarde-ventile': 'mansard roof air intake',
   'sortie-murale-de-ventilation': 'wall vent', 'sortie-murale-commerciale': 'wall vent', 'boite-a-clapets-multiples': 'roof exhaust box', 'cmm-4': 'roof exhaust cap', 'vr-rectangulaire': 'roof vent', 'vr-triangulaire': 'roof vent', 'col-de-cygne': 'commercial roof vent',
 };
 export function seoTitle(name: string, kw: string, l: L) {
@@ -40,7 +40,17 @@ export function seoTitle(name: string, kw: string, l: L) {
   if (core.length <= 65) return core;
   return `${name} | Multi-Ventilation`.length <= 65 ? `${name} | Multi-Ventilation` : name;
 }
-export const clip = (s: string, n = 158) => (s.length > n ? s.slice(0, s.lastIndexOf(' ', n - 1)) + '…' : s);
+// Coupe une description à 155 caractères au plus, sur une fin de phrase si possible, sans « … ».
+export const clip = (s: string, n = 155) => {
+  s = s.replace(/\.{2,}/g, '.').replace(/\s+/g, ' ').trim();
+  if (s.length <= n) return s;
+  const parts = s.match(/[^.!?]+[.!?]+/g) ?? [s];
+  let out = '';
+  for (const x of parts) { if ((out + x).trim().length > n) break; out += x; }
+  if (out.trim().length >= 70) return out.trim();
+  const cut = s.slice(0, n - 1);
+  return cut.slice(0, Math.max(cut.lastIndexOf(','), cut.lastIndexOf(' '))).replace(/[,;:\s]+$/, '') + '.';
+};
 export const keyword = (p: Product, l: L) => (l === 'fr' ? kwFr : kwEn)[p.slug] ?? (l === 'fr' ? kwFr : kwEn)[p.cat];
 
 // Chiffre principal : la surface libre de ventilation (mesurée) passe avant le débit (estimé).
@@ -72,7 +82,7 @@ export const faqMore: Record<L, [string, string][]> = {
     ['Quel ventilateur choisir pour un toit à faible pente ?', 'Vérifiez la plage de pentes du modèle. L’AirM300 et l’AirM100 à base ajustable conviennent de 1/12 à 16/12. Le Dôme 480 et les ventilateurs à persiennes conviennent à partir de 2/12, et le ventilateur 2422 à partir de 3/12. Sous 1/12, consultez-nous : l’AirM300 base plate est conçu pour les toits plats.'],
     ['Quel ventilateur convient aux bâtiments agricoles et commerciaux ?', 'Pour les grandes toitures, le Dôme 480 se fabrique en longueurs de 4, 6 et 8 pieds et a été testé selon la norme CAN3-A93-M82. Le col de cygne, les louvres et les ventilateurs à persiennes complètent la gamme pour les bâtiments ICI. Dans les bâtiments d’élevage, l’air est corrosif : parlez-nous de l’usage du bâtiment avant de commander.'],
     ['Peut-on assortir le ventilateur à la couleur du toit ?', 'Oui. Chaque ventilateur est plié dans l’acier prépeint des grands fabricants de toitures métalliques, dans la couleur exacte de votre revêtement. Si votre couleur n’est pas dans nos palettes, nous trouvons la correspondance à partir d’un échantillon.'],
-    ['Où trouver les instructions d’installation ?', 'Nos guides d’installation de l’AirM300 et du Dôme 480 sont en préparation. En attendant, le catalogue complet est téléchargeable sur chaque page produit, et nos conseillers techniques répondent aux couvreurs par téléphone. L’installation doit être faite par un couvreur ou un entrepreneur professionnel.'],
+    ['Où trouver les instructions d’installation ?', 'Chaque fiche produit indique les pentes compatibles, les dimensions et les points d’installation à respecter, et le catalogue complet est téléchargeable sur chaque page. Nos conseillers techniques répondent aux couvreurs par téléphone au (450) 441-1226 pour toute question de pose. L’installation doit être faite par un couvreur ou un entrepreneur professionnel, selon les règles de l’art : c’est une condition de la garantie.'],
   ],
   en: [
     ['What is the difference between NFVA and CFM?', 'Net free ventilating area (NFVA) is the actual area air can pass through once screens and louvres are deducted. It is measured in square inches, and it is what the building code uses to size attic ventilation. Airflow in cubic feet per minute (CFM) is the volume of air moved: for a static vent it depends on wind and temperature difference, so our CFM figures are estimates calculated from the NFVA. To compare two vents, compare their NFVA.'],
@@ -83,6 +93,13 @@ export const faqMore: Record<L, [string, string][]> = {
     ['Which vent should I use on a low-slope roof?', 'Check the model’s pitch range. The pitch-adjustable AirM300 and AirM100 fit 1/12 to 16/12. The 480 Dome and louvered roof vents fit from 2/12, and the 2422 vent from 3/12. Below 1/12, talk to us: the AirM300 flat roof base is designed for flat roofs.'],
     ['Which vent suits agricultural and commercial buildings?', 'For large roofs, the 480 Dome comes in 4, 6 and 8 ft lengths and was tested to CAN3-A93-M82. Gooseneck vents, louvres and louvered roof vents complete the range for ICI buildings. Livestock buildings have corrosive air: tell us how the building is used before ordering.'],
     ['Can the vent match my roof colour?', 'Yes. Every vent is formed from the prepainted steel used by the major metal roofing manufacturers, in the exact colour of your cladding. If your colour is not in our palettes, we match it from a sample.'],
-    ['Where can I find installation instructions?', 'Our AirM300 and 480 Dome installation guides are in preparation. In the meantime, the full catalogue can be downloaded from every product page, and our technical advisors answer roofers by phone. Installation must be done by a professional roofer or contractor.'],
+    ['Where can I find installation instructions?', 'Every product page lists the compatible pitches, the dimensions and the installation points to follow, and the full catalogue can be downloaded from every page. Our technical advisors answer roofers by phone at (450) 441-1226 for any installation question. Installation must be done by a professional roofer or contractor, following good roofing practice: this is a condition of the warranty.'],
   ],
+};
+
+// Titres et descriptions proposés à l'annexe B de l'audit.
+export const seoOverride: Record<string, Record<L, [string, string]>> = {
+  'airm300-base-ajustable': { fr: ['AirM300 base ajustable, pentes 1/12 à 16/12 | Multi-Ventilation', 'Ventilateur de toit AirM300, SFVA de 144 po², essais CAN3-A93-M82. Plié sur mesure dans l’acier prépeint de votre toiture, en 5 jours.'], en: ['AirM300 Adjustable Base, 1/12 to 16/12 Pitch | Multi-Ventilation', 'AirM300 roof vent, 144 sq. in. NFVA, tested to CAN3-A93-M82. Custom made in the prepainted steel of your roof in 5 days.'] },
+  'dome-480': { fr: ['Dôme 480 : ventilateur de toit agricole | Multi-Ventilation', 'Dôme 480 en 4, 6 ou 8 pi, 242 à 500 po² de SFVA, testé CAN3-A93-M82. Pour bâtiments agricoles et commerciaux, prépeint, fabriqué en 5 jours.'], en: ['480 Dome: Agricultural Roof Vent | Multi-Ventilation', '480 Dome in 4, 6 or 8 ft, 242 to 500 sq. in. NFVA, tested to CAN3-A93-M82. For farm and commercial roofs, prepainted, made in 5 days.'] },
+  'soffite-ventile-oblong-50': { fr: ['Soffite ventilé Oblong 50 % en acier prépeint | Multi-Ventilation', 'Soffite entièrement perforé, 77 po² de ventilation par pied linéaire, le plus élevé de la gamme. Sur mesure, couleur de votre toiture, 5 jours.'], en: ['50% Oblong Vented Steel Soffit | Multi-Ventilation', 'Fully perforated steel soffit, 77 sq. in. of ventilation per linear foot, the highest in our range. Custom, matched to your roof colour.'] },
 };

@@ -1,6 +1,7 @@
 ---
 import V from '../../../views/Product.astro';
 import { products } from '../../../data/produits';
-export function getStaticPaths() { return products.map((p) => ({ params: { slug: p.slug } })); }
+import { enSlugs } from '../../../i18n';
+export function getStaticPaths() { return products.map((p) => ({ params: { slug: enSlugs[p.slug] ?? p.slug }, props: { fr: p.slug } })); }
 ---
-<V lang="en" slug={Astro.params.slug} />
+<V lang="en" slug={Astro.props.fr} />

@@ -1,0 +1,7 @@
+---
+import Inner from '../components/Inner.astro';
+import { routes } from '../i18n';
+---
+<Inner noindex title="Page introuvable | Multi-Ventilation" description="Page introuvable." h1="Page introuvable" lead="Cette page n’existe pas ou a été déplacée. Page not found.">
+  <p class="btns"><a class="btn" href={routes.products.fr}>Voir les produits</a> <a class="btn ghost" href={routes.products.en}>See the products</a> <a class="btn ghost" href={routes.quote.fr}>Demander un prix</a></p>
+</Inner>

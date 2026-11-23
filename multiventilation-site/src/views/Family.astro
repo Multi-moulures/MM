@@ -10,7 +10,7 @@ const F = families[family][lang];
 const products = getProducts(lang);
 const groups: ['airm300' | 'airm100', Model[]][] = (family === 'airm' ? ['airm300', 'airm100'] : [family]).map((f) => [f as 'airm300' | 'airm100', models(f as 'airm300' | 'airm100', lang)]);
 const famUrl = (f: string) => `${routes.products[lang]}${f}/`;
-const soon = fr ? 'Bientôt disponible' : 'Coming soon';
+const soon = '';
 const live = groups.flatMap(([, m]) => m).filter((m) => m.slug);
 const schema = [{ '@context': 'https://schema.org', '@type': 'ItemList', name: F.h1, numberOfItems: live.length, itemListElement: live.map((m, i) => ({ '@type': 'ListItem', position: i + 1, name: products.find((p) => p.slug === m.slug)!.name, url: site.url + productUrl(m.slug!, lang) })) }];
 const crumbs: [string, string][] = [[fr ? 'Produits' : 'Products', routes.products[lang]]];
@@ -21,7 +21,7 @@ if (family !== 'airm') crumbs.push([fr ? 'AirM' : 'AirM', famUrl('airm')]);
     <section class="fam">
       {family === 'airm' && <h2><a href={famUrl(f)}>{f === 'airm300' ? 'AirM300' : 'AirM100'}</a></h2>}
       <div class="grid g4">
-        {list.map((m) => {
+        {list.filter((m) => m.slug).map((m) => {
           const p = m.slug ? products.find((x) => x.slug === m.slug) : undefined;
           const h = p ? headline(p, lang) : undefined;
           return p ? (

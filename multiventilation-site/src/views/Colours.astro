@@ -1,0 +1,79 @@
+---
+import Inner from '../components/Inner.astro';
+import { site } from '../data/site';
+import { routes, type Lang } from '../i18n';
+import colours from '../data/couleurs.json';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const steel = (colours as { brand: string; kind: string; series: { series: string; colors: string[] }[]; note?: string }[])
+  .filter((c) => c.kind === 'steel')
+  .map((b) => ({ ...b, count: b.series.reduce((n, s) => n + s.colors.length, 0) }));
+const total = steel.reduce((n, b) => n + b.count, 0);
+const T = fr ? {
+  title: 'Couleurs de ventilateurs de toit en acier prépeint | Multi-Ventilation',
+  desc: `Ventilateurs de toit et soffites dans la couleur de votre toiture : ${total} couleurs d’acier prépeint Ideal, Vicwest, MAC, Agway et Color Steels.`,
+  kicker: 'Couleurs', h1: 'Votre ventilation dans la couleur de votre toiture',
+  lead: 'Nous plions chaque ventilateur dans le même acier prépeint que votre revêtement. Il s’agence à la couleur et vieillit de la même façon que le toit.',
+  s1: 'couleurs d’acier prépeint', s2: 'fabricants de toiture assortis', s3: 'jours ouvrables de fabrication',
+  palH: 'Les palettes que nous assortissons', palP: 'Choisissez la marque de votre revêtement, puis le nom de la couleur. Indiquez-les dans votre demande de prix.',
+  cnt: 'couleurs',
+  notH: 'Votre couleur n’est pas dans la liste ?', not: ['Envoyez-nous un échantillon de votre revêtement : nous trouvons la correspondance.', 'Couleurs spéciales et finis texturés offerts sur commande.', 'Un seul fournisseur pour vos ventilateurs, faîtières et soffites, toutes marques de toiture confondues.'],
+  howH: 'Comment commander', how: ['Indiquez la marque et le nom de la couleur de votre toiture.', 'Choisissez le produit et la grandeur, ou donnez vos dimensions sur mesure.', 'Échantillon de couleur offert sur demande avant la commande.'],
+  ask: 'Demander un prix', call: 'Appeler un conseiller',
+  note: 'Les noms et palettes appartiennent à leurs fabricants respectifs et sont cités uniquement pour la correspondance des couleurs. Demandez un échantillon avant de commander.',
+} : {
+  title: 'Prepainted Steel Roof Vent Colours | Multi-Ventilation',
+  desc: `Roof vents and soffits in the colour of your roof: ${total} prepainted steel colours from Ideal, Vicwest, MAC, Agway and Color Steels.`,
+  kicker: 'Colours', h1: 'Your ventilation in the colour of your roof',
+  lead: 'We form every vent from the same prepainted steel as your cladding. It matches the colour and weathers the same way as the roof.',
+  s1: 'prepainted steel colours', s2: 'roofing manufacturers matched', s3: 'business days to fabricate',
+  palH: 'The palettes we match', palP: 'Pick your cladding brand, then the colour name. Include them in your quote request.',
+  cnt: 'colours',
+  notH: 'Colour not listed?', not: ['Send us a sample of your cladding and we will match it.', 'Special colours and textured finishes available to order.', 'One supplier for your roof vents, ridge caps and soffits, whatever the roofing brand.'],
+  howH: 'How to order', how: ['Tell us the brand and colour name of your roof.', 'Pick the product and size, or give us your custom dimensions.', 'Colour sample available on request before ordering.'],
+  ask: 'Get a quote', call: 'Call an advisor',
+  note: 'Names and palettes belong to their respective manufacturers and are cited only for colour matching. Ask for a sample before ordering.',
+};
+---
+<Inner title={T.title} description={T.desc} kicker={T.kicker} h1={T.h1} lead={T.lead}>
+  <div class="stats">
+    <div><span>{total}</span>{T.s1}</div>
+    <div><span>{steel.length}</span>{T.s2}</div>
+    <div><span>5</span>{T.s3}</div>
+  </div>
+  <h2>{T.palH}</h2>
+  <p>{T.palP}</p>
+  <div class="brands">
+    {steel.map((b) => (
+      <details>
+        <summary><h3>{b.brand}</h3><span class="cnt">{b.count} {T.cnt}</span></summary>
+        {b.series.map((s) => <div class="ser"><p class="caps">{s.series}</p><ul class="chips">{s.colors.map((c) => <li>{c}</li>)}</ul></div>)}
+      </details>
+    ))}
+  </div>
+  <div class="grid g2 how">
+    <div class="card"><h2>{T.notH}</h2><ul class="ticks">{T.not.map((x) => <li>{x}</li>)}</ul></div>
+    <div class="card"><h2>{T.howH}</h2><ul class="ticks">{T.how.map((x) => <li>{x}</li>)}</ul>
+      <p class="btns"><a class="btn copper" href={routes.quote[lang]}>{T.ask}</a><a class="btn ghost" href={'tel:' + site.phone}>{T.call}</a></p></div>
+  </div>
+  <p class="note">{T.note}</p>
+</Inner>
+<style>
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--mm-navy);margin-bottom:40px}
+  .stats div{padding:20px 16px 20px 0;border-bottom:1px solid var(--mm-rule);display:grid;color:var(--mm-graphite)}
+  .stats span{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,3vw,36px);color:var(--mm-navy);line-height:1.1}
+  .brands{display:grid;gap:8px;margin-top:16px}
+  details{border:1px solid var(--mm-rule);background:#fff;padding:0 18px}
+  details[open]{padding-bottom:18px}
+  summary{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;cursor:pointer}
+  summary h3{margin:0;font-size:19px}
+  .cnt{font-weight:500;color:var(--mm-graphite);font-size:15px}
+  .ser{margin-top:12px}
+  .chips{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+  .chips li{background:var(--mm-mist);padding:4px 10px;font-size:14px}
+  .how{margin-top:48px}
+  .how h2{font-size:22px}
+  .ticks{padding-left:20px;display:grid;gap:6px}
+  .btn.copper{background:var(--mm-copper);border-color:var(--mm-copper)}
+  .note{font-size:14px;color:var(--mm-graphite);margin-top:24px}
+</style>

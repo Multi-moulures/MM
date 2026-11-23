@@ -6,6 +6,12 @@ const fr = lang === 'fr';
 const faq = getFaq(lang);
 const schema = [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }];
 ---
-<Inner schema={schema} title={fr ? 'Ventilation d’entretoit : SFVA, PCM et condensation | FAQ' : 'Attic ventilation FAQ: NFVA, CFM and condensation'} description={fr ? 'Combien de ventilation pour un entretoit, SFVA ou PCM, condensation, toiture métallique, faible pente, AirM100 ou AirM300 : nos réponses.' : 'How much attic ventilation, NFVA vs CFM, condensation, metal roofs, low slopes, AirM100 or AirM300: answers for roofers and building owners.'} h1={fr ? 'Ventilation de toiture : questions fréquentes' : 'Roof ventilation: frequently asked questions'}>
-  <div style="max-width:820px">{faq.map(([q, a]) => <details open><summary>{q}</summary><p>{a}</p></details>)}</div>
+<Inner schema={schema} title={fr ? 'FAQ ventilation d’entretoit : SFVA, PCM, condensation' : 'Attic Ventilation FAQ: NFVA, CFM, Condensation | Multi-Ventilation'} description={fr ? 'Combien de ventilation pour un entretoit, SFVA ou PCM, soffite et aérateur, condensation, pente minimale, délai et garantie : nos réponses.' : 'How much attic ventilation you need, NFVA versus CFM, soffit and vent pairing, condensation, minimum pitch, lead time and warranty.'} h1={fr ? 'Ventilation de toiture : questions fréquentes' : 'Roof ventilation: frequently asked questions'}>
+  <div class="faq">{faq.map(([q, a]) => <section><h2>{q}</h2><p>{a}</p></section>)}</div>
 </Inner>
+<style>
+  .faq{max-width:820px}
+  .faq section{border-bottom:1px solid var(--mm-rule);padding:20px 0}
+  .faq h2{font-size:20px;margin-bottom:8px}
+  .faq p{margin:0}
+</style>

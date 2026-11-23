@@ -15,7 +15,7 @@ export const nav = [
   ['/faq/', 'FAQ'],
 ];
 export const faq: [string, string][] = [
-  ['Quel est le délai de fabrication ?', 'Nos produits de ventilation sur mesure sont fabriqués en 5 jours, dans la grandeur et la couleur de votre choix.'],
+  ['Quel est le délai de fabrication ?', 'Nos produits de ventilation sur mesure sont fabriqués en 5 jours ouvrables, dans la grandeur et la couleur de votre choix. Le délai commence à la commande confirmée (dimensions et couleur approuvées) et vise la fabrication : la livraison s’ajoute selon votre région, ou vous pouvez faire la cueillette à notre usine de Saint-Bruno-de-Montarville.'],
   ['Pouvez-vous assortir la couleur de ma toiture ?', 'Oui. Nous fabriquons nos aérateurs, clapets et soffites à partir du même acier galvanisé prépeint que celui des fabricants de toitures métalliques. Nous assortissons les palettes d’Ideal Roofing, Vicwest, MAC, Agway Metals et Color Steels, et nous trouvons la correspondance à partir d’un échantillon si votre couleur n’y est pas.'],
   ['Vos aérateurs sont-ils testés ?', 'L’AirM300 et le Dôme 480 ont été testés selon la norme CAN3-A93-M82 (R2003) par UL Canada, laboratoire accrédité ISO/IEC 17025, pour la résistance au vent, à la pluie, à la corrosion et l’intégrité structurale.'],
   ['Combien de ventilation faut-il pour un entretoit ?', 'Le Code national du bâtiment du Canada demande généralement (article 9.19.1.2) une surface libre de ventilation d’au moins 1/300 de la surface isolée du plafond, davantage pour certains toits à faible pente, répartie entre l’entrée d’air (soffites) et l’évacuation (aérateurs). Validez toujours avec le code applicable et les exigences du fabricant de votre toiture.'],

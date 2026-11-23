@@ -1,0 +1,27 @@
+// Généré à partir de src/i18n.ts
+export const enSlugs = {
+ "airm300-base-ajustable": "airm300-adjustable-base",
+ "airm300-base-pignon": "airm300-ridge-base",
+ "airm300-base-plate": "airm300-flat-roof-base",
+ "airm300-base-feine": "airm300-curb-base",
+ "airm100-base-ajustable": "airm100-adjustable-base",
+ "airm100-base-feine": "airm100-curb-base",
+ "ventilateur-2422": "2422-low-profile-roof-vent",
+ "faitiere-ventilee": "vented-ridge-cap",
+ "dome-480": "dome-480",
+ "col-de-cygne": "gooseneck-vent",
+ "louvre": "wall-louvre",
+ "vr-rectangulaire": "rectangular-louvered-roof-vent",
+ "vr-triangulaire": "triangular-louvered-roof-vent",
+ "sortie-murale-commerciale": "commercial-wall-vent",
+ "persiennes-architecturales": "architectural-louvres",
+ "boite-a-clapets-multiples": "multi-port-roof-exhaust-box",
+ "cmm-4": "cmm-4-roof-exhaust-cap",
+ "sortie-murale-de-ventilation": "wall-vent",
+ "soffite-ventilation-cachee": "hidden-vent-steel-soffit",
+ "soffite-mural-anti-rafale": "wind-resistant-wall-soffit",
+ "soffite-ventile-oblong-50": "oblong-50-vented-soffit",
+ "soffite-ventile-oblong": "oblong-vented-soffit",
+ "soffite-ventile-embosse": "embossed-vented-soffit",
+ "solin-de-mansarde-ventile": "vented-mansard-flashing"
+};

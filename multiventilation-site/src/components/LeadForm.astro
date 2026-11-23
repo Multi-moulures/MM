@@ -7,11 +7,12 @@ const provinces = fr
   ? ['Québec', 'Ontario', 'Nouveau-Brunswick', 'Nouvelle-Écosse', 'Île-du-Prince-Édouard', 'Terre-Neuve-et-Labrador', 'Manitoba', 'Saskatchewan', 'Alberta', 'Colombie-Britannique', 'Territoires', 'États-Unis', 'Autre pays']
   : ['Quebec', 'Ontario', 'New Brunswick', 'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Manitoba', 'Saskatchewan', 'Alberta', 'British Columbia', 'Territories', 'United States', 'Other country'];
 const L = fr
-  ? { who: 'Vous êtes', roofer: 'Couvreur ou entrepreneur', reseller: 'Revendeur, distributeur ou quincaillerie', other: 'Autre (architecte, propriétaire, gestionnaire)', prov: 'Province ou région', city: 'Ville', co: 'Entreprise', name: 'Votre nom', phone: 'Téléphone', email: 'Courriel', msg: 'Produits, grandeurs, couleur et quantités', send: 'Envoyer', todo: 'Formulaire à brancher : chaque demande doit arriver avec son type et sa région pour être dirigée vers la bonne personne.' }
-  : { who: 'You are', roofer: 'Roofer or contractor', reseller: 'Reseller, distributor or building supply store', other: 'Other (architect, owner, property manager)', prov: 'Province or region', city: 'City', co: 'Company', name: 'Your name', phone: 'Phone', email: 'Email', msg: 'Products, sizes, colour and quantities', send: 'Send', todo: 'Form to connect.' };
+  ? { who: 'Vous êtes', roofer: 'Couvreur ou entrepreneur', reseller: 'Revendeur, distributeur ou quincaillerie', other: 'Autre (architecte, propriétaire, gestionnaire)', prov: 'Province ou région', city: 'Ville', co: 'Entreprise', name: 'Votre nom', phone: 'Téléphone', email: 'Courriel', msg: 'Produits, grandeurs, couleur et quantités', send: 'Envoyer' }
+  : { who: 'You are', roofer: 'Roofer or contractor', reseller: 'Reseller, distributor or building supply store', other: 'Other (architect, owner, property manager)', prov: 'Province or region', city: 'City', co: 'Company', name: 'Your name', phone: 'Phone', email: 'Email', msg: 'Products, sizes, colour and quantities', send: 'Send' };
 ---
 <form class="order lead" method="post" action="#" data-lead data-lang={fr ? 'fr' : 'en'} data-names={JSON.stringify(names)}>
   <input type="hidden" name="produit" value="" />
+  <label class="hp" aria-hidden="true">Site web<input name="site_web" tabindex="-1" autocomplete="off" /></label>
   <fieldset class="who">
     <legend>{L.who}</legend>
     <label class="opt"><input type="radio" name="type" value="couvreur" checked={kind === 'couvreur'} /> {L.roofer}</label>
@@ -51,31 +52,30 @@ const L = fr
       return fr ? 'Un conseiller vous rappellera avec un prix et un délai de fabrication.' : 'An advisor will call you back with a price and a production date.';
     };
     f.addEventListener('change', () => { out.hidden = false; out.textContent = msg(); });
-    // En attendant le service de formulaires : la demande s'ouvre dans le logiciel de courriel du visiteur, adressée à info@.
-    f.addEventListener('submit', (e) => {
+    // Envoi au worker (/api/demande), qui transmet la demande par courriel. En cas d'échec, le courriel du visiteur s'ouvre.
+    f.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const btn = f.querySelector('button[type=submit]') as HTMLButtonElement;
       const d = new FormData(f as HTMLFormElement);
-      const g = (k: string) => String(d.get(k) || '');
-      const type = { couvreur: fr ? 'Couvreur ou entrepreneur' : 'Roofer or contractor', revendeur: fr ? 'Revendeur' : 'Reseller', autre: fr ? 'Autre' : 'Other' }[g('type')] || g('type');
-      const lines = [
-        (fr ? 'Type : ' : 'Type: ') + type,
-        (fr ? 'Province : ' : 'Province: ') + g('province'),
-        (fr ? 'Ville : ' : 'City: ') + g('ville'),
-        (fr ? 'Entreprise : ' : 'Company: ') + g('entreprise'),
-        (fr ? 'Nom : ' : 'Name: ') + g('nom'),
-        (fr ? 'Téléphone : ' : 'Phone: ') + g('telephone'),
-        (fr ? 'Courriel : ' : 'Email: ') + g('courriel'),
-        (fr ? 'Transmettre au revendeur de ma région : ' : 'Share with my regional reseller: ') + (g('partage_revendeur') ? (fr ? 'oui' : 'yes') : (fr ? 'non' : 'no')),
-        '', g('message'),
-      ];
-      const subject = (fr ? 'Demande de prix Multi-Ventilation : ' : 'Multi-Ventilation quote request: ') + (g('entreprise') || g('nom'));
-      location.href = 'mailto:info@multimoulures.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
-      out.hidden = false;
-      out.textContent = (fr ? 'Votre logiciel de courriel s’ouvre avec votre demande : il ne reste qu’à l’envoyer. ' : 'Your email app is opening with your request: just press send. ') + msg();
+      const data = Object.fromEntries(d.entries()) as Record<string, string>;
+      data.lang = fr ? 'fr' : 'en'; data.page = location.pathname + location.search;
+      btn.disabled = true; out.hidden = false; out.textContent = fr ? 'Envoi en cours…' : 'Sending…';
+      try {
+        const r = await fetch('/api/demande', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
+        if (!r.ok) throw new Error(String(r.status));
+        location.href = (fr ? '/merci/' : '/en/thank-you/') + '?type=' + encodeURIComponent(data.type || '');
+      } catch {
+        btn.disabled = false;
+        const g = (k: string) => data[k] || '';
+        const lines = [`Type : ${g('type')}`, `Province : ${g('province')}`, `Ville : ${g('ville')}`, `Entreprise : ${g('entreprise')}`, `Nom : ${g('nom')}`, `Téléphone : ${g('telephone')}`, `Courriel : ${g('courriel')}`, '', g('message')];
+        out.textContent = fr ? 'L’envoi n’a pas fonctionné. Votre logiciel de courriel s’ouvre avec votre demande, ou appelez-nous au (450) 441-1226.' : 'Sending failed. Your email app is opening with your request, or call us at (450) 441-1226.';
+        location.href = 'mailto:info@multimoulures.com?subject=' + encodeURIComponent('Demande de prix Multi-Ventilation : ' + (g('entreprise') || g('nom'))) + '&body=' + encodeURIComponent(lines.join('\n'));
+      }
     });
   });
 </script>
 <style>
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .who{border:0;padding:0;margin:0;display:grid;gap:8px}
   .who legend{font-weight:500;margin-bottom:6px}
   .opt{display:flex!important;gap:10px;align-items:center;font-weight:400!important;border:1px solid var(--mm-rule);padding:12px;background:#fff;cursor:pointer}

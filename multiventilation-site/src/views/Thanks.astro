@@ -1,0 +1,11 @@
+---
+import Inner from '../components/Inner.astro';
+import { site } from '../data/site';
+import { routes, type Lang } from '../i18n';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+---
+<Inner noindex title={fr ? 'Merci, votre demande est envoyée | Multi-Ventilation' : 'Thank you, your request was sent | Multi-Ventilation'} description={fr ? 'Votre demande est envoyée.' : 'Your request was sent.'} h1={fr ? 'Merci, votre demande est envoyée' : 'Thank you, your request was sent'} lead={fr ? 'Un conseiller vous répondra avec un prix et un délai de fabrication.' : 'An advisor will get back to you with a price and a production date.'}>
+  <p>{fr ? 'Pour une demande urgente, appelez-nous au ' : 'For an urgent request, call us at '}<a href={'tel:' + site.phone}>{site.phoneDisplay}</a>.</p>
+  <p class="btns"><a class="btn" href={routes.products[lang]}>{fr ? 'Retour aux produits' : 'Back to products'}</a> <a class="btn ghost" href={routes.colours[lang]}>{fr ? 'Voir les couleurs' : 'See the colours'}</a></p>
+</Inner>

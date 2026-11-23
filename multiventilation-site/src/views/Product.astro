@@ -1,9 +1,10 @@
 ---
 import { realisations } from '../data/realisations';
+import sizes from '../data/imgsizes.json';
 import Inner from '../components/Inner.astro';
 import Card from '../components/Card.astro';
 import { site } from '../data/site';
-import { apps, appsOf, headline, keyword, seoTitle, clip } from '../data/seo';
+import { apps, appsOf, headline, keyword, seoTitle, clip, seoOverride } from '../data/seo';
 import { getCategories, getProducts, productUrl, routes, type Lang } from '../i18n';
 const { lang, slug } = Astro.props as { lang: Lang; slug: string };
 const fr = lang === 'fr';
@@ -15,28 +16,36 @@ const h = headline(p, lang);
 const fam = p.slug.startsWith('airm300') ? 'airm300' : p.slug.startsWith('airm100') ? 'airm100' : '';
 const kw = keyword(p, lang);
 const myApps = appsOf(p).map((id) => apps.find((a) => a.id === id)!);
+const pairSlugs = p.cat === 'soffites' ? ['airm300-base-ajustable', 'faitiere-ventilee', 'dome-480', 'ventilateur-2422'] : p.cat === 'aerateurs' ? ['soffite-ventile-oblong-50', 'soffite-ventile-oblong', 'soffite-ventilation-cachee', 'solin-de-mansarde-ventile'] : [];
+const pair = pairSlugs.filter((s) => s !== p.slug).map((s) => products.find((x) => x.slug === s)!).filter(Boolean);
+const pairH = p.cat === 'soffites' ? (fr ? 'Complétez avec une sortie d’air au toit' : 'Pair with a roof exhaust vent') : (fr ? 'Complétez avec une entrée d’air au soffite' : 'Pair with a soffit air intake');
+const pairP = fr ? 'Une ventilation d’entretoit efficace équilibre l’entrée d’air en bas du toit et la sortie d’air en haut.' : 'Effective attic ventilation balances air intake low on the roof with exhaust high on the roof.';
 const quoteUrl = `${routes.quote[lang]}?produit=${p.slug}`;
 const L = fr
   ? { prods: 'Produits', title: seoTitle(p.name, kw, 'fr'), desc: `${p.name}, ${p.sub.toLowerCase()}. ${h.label.split(',')[0]} : ${h.v} ${h.u}. Fabriqué au Québec sur mesure, dans la couleur de votre toiture, en 5 jours.`,
-      tags: ['Fabriqué en 5 jours', 'Couleur assortie', 'Acier canadien', 'Formats sur mesure'], pitch: 'Pentes', tested: 'Testé selon CAN3-A93-M82', quote: 'Demander un prix pour ce produit', custom: 'Besoin d’un format sur mesure ? Indiquez vos dimensions dans la demande de prix ou appelez un conseiller technique.',
+      tags: ['Fabriqué en 5 jours', 'Couleur assortie', 'Acier canadien', 'Formats sur mesure'], pitch: 'Pentes', tested: 'Testé selon CAN3-A93-M82', quote: 'Demander un prix pour ce produit', custom: 'Besoin d’un format sur mesure ? Indiquez vos dimensions dans la demande de prix ou appelez un conseiller technique.', five: 'Fabriqué en 5 jours ouvrables à partir de la commande confirmée. Livraison en sus.', feine: 'La base feine se pose sur une boîte de bois, offerte par Multi-Moulures, qui facilite l’installation et assure un support solide.',
       specs: 'Spécifications techniques', dims: 'Dimensions et formats', note: 'Les débits en PCM sont des estimations calculées à partir de la surface libre de ventilation (SFVA).', war: 'Garantie à vie limitée sur les défauts de fabrication, 10 ans sur la peinture',
       lab: 'Testé selon la norme CAN3-A93-M82 (R2003) par UL Canada, laboratoire accrédité ISO/IEC 17025. Il s’agit d’essais de performance selon la norme, et non d’une certification de produit.', same: 'Dans la même catégorie', mat: 'Acier galvanisé G90 prépeint',
       appsH: 'Applications', colH: 'Couleurs offertes', col: 'Fabriqué dans l’acier prépeint des palettes d’Ideal Roofing, Vicwest, MAC, Agway Metals et Color Steels, ou assorti à partir d’un échantillon.', colL: 'Voir les couleurs en inventaire', colQ: 'Demander votre couleur',
-      instH: 'Installation', inst: ['Installation par un couvreur ou un entrepreneur professionnel, selon les règles de l’art. C’est une condition de la garantie.', 'L’étanchéité autour du produit (solins, membranes, scellants) relève de l’installateur.'], instPitch: 'Pentes compatibles :', instGuide: 'Guide d’installation détaillé : en préparation. D’ici là, nos conseillers techniques répondent aux couvreurs au',
-      docH: 'Documentation technique', docCat: 'Catalogue de ventilation (PDF, 31 pages, 5,6 Mo)', docTable: 'Tableau des dimensions et surfaces de ventilation : sur cette page', docLab: 'Rapport d’essai UL Canada : disponible sur demande', docWar: 'Conditions de garantie' }
+      instH: 'Installation', inst: ['Installation par un couvreur ou un entrepreneur professionnel, selon les règles de l’art. C’est une condition de la garantie.', 'L’étanchéité autour du produit (solins, membranes, scellants) relève de l’installateur.'], instPitch: 'Pentes compatibles :', instGuide: 'Une question de pose ? Nos conseillers techniques répondent aux couvreurs au',
+      docH: 'Documentation technique', docCat: 'Catalogue de ventilation (PDF, 31 pages, 5,6 Mo)', docTable: 'Tableau des dimensions et surfaces de ventilation : sur cette page', docLab: 'Rapport d’essai UL Canada : transmis aux professionnels qui en font la demande', docWar: 'Conditions de garantie' }
   : { prods: 'Products', title: seoTitle(p.name, kw, 'en'), desc: `${p.name}, ${p.sub.toLowerCase()}. ${h.label.split(',')[0]}: ${h.v} ${h.u}. Custom made in Quebec, in the colour of your roof, in 5 days.`,
-      tags: ['Made in 5 days', 'Colour matched', 'Canadian steel', 'Custom sizes'], pitch: 'Pitch', tested: 'Tested to CAN3-A93-M82', quote: 'Get a quote for this product', custom: 'Need a custom size? Enter your dimensions in the quote request or call a technical advisor.',
+      tags: ['Made in 5 days', 'Colour matched', 'Canadian steel', 'Custom sizes'], pitch: 'Pitch', tested: 'Tested to CAN3-A93-M82', quote: 'Get a quote for this product', custom: 'Need a custom size? Enter your dimensions in the quote request or call a technical advisor.', five: 'Made in 5 business days from order confirmation. Delivery extra.', feine: 'The curb base sits on a wooden curb box, available from Multi-Moulures, for easier installation and solid support.',
       specs: 'Technical specifications', dims: 'Sizes and dimensions', note: 'CFM figures are estimates calculated from the net free ventilating area (NFVA).', war: 'Limited lifetime warranty on manufacturing defects, 10 years on paint',
       lab: 'Tested to CAN3-A93-M82 (R2003) by UL Canada, an ISO/IEC 17025 accredited laboratory. These are performance tests to the standard, not a product certification.', same: 'In the same category', mat: 'Prepainted G90 galvanized steel',
       appsH: 'Applications', colH: 'Available colours', col: 'Made from prepainted steel in the Ideal Roofing, Vicwest, MAC, Agway Metals and Color Steels palettes, or matched from a sample.', colL: 'See the colours in stock', colQ: 'Ask for your colour',
-      instH: 'Installation', inst: ['Installed by a professional roofer or contractor, following good roofing practice. This is a condition of the warranty.', 'Weatherproofing around the product (flashing, membranes, sealants) is the installer’s responsibility.'], instPitch: 'Compatible pitch:', instGuide: 'Detailed installation guide: in preparation. In the meantime, our technical advisors answer roofers at',
-      docH: 'Technical documentation', docCat: 'Ventilation catalogue (PDF, French, 31 pages, 5.6 MB)', docTable: 'Sizes and ventilating area table: on this page', docLab: 'UL Canada test report: available on request', docWar: 'Warranty terms' };
+      instH: 'Installation', inst: ['Installed by a professional roofer or contractor, following good roofing practice. This is a condition of the warranty.', 'Weatherproofing around the product (flashing, membranes, sealants) is the installer’s responsibility.'], instPitch: 'Compatible pitch:', instGuide: 'Installation question? Our technical advisors answer roofers at',
+      docH: 'Technical documentation', docCat: 'Ventilation catalogue (PDF, French, 31 pages, 5.6 MB)', docTable: 'Sizes and ventilating area table: on this page', docLab: 'UL Canada test report: sent to professionals on request', docWar: 'Warranty terms' };
+const hh = (x: string) => `${p.name}${fr ? ' : ' : ': '}${x.charAt(0).toLowerCase() + x.slice(1)}`;
+const [iw, ih] = (sizes as Record<string, number[]>)[p.slug] ?? [460, 460];
+const crumbs: [string, string][] = [[L.prods, routes.products[lang]]];
+if (fam) crumbs.push([fam === 'airm300' ? 'AirM300' : 'AirM100', `${routes.products[lang]}${fam}/`]);
 const props = p.specs.map(([k, v]) => ({ '@type': 'PropertyValue', name: k, value: v }));
-const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.name, description: p.desc, category: cat.name, image: `${site.url}/img/${p.slug}.webp`, url: site.url + productUrl(p.slug, lang), sku: p.slug, brand: { '@type': 'Brand', name: 'Multi-Ventilation' }, manufacturer: { '@type': 'Organization', name: 'Multi-Moulures inc.', url: site.parent }, material: L.mat, countryOfOrigin: 'CA', additionalProperty: props }];
+const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.name, description: p.desc, category: cat.name, image: `${site.url}/img/${p.slug}.webp`, url: site.url + productUrl(p.slug, lang), sku: p.slug, '@id': site.url + productUrl(p.slug, lang) + '#product', brand: { '@type': 'Brand', name: 'Multi-Ventilation' }, manufacturer: { '@id': site.url + '/#org' }, material: L.mat, countryOfOrigin: 'CA', additionalProperty: props }];
 ---
-<Inner schema={schema} crumbs={[[L.prods, routes.products[lang]], [cat.name, `${routes.products[lang]}#${cat.id}`]]} title={L.title} description={clip(L.desc)} kicker={cat.name} h1={p.name} lead={p.sub}>
+<Inner schema={schema} crumbs={crumbs} image={`/img/og/${p.slug}.jpg`} title={seoOverride[p.slug]?.[lang][0] ?? L.title} description={seoOverride[p.slug]?.[lang][1] ?? clip(L.desc)} kicker={cat.name} h1={p.name} lead={p.sub}>
   <div class="grid g2 top">
-    <img class="hero-img" src={`/img/${p.slug}.webp`} alt={`${p.name}, ${kw}`} width="540" height="420" />
+    <img class="hero-img" src={`/img/${p.slug}.webp`} alt={`${p.name}, ${kw}`} width={iw} height={ih} />
     <div>
       <div class="metric"><span class="v">{h.v}</span><span class="u">{h.u}</span></div>
       <p class="ml">{h.label}</p>
@@ -48,19 +57,20 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.
         {p.pitch && <li>{L.pitch} {p.pitch}</li>}{p.tested && <li>{L.tested}</li>}
       </ul>
       <p class="btns"><a class="btn copper" href={quoteUrl}>{L.quote}</a><a class="btn ghost" href={'tel:' + site.phone}>{site.phoneDisplay}</a></p>
-      <p class="mn">{L.custom}</p>
+      <p class="mn">{L.five} {L.custom}</p>
+      {p.slug.endsWith('-feine') && <p class="mn">{L.feine}</p>}
       {fam && <p class="fam"><a href={`${routes.products[lang]}${fam}/`}>{fr ? `Voir toutes les bases ${fam === 'airm300' ? 'AirM300' : 'AirM100'}` : `See all ${fam === 'airm300' ? 'AirM300' : 'AirM100'} bases`} →</a></p>}
     </div>
   </div>
 
   <div class="info">
-    {myApps.length > 0 && <section><h2>{L.appsH}</h2><ul class="apps">{myApps.map((a) => <li><a href={`${routes.products[lang]}#app-${a.id}`}>{a[lang][0]}</a></li>)}</ul></section>}
-    <section><h2>{L.colH}</h2><p>{L.col}</p><p>{site.parentLive ? <a href={site.parent + '/couleurs-et-metaux/'}>{L.colL} →</a> : <a href={quoteUrl}>{L.colQ} →</a>}</p></section>
-    <section><h2>{L.instH}</h2><ul>{L.inst.map((x) => <li>{x}</li>)}{p.pitch && <li>{L.instPitch} {p.pitch}.</li>}<li>{L.instGuide} <a href={'tel:' + site.phone}>{site.phoneDisplay}</a>.</li></ul></section>
-    <section><h2>{L.docH}</h2><ul class="docs">
+    {myApps.length > 0 && <section><h2>{hh(L.appsH)}</h2><ul class="apps">{myApps.map((a) => <li><a href={`${routes.products[lang]}#app-${a.id}`}>{a[lang][0]}</a></li>)}</ul></section>}
+    <section><h2>{hh(L.colH)}</h2><p>{L.col}</p><p><a href={routes.colours[lang]}>{L.colL} →</a></p></section>
+    <section><h2>{hh(L.instH)}</h2><ul>{L.inst.map((x) => <li>{x}</li>)}{p.pitch && <li>{L.instPitch} {p.pitch}.</li>}<li>{L.instGuide} <a href={'tel:' + site.phone}>{site.phoneDisplay}</a>.</li></ul></section>
+    <section><h2>{hh(L.docH)}</h2><ul class="docs">
       <li><a href="/docs/catalogue-multi-ventilation.pdf" download>{L.docCat}</a></li>
       <li>{L.docTable}</li>
-      {p.tested && <li>{L.docLab}</li>}
+      {p.tested && <li>{L.docLab}{fr ? ' : ' : ': '}<a href={quoteUrl}>{fr ? 'demander le rapport' : 'request the report'}</a></li>}
       <li><a href={routes.warranty[lang]}>{L.docWar}</a></li>
     </ul></section>
   </div>
@@ -68,7 +78,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.
   <div class="grid g2" style="margin-top:48px">
     <table class="spec"><caption class="sr">{L.specs} : {p.name}</caption><tr><th colspan="2" scope="col">{L.specs}</th></tr>{p.specs.map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}</table>
     <div>
-      <h2 class="th">{L.dims}</h2>
+      <h2 class="th">{hh(L.dims)}</h2>
       <div class="scroll"><table class="spec"><caption class="sr">{L.dims} : {p.name}</caption><tr>{p.table.head.map((x) => <th scope="col">{x}</th>)}</tr>{p.table.rows.map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}</table></div>
       {p.table.note && <p class="mn">{p.table.note}</p>}
       <p class="mn">{L.note} <a href={routes.warranty[lang]}>{L.war}</a>.</p>
@@ -80,6 +90,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.
       {realisations[p.slug].map((ph) => <figure><img src={ph.src} alt={ph[lang]} width={ph.w} height={ph.h} loading="lazy" /><figcaption>{ph[lang]}</figcaption></figure>)}
     </section>
   )}
+  {pair.length > 0 && <section style="margin-top:64px"><h2>{pairH}</h2><p>{pairP} <a href={routes.faq[lang]}>{fr ? 'Voir la FAQ' : 'See the FAQ'}</a>.</p><div class="grid g4">{pair.map((o) => <Card p={o} lang={lang} />)}</div></section>}
   {others.length > 0 && <section style="margin-top:64px"><h2>{L.same}</h2><div class="grid g4">{others.map((o) => <Card p={o} lang={lang} />)}</div></section>}
 </Inner>
 <style>
@@ -87,7 +98,7 @@ const schema = [{ '@context': 'https://schema.org', '@type': 'Product', name: p.
   .real figure{margin:0 0 28px}
   .real img{width:100%;height:auto;display:block}
   .real figcaption{font-size:14px;color:var(--mm-graphite);margin-top:8px}
-  .hero-img{width:100%;max-height:420px;object-fit:contain;background:var(--mm-mist)}
+  .hero-img{width:100%;height:auto;max-height:420px;object-fit:contain;background:var(--mm-mist)}
   .top{align-items:start}
   .metric{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-family:var(--font-display);font-weight:800;color:var(--mm-navy);line-height:1}
   .v{font-size:clamp(44px,6vw,72px)}.u{font-size:24px}

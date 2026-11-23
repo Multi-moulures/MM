@@ -6,8 +6,7 @@ const { lang } = Astro.props as { lang: Lang };
 const fr = lang === 'fr';
 const w = warranty[lang];
 ---
-<Inner title={fr ? 'Garantie à vie limitée | Multi-Ventilation' : 'Limited lifetime warranty | Multi-Ventilation'} description={fr ? 'Garantie à vie limitée sur les défauts de fabrication, remplacement sans frais pendant 10 ans, 10 ans sur la peinture, transférable. Conditions et réclamations.' : 'Limited lifetime warranty on manufacturing defects, free replacement for 10 years, 10 years on paint, transferable. Terms and claims.'} kicker={fr ? 'Garantie' : 'Warranty'} h1={fr ? 'Notre garantie' : 'Our warranty'} lead={w.intro}>
-  <p class="todo">{fr ? 'Ébauche à faire valider par Laurie avant la mise en ligne.' : 'Draft, to be reviewed before launch.'}</p>
+<Inner title={fr ? 'Garantie à vie limitée et peinture 10 ans | Multi-Ventilation' : 'Limited Lifetime Warranty, 10-Year Paint | Multi-Ventilation'} description={fr ? 'Garantie à vie limitée sur les défauts de fabrication, peinture 10 ans, transférable au nouveau propriétaire. Conditions et réclamation.' : 'Limited lifetime warranty on manufacturing defects, 10-year paint cover, transferable to the next owner. Terms and how to claim.'} kicker={fr ? 'Garantie' : 'Warranty'} h1={fr ? 'Notre garantie' : 'Our warranty'} lead={w.intro}>
   <div class="hl">{w.highlights.map(([b, s]) => <div><b>{b}</b>{s}</div>)}</div>
   <div class="wb">
     {w.sections.map((s) => <section><h2>{s.h}</h2>{s.p?.map((x) => <p>{x}</p>)}{s.li && <ul>{s.li.map((x) => <li>{x}</li>)}</ul>}</section>)}

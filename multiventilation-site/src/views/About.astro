@@ -1,0 +1,60 @@
+---
+import Inner from '../components/Inner.astro';
+import { site } from '../data/site';
+import { routes, type Lang } from '../i18n';
+import { products } from '../data/produits';
+const { lang } = Astro.props as { lang: Lang };
+const fr = lang === 'fr';
+const c = fr ? {
+  title: 'À propos : fabricant québécois de ventilation | Multi-Ventilation',
+  desc: 'Division ventilation de Multi-Moulures, fabricant de Saint-Bruno-de-Montarville depuis plus de 35 ans : 2 usines, 70 employés, sur mesure en 5 jours.',
+  kicker: 'À propos', h1: 'Un fabricant québécois de ventilation de toiture',
+  lead: 'Multi-Ventilation est la division ventilation de Multi-Moulures, qui plie le métal pour les couvreurs du Québec depuis plus de 35 ans.',
+  pillars: [['Fabriqué ici.', 'Chaque ventilateur, faîtière et soffite est plié dans nos usines de Saint-Bruno-de-Montarville, en acier galvanisé canadien.'], ['Sur mesure, en 5 jours.', 'La grandeur, la pente et la couleur de votre projet, fabriquées en 5 jours ouvrables à partir de la commande confirmée.'], ['Testé.', 'L’AirM300 et le Dôme 480 ont été testés selon la norme CAN3-A93-M82 (R2003) par UL Canada, laboratoire accrédité ISO/IEC 17025.']],
+  plantsH: 'Deux usines, une équipe de 70 personnes', plantsP: 'Nos deux usines de 20 000 pi² regroupent huit plieuses, dont une de 20 pieds, trois cisailles, deux poinçonneuses CNC et des profileuses. L’acier prépeint des grands fabricants de toiture est en inventaire : la fabrication démarre dès votre commande confirmée.',
+  storyH: 'Notre histoire', story: ['Multi-Moulures a été fondée il y a plus de 35 ans par Yves et Patrick Mathieu, pour fabriquer des moulures et composantes de métal sur mesure pour la toiture, le revêtement et l’enveloppe du bâtiment.', 'Les produits de ventilation sont nés des demandes des couvreurs, qui voulaient des aérateurs dans la couleur exacte de leurs toitures métalliques. Multi-Ventilation regroupe aujourd’hui cette gamme sous sa propre marque.', 'L’entreprise est dirigée par Marc Edwards et Charles Lambert, avec toute l’équipe en place.'],
+  numsH: 'En chiffres',
+  rows: [['Fondée', 'Il y a plus de 35 ans'], ['Usines', '2 usines de 20 000 pi²'], ['Équipe', '70 employés'], ['Plieuses', '8, dont une de 20 pieds'], ['Poinçonneuses CNC', '2'], ['Produits de ventilation', String(products.length)], ['Adresse', `${site.street}, ${site.city}`]],
+  ctaH: 'Parlez à un conseiller technique', cta: 'Demander un prix', colours: 'Voir les couleurs', alt: 'Usine Multi-Moulures à Saint-Bruno-de-Montarville',
+} : {
+  title: 'About: a Quebec roof ventilation manufacturer | Multi-Ventilation',
+  desc: 'The ventilation division of Multi-Moulures, a Quebec manufacturer for over 35 years: 2 plants, 70 employees, custom roof vents in 5 days.',
+  kicker: 'About', h1: 'A Quebec roof ventilation manufacturer',
+  lead: 'Multi-Ventilation is the ventilation division of Multi-Moulures, which has been bending metal for Quebec roofers for over 35 years.',
+  pillars: [['Made here.', 'Every roof vent, ridge cap and soffit is formed in our Saint-Bruno-de-Montarville plants, from Canadian galvanized steel.'], ['Custom, in 5 days.', 'The size, pitch and colour of your project, made in 5 business days from order confirmation.'], ['Tested.', 'The AirM300 and the 480 Dome were tested to CAN3-A93-M82 (R2003) by UL Canada, an ISO/IEC 17025 accredited laboratory.']],
+  plantsH: 'Two plants, a team of 70', plantsP: 'Our two 20,000 sq ft plants house eight brakes, including a 20 foot brake, three shears, two CNC punches and roll formers. Prepainted steel from the major roofing manufacturers is in stock: fabrication starts as soon as your order is confirmed.',
+  storyH: 'Our story', story: ['Multi-Moulures was founded over 35 years ago by Yves and Patrick Mathieu to make custom metal flashings and components for roofing, cladding and the building envelope.', 'The ventilation products grew out of roofers’ requests for roof vents in the exact colour of their metal roofs. Multi-Ventilation now brings this range together under its own brand.', 'The company is led by Marc Edwards and Charles Lambert, with the whole team in place.'],
+  numsH: 'By the numbers',
+  rows: [['Founded', 'Over 35 years ago'], ['Plants', '2 plants of 20,000 sq ft'], ['Team', '70 employees'], ['Brakes', '8, including a 20 foot brake'], ['CNC punching', '2'], ['Ventilation products', String(products.length)], ['Address', `${site.street}, ${site.city}, Quebec`]],
+  ctaH: 'Talk to a technical advisor', cta: 'Get a quote', colours: 'See the colours', alt: 'Multi-Moulures plant in Saint-Bruno-de-Montarville',
+};
+const schema = [{ '@context': 'https://schema.org', '@type': 'AboutPage', '@id': site.url + routes.about[lang] + '#webpage', url: site.url + routes.about[lang], name: c.title, inLanguage: fr ? 'fr-CA' : 'en-CA', isPartOf: { '@id': site.url + '/#website' }, about: { '@id': site.url + '/#org' } }];
+---
+<Inner schema={schema} title={c.title} description={c.desc} kicker={c.kicker} h1={c.h1} lead={c.lead}>
+  <div class="pgrid">{c.pillars.map(([h, p]) => <div class="pillar"><h2>{h}</h2><p>{p}</p></div>)}</div>
+  <div class="split">
+    <img src="/img/usine-hero.webp" alt={c.alt} width="1200" height="800" loading="lazy" />
+    <div><h2>{c.plantsH}</h2><p class="lead">{c.plantsP}</p></div>
+  </div>
+  <div class="split">
+    <div><h2>{c.storyH}</h2>{c.story.map((p) => <p>{p}</p>)}</div>
+    <table class="spec"><tr><th colspan="2" scope="col">{c.numsH}</th></tr>{c.rows.map(([a, b]) => <tr><th scope="row">{a}</th><td>{b}</td></tr>)}</table>
+  </div>
+  <div class="cta">
+    <h2>{c.ctaH}</h2>
+    <p class="btns"><a class="btn copper" href={routes.quote[lang]}>{c.cta}</a><a class="btn ghost" href={'tel:' + site.phone}>{site.phoneDisplay}</a><a class="btn ghost" href={routes.colours[lang]}>{c.colours}</a></p>
+  </div>
+</Inner>
+<style>
+  .pgrid{display:grid;margin-bottom:56px}
+  @media (min-width:800px){.pgrid{grid-template-columns:repeat(3,1fr)}}
+  .pillar{border-left:4px solid var(--mm-copper);padding:8px 28px 8px 24px;margin-bottom:24px}
+  .pillar h2{font-size:24px;margin-bottom:8px}
+  .pillar p{color:var(--mm-graphite);margin:0}
+  .split{display:grid;gap:40px;align-items:center;margin-bottom:56px}
+  @media (min-width:900px){.split{grid-template-columns:1fr 1fr}}
+  .split img{width:100%;height:auto}
+  table.spec th[scope=row]{font-weight:400;text-align:left;padding:10px 12px;border-bottom:1px solid var(--mm-rule);background:transparent;color:inherit}
+  .cta{border-top:1px solid var(--mm-rule);padding-top:32px}
+  .btn.copper{background:var(--mm-copper);border-color:var(--mm-copper)}
+</style>

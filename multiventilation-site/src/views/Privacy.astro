@@ -8,9 +8,8 @@ const sections = privacy(lang, 'mv');
 ---
 <Inner title={fr ? 'Politique de confidentialité | Multi-Ventilation' : 'Privacy policy | Multi-Ventilation'} description={fr ? 'Comment Multi-Ventilation, une division de Multi-Moulures, recueille, utilise et protège vos renseignements personnels (Loi 25).' : 'How Multi-Ventilation, a division of Multi-Moulures, collects, uses and protects your personal information.'} h1={fr ? 'Politique de confidentialité' : 'Privacy policy'} lead={(fr ? 'Dernière mise à jour : ' : 'Last updated: ') + privacyUpdated[lang]}>
   <div class="pol">
-    <p class="todo">{fr ? 'Ébauche à faire valider par Laurie avant la mise en ligne.' : 'Draft, to be reviewed before launch.'}</p>
     <nav class="toc">{sections.map((s, i) => <a href={`#s${i + 1}`}>{i + 1}. {s.h}</a>)}</nav>
-    {sections.map((s, i) => <section id={`s${i + 1}`}><h2>{i + 1}. {s.h}</h2>{s.p.map((x) => <p>{x}</p>)}{s.todo && fr && <p class="todo">{s.todo}</p>}</section>)}
+    {sections.map((s, i) => <section id={`s${i + 1}`}><h2>{i + 1}. {s.h}</h2>{s.p.map((x) => <p>{x}</p>)}</section>)}
   </div>
 </Inner>
 <style>

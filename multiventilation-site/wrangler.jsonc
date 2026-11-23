@@ -1,0 +1,16 @@
+// Configuration du worker « mv » (multiventilation.ca). Commande de déploiement dans Cloudflare : npx wrangler deploy
+{
+  "name": "mv",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-19",
+  "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": true, "not_found_handling": "404-page" },
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "multiventilation.ca", "custom_domain": true },
+    { "pattern": "www.multiventilation.ca", "custom_domain": true }
+  ],
+  // TEMPORAIRE : remplacer marc@ par info@multimoulures.com ici et dans MAIL_TO quand info@ sera vérifié dans Email Routing.
+  "send_email": [{ "name": "MAIL", "destination_address": "marc@multimoulures.com" }],
+  "vars": { "MAIL_FROM": "formulaire@multiventilation.ca", "MAIL_TO": "marc@multimoulures.com" },
+  "observability": { "enabled": true }
+}
